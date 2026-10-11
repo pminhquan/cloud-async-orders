@@ -1,27 +1,45 @@
-# Danh Mục Tài Nguyên AWS Dự Kiến (AWS Resource Inventory)
+# Danh mục AWS Tuần 1
 
-Tài liệu liệt kê các tài nguyên đám mây dự kiến được sử dụng trong dự án **cloud-async-orders**, cùng các ràng buộc về môi trường AWS Learner Lab.
+Cập nhật 2026-10-11. Kết quả SV1 dựa trên thông tin SV1 cung cấp và ảnh riêng tư tại [chỉ mục minh chứng](evidence/week1/README.md). Tên tài nguyên SV2 theo thông tin về ZIP Tuần 1 của Khôi; đây là nguồn báo cáo riêng, chưa xác nhận cấu hình chi tiết hoặc tích hợp chung tại repo.
 
-> [!IMPORTANT]
-> **TẤT CẢ CÁC HÀNG TRONG DANH MỤC DƯỚI ĐÂY Ở TRẠNG THÁI LÊN KẾ HOẠCH (PLANNED).**
-> - **Phân loại trạng thái**: **PLANNED** (thiết kế dự kiến); **VERIFIED** (đã kiểm tra đối soát với Console thực tế và có minh chứng); **CREATED** (tài nguyên thực tế đã tạo trên AWS và có minh chứng). Hiện tại **chưa có hàng nào chuyển sang VERIFIED hoặc CREATED**; chưa có tài nguyên nào được tạo trên AWS.
+## 1. Tài nguyên SV1 đã xác nhận
 
-## 1. Bảng Danh Mục Tài Nguyên Dự Kiến (Planned Resources)
+| Tên thực tế | Dịch vụ / vai trò | Trạng thái |
+| :--- | :--- | :--- |
+| `orders-queue` | SQS Standard, SSE-SQS; queue nguồn | Đã tạo và kiểm thử với Consumer |
+| `orders-dlq` | SQS Standard, SSE-SQS; cô lập tin nhắn lỗi | Đã xác nhận body `ORD-W1-Q-ERR-002` |
+| `order-processor` | Lambda Consumer kiểm tra dữ liệu và ghi log | Đã chạy trực tiếp và qua SQS; chưa ghi DynamoDB hoặc xử lý lặp an toàn cho nghiệp vụ |
 
-| Tên tài nguyên đề xuất | Dịch vụ AWS | Mục đích kỹ thuật | Đầu mối phụ trách | Trạng thái | Tag đề xuất | Ghi chú & Ràng buộc |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `api-async-orders` | Amazon API Gateway | Nhận `POST /orders` từ client | Khôi (SV2) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: khoi-sv2` | REST hoặc HTTP API |
-| `order-producer` | AWS Lambda | Validate và gửi tin nhắn SQS | Khôi (SV2) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: khoi-sv2` | Gán IAM `LabRole` có sẵn |
-| `orders-queue` | Amazon SQS | Hàng đợi đệm đơn hàng | Quan (SV1) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: quan-sv1` | Standard hoặc FIFO; gắn kèm DLQ |
-| `orders-dlq` | Amazon SQS | Dead Letter Queue cô lập lỗi | Quan (SV1) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: quan-sv1` | Cùng loại hàng đợi với queue nguồn |
-| `order-processor` | AWS Lambda | Xử lý tin nhắn và ghi DynamoDB | Quan (SV1) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: quan-sv1` | Kích hoạt bởi SQS ESM, gán `LabRole` |
-| `Orders` | Amazon DynamoDB | Lưu trữ đơn hàng | Khôi (SV2) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: khoi-sv2` | Partition Key `orderId` |
-| `dlq-alarm-messages-visible` | Amazon CloudWatch | Giám sát số tin nhắn trong DLQ | Phối hợp nhóm (Joint) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: team-joint` | Đầu mối phụ trách chi tiết chờ chốt |
-| `order-processing-alerts` | Amazon SNS | Gửi cảnh báo lỗi qua email | Khôi (SV2) | **PLANNED** | `Project: cloud-async-orders`<br>`Owner: khoi-sv2` | Giao thức Email |
+| Cấu hình PoC | Giá trị |
+| :--- | :--- |
+| Region / execution role | `us-east-1` / `LabRole` có sẵn |
+| Runtime / timeout / memory | Python 3.13 / 10 giây / 128 MB |
+| Main queue visibility timeout | 60 giây |
+| DLQ / redrive | `orders-dlq`; `maxReceiveCount=3`; DLQ retention 14 ngày |
+| SQS trigger | Enabled |
+| Batch size / batch window | 1 / 0 giây (Console hiển thị `None`) |
+| Maximum concurrency của mapping | 2 |
+| Report batch item failures | Disabled; exception làm thất bại cả batch |
 
-## 2. Ràng Buộc Nền Tảng AWS Learner Lab
+Visibility timeout và execution role theo thông tin SV1 cung cấp; ảnh chưa mở đầy đủ hai cấu hình này. Ảnh IAM cho thấy role/trust có Lambda; invocation và ghi CloudWatch thành công không chứng minh toàn bộ quyền thực tế. Ảnh trigger Disabled là bước trước, không phải trạng thái hiện tại.
 
-- **Vùng triển khai (Proposed Region)**: Đề xuất `us-east-1` hoặc `us-west-2` (PROPOSED, chờ xác nhận trong Lab Console). Tất cả tài nguyên phải nằm trên cùng một Region.
-- **Vai trò thực thi (IAM Role)**: Bắt buộc: **Không tạo IAM users hoặc IAM roles mới; chỉ dùng vai trò/profile được Lab cho phép**. Các hàm Lambda sử dụng vai trò thực thi `LabRole` có sẵn; `LabInstanceProfile` là EC2 instance profile có sẵn, không phải role của Lambda (dự án không dùng và không lên kế hoạch tạo EC2/EBS). Quyền hạn cụ thể của `LabRole` ở trạng thái CHƯA RÕ (UNKNOWN) cho đến khi kiểm tra thực tế trong Console; không tự ý khẳng định các chính sách IAM là không thể chỉnh sửa hoặc tài khoản được cấp quyền chia sẻ.
-- **Quy ước Gán Thẻ (Tags)**: Bắt buộc 2 tag key: `Project` và `Owner`. Các giá trị cụ thể ở bảng trên ở trạng thái đề xuất (PROPOSED) chờ hai sinh viên thống nhất.
-- **Ràng buộc hai tài khoản Learner Lab**: Hai sinh viên có thể sở hữu hai tài khoản Lab riêng biệt. Nếu khác tài khoản, việc tích hợp API/Lambda/SQS/DynamoDB bắt buộc phải có quyền và chính sách tài nguyên chéo (cross-account permissions/policies) được kiểm chứng, không được mặc định cho phép. Đề xuất triển khai trên cùng một tài khoản chính (PROPOSED) tùy quy định môn học. Tuyệt đối không chia sẻ thông tin đăng nhập và không công khai Account ID.
+## 2. Thành phần SV2 được báo cáo riêng
+
+API Gateway, Producer, DynamoDB và SNS dưới đây là tài nguyên triển khai riêng theo minh chứng Khôi báo cáo. CloudWatch Alarm vẫn là kế hoạch, chưa xác nhận đã triển khai. Không mặc định các thành phần này đã nối với PoC SV1.
+
+| Thành phần Khôi phụ trách | Tên được báo cáo | Cần xác nhận thêm |
+| :--- | :--- | :--- |
+| API Gateway | `order-api` | Loại HTTP/REST API và kết nối Producer |
+| Producer Lambda | `order-producer` | Cấu hình và luồng gửi SQS của SV1 |
+| DynamoDB | `Orders` | Cấu hình khóa thực tế; khóa đích thiết kế là `orderId` |
+| CloudWatch Alarm | Chưa có tên triển khai xác nhận — PLANNED | Triển khai, metric và điều kiện đánh giá |
+| SNS Topic | `order-dlq-alert` | Quyền publish và xác nhận email |
+
+Các đường tích hợp SV2 → SQS, Consumer → DynamoDB và DLQ → Alarm → SNS trên [sơ đồ](architecture/README.md) vẫn là thiết kế đích, chưa chứng minh E2E chung.
+
+## 3. Ràng buộc Lab và việc còn thiếu
+
+- Tags thống nhất: `Project=AsyncOrderProcessing`, `Owner=Khoi-Quan`; chưa có ảnh Tags trên từng tài nguyên.
+- Không tạo IAM user/role mới; chỉ dùng `LabRole`/`LabInstanceProfile` được Lab cho phép. `LabInstanceProfile` dành cho EC2, không phải execution role Lambda; dự án không dùng EC2/EBS.
+- Tổng Lambda concurrency tài khoản ≤ 10; mapping Consumer giới hạn 2 chưa chứng minh tổng sử dụng toàn tài khoản.
+- Các thành phần tích hợp phải tương thích `us-east-1`. Mô hình một tài khoản chính vẫn là đề xuất; nếu khác tài khoản phải kiểm chứng quyền/chính sách cross-account. Không chia sẻ thông tin đăng nhập, access key, secret key, session token hoặc mật khẩu. Account ID là mã định danh, không phải thông tin xác thực; nên hạn chế thông tin cá nhân và mã định danh không cần thiết khi công khai minh chứng.

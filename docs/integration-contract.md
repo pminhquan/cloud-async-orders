@@ -3,7 +3,7 @@
 Tài liệu đặc tả hợp đồng dữ liệu, cơ chế idempotency (xử lý lặp an toàn) và cấu hình Event Source Mapping cho hệ thống **cloud-async-orders**.
 
 > [!NOTE]
-> **Toàn bộ cấu trúc và thông số dưới đây ở trạng thái ĐỀ XUẤT (PROPOSED), chờ nhóm xác nhận trong quá trình cài đặt thực tế.**
+> **Hợp đồng đích cho hệ thống hoàn chỉnh bên dưới vẫn là ĐỀ XUẤT (PROPOSED).** PoC Tuần 1 đã kiểm thử schema `orderId` / `items[].sku` / positive integer `quantity` trên SQS Standard. Cấu hình thực tế: batch 1, window 0 giây, maximum concurrency 2, Report batch item failures **Disabled**; lỗi ném exception làm thất bại cả batch. Chưa có ghi DynamoDB/production-grade idempotency hoặc partial batch response. Nguồn và kết quả xem [inventory](aws-inventory.md) và [evidence](evidence/week1/README.md); không coi các bước thiết kế bên dưới là đã cài đặt.
 
 ## 1. Cấu Trúc JSON Đơn Hàng Đề Xuất (Proposed JSON Schema)
 
@@ -36,8 +36,8 @@ Dữ liệu JSON đơn giản hóa, chỉ bao gồm `orderId` và danh sách `it
   - Gửi payload đơn hàng vào `MessageBody` của hàng đợi SQS.
   - *Giao diện FIFO*: Nếu sử dụng hàng đợi FIFO, lệnh gửi bắt buộc phải cung cấp `MessageGroupId` và `MessageDeduplicationId` (hoặc bật Content-Based Deduplication trên hàng đợi); phương án ánh xạ các tham số này ở trạng thái ĐỀ XUẤT (PROPOSED / chưa chốt), không gửi tin nhắn FIFO khi thiếu các tham số bắt buộc.
 - **Amazon SQS -> Consumer Lambda**:
-  - SQS kích hoạt Consumer Lambda qua Event Source Mapping (ESM).
-  - Lambda ESM chịu trách nhiệm tự động xóa các tin nhắn xử lý thành công khỏi SQS. Handler chỉ trả về danh sách `batchItemFailures` chứa các tin nhắn thất bại.
+  - Lambda thăm dò hàng đợi SQS qua Event Source Mapping (ESM) và gọi Consumer để xử lý từng lô.
+  - Lambda ESM tự động xóa các tin nhắn xử lý thành công khỏi SQS. Theo thiết kế đích, bật `ReportBatchItemFailures` trên ESM và để handler trả về `batchItemFailures` chứa các tin nhắn thất bại. PoC hiện chưa bật tính năng này.
 - **Consumer Lambda -> Amazon DynamoDB**:
   - Consumer validate nội dung body và thực hiện ghi nguyên tử có điều kiện (conditional `PutItem` với khóa `orderId`).
 
@@ -56,8 +56,8 @@ Dữ liệu JSON đơn giản hóa, chỉ bao gồm `orderId` và danh sách `it
 - [Configure SQS with Lambda](https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html)
 - [Lambda SQS Error Handling](https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html)
 
-- **Visibility Timeout**: AWS khuyến nghị Visibility Timeout của SQS $\ge 6 \times \text{Function Timeout} + \text{Standard Batching Window}$. Batching window chỉ áp dụng cho Standard queue; FIFO batch tối đa 10. Toàn bộ các giá trị số cụ thể ở trạng thái PROPOSED chờ kiểm tra trong Lab.
-- **Giới hạn Concurrency**: Tổng concurrency toàn tài khoản AWS Learner Lab $\le 10$ (tính chung cho producer, consumer và các hàm khác). Đề xuất cấu hình `MaximumConcurrency` trên Event Source Mapping; khả năng cấp phát Reserved Concurrency ở trạng thái CHƯA RÕ (UNKNOWN) do quota tài khoản Lab hạn chế.
+- **Visibility Timeout**: AWS khuyến nghị Visibility Timeout của SQS $\ge 6 \times \text{Function Timeout} + \text{Standard Batching Window}$. PoC dùng visibility timeout 60 giây, function timeout 10 giây và batch window 0 giây, đáp ứng khuyến nghị này. Batching window chỉ áp dụng cho Standard queue; FIFO batch tối đa 10. Cấu hình cho giai đoạn tích hợp cần được kiểm tra lại theo thời gian xử lý thực tế.
+- **Giới hạn Concurrency**: Tổng concurrency toàn tài khoản AWS Learner Lab $\le 10$ (tính chung cho producer, consumer và các hàm khác). PoC đã đặt `MaximumConcurrency` là 2 trên Event Source Mapping; cần đối soát phân bổ khi tích hợp Producer. Khả năng cấp phát Reserved Concurrency vẫn CHƯA RÕ (UNKNOWN) do quota tài khoản Lab hạn chế.
 - **Xử lý lỗi theo lô (Error Handling)**:
   - Nếu hàm Lambda ném ra Exception chưa bắt, toàn bộ lô tin nhắn sẽ bị coi là thất bại và thử lại.
   - Cấu hình `ReportBatchItemFailures` để chỉ retry các tin nhắn bị lỗi; đối với FIFO queue, handler phải dừng xử lý ở tin nhắn lỗi đầu tiên và trả về ID của tin nhắn lỗi cùng các tin nhắn chưa xử lý trong lô để bảo toàn thứ tự nghiêm ngặt.

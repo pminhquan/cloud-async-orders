@@ -1,46 +1,28 @@
-# cloud-async-orders: Hệ Thống Xử Lý Đơn Hàng Bất Đồng Bộ (AWS Serverless)
+# cloud-async-orders: Xử lý đơn hàng bất đồng bộ trên AWS
 
-Dự án môn học xây dựng hệ thống xử lý đơn hàng bất đồng bộ (Asynchronous Order Processing) trên AWS Serverless, hướng đến tính sẵn sàng cao, chịu lỗi và tối ưu chi phí trong môi trường AWS Learner Lab.
+Dự án môn học sử dụng API Gateway, Lambda, SQS/DLQ, DynamoDB và CloudWatch/SNS trong AWS Learner Lab.
 
-## 1. Tổng Quan Kiến Trúc
+## 1. Tiến độ Tuần 1
 
-Luồng xử lý chính:
-`API Gateway -> Producer Lambda (order-producer) -> SQS Queue -> Consumer Lambda (order-processor) -> DynamoDB (Orders)`
+SV1 đã kiểm thử SQS Standard → Consumer tại `us-east-1`: tin nhắn hợp lệ có `POC_VALIDATED`, tin nhắn lỗi được retry và chuyển DLQ. Consumer hiện chỉ kiểm tra dữ liệu và ghi log, chưa ghi DynamoDB hoặc có idempotency ở mức production. Xem [cấu hình triển khai](docs/aws-inventory.md) và [minh chứng](docs/evidence/week1/README.md).
 
-- **Amazon API Gateway**: Nhận yêu cầu `POST /orders`, chuyển tiếp đến Producer Lambda.
-- **AWS Lambda (`order-producer`)**: Validate dữ liệu cơ bản, gửi tin nhắn vào SQS, phản hồi `202 Accepted` khi gửi thành công.
-- **Amazon SQS (`orders-queue` & `orders-dlq`)**: Đệm tin nhắn đơn hàng; cô lập tin nhắn lỗi vào DLQ sau ngưỡng nhận tối đa (`maxReceiveCount`).
-- **AWS Lambda (`order-processor`)**: Đọc tin nhắn theo batch, kiểm tra idempotency (xử lý lặp an toàn), ghi đơn hàng vào DynamoDB và trả về `batchItemFailures`.
-- **Amazon DynamoDB (`Orders`)**: Lưu trữ thông tin đơn hàng với Partition Key `orderId`.
-- **Amazon CloudWatch & SNS**: Giám sát tin nhắn trong DLQ qua CloudWatch Alarm và gửi cảnh báo email qua SNS Topic.
+[Sơ đồ kiến trúc Mermaid](docs/architecture/README.md) phân biệt PoC SV1, các thành phần SV2 phát triển riêng theo thông tin người dùng và các đường tích hợp tương lai. Chưa xác nhận ứng dụng E2E hoàn chỉnh.
 
-Chi tiết thiết kế và luồng lỗi xem tại [docs/architecture/README.md](docs/architecture/README.md).
+## 2. Phân công và lộ trình
 
-## 2. Lộ Trình 4 Tuần (Roadmap)
+- **Quan (SV1, trưởng nhóm)**: SQS/DLQ, Consumer, kiểm thử, minh chứng SV1, sơ đồ kiến trúc và phối hợp tích hợp kỹ thuật.
+- **Khôi (SV2)**: API Gateway/Producer, DynamoDB, SNS/giám sát; tổng hợp README, báo cáo tuần và khai báo AI riêng.
+- Mỗi người cung cấp thông tin trung thực về đóng góp, giờ làm và việc dùng AI; Quan không duy trì báo cáo trùng. Chi tiết tại [phân công](docs/task-assignment.md).
 
-- **Tuần 1**: Nghiên cứu kỹ thuật (Standard vs FIFO, DLQ); tài liệu kiến trúc & tạo sơ đồ kiến trúc chính thức; thiết lập truy cập AWS Learner Lab; thống nhất quy ước tag `Project`/`Owner`. *(Lưu ý: Sơ đồ kiến trúc và thiết lập môi trường là nhiệm vụ chính thức của tuần nhưng chưa thực thi trong gói tài liệu nền tảng này)*.
-- **Tuần 2**: Cài đặt và kiểm thử đơn vị (Unit Test) các thành phần cốt lõi (`order-producer`, SQS/DLQ, `order-processor`, DynamoDB `Orders`).
-- **Tuần 3**: Tích hợp hệ thống toàn diện, kiểm tra quyền `LabRole`, cấu hình CloudWatch Alarms -> SNS, tùy chọn cơ sở hạ tầng dưới dạng mã (IaC).
-- **Tuần 4**: Kiểm thử tải (load script), kiểm thử đầu-cuối (E2E), tối ưu chi phí, dọn dẹp tài nguyên Lab, báo cáo tổng kết & video demo ($\le 10$ phút).
+Lộ trình: Tuần 1 nghiên cứu, kiến trúc và môi trường Lab; Tuần 2 triển khai/kiểm thử thành phần; Tuần 3 tích hợp và cảnh báo (IaC tùy chọn); Tuần 4 kiểm thử tải, chi phí, dọn Lab và demo. [Kế hoạch Tuần 1](docs/week1-plan.md) ghi rõ các bàn giao còn thiếu.
 
-## 3. Phân Công Vai Trò (Ownership)
+## 3. Tài liệu
 
-- **SV1: Quan (Leader)**: Phụ trách SQS, DLQ, Consumer `order-processor`, batch/concurrency, nghiên cứu Standard vs FIFO, tổng hợp kiến trúc và review nhóm.
-- **SV2: Khôi**: Phụ trách API Gateway, Producer `order-producer`, DynamoDB `Orders`, SNS Topic, nghiên cứu retry/alerting, tích hợp README.
-- **Phối hợp nhóm (Joint)**: Giám sát CloudWatch Alarms (điều phối chung, đầu mối chi tiết chờ chốt); thiết lập truy cập AWS Lab, quy ước tags, ghi nhận nhật ký worklog ($\ge 8$h/tuần/người), thu thập minh chứng và đồng giải trình dự án.
+- [Yêu cầu môn học và ràng buộc Lab](docs/requirements.md)
+- [Kế hoạch Tuần 1](docs/week1-plan.md) · [Phân công](docs/task-assignment.md)
+- [Kiến trúc](docs/architecture/README.md) · [Hợp đồng tích hợp](docs/integration-contract.md)
+- [SQS Standard/FIFO và DLQ](docs/research/standard-vs-fifo.md) · [Nghiên cứu SV2](docs/research/sv2-services.md)
+- [Danh mục AWS](docs/aws-inventory.md) · [Minh chứng Tuần 1](docs/evidence/week1/README.md)
+- [Hoạt động và giờ làm Tuần 1](docs/worklog/week1.md)
 
-Chi tiết phân công xem tại [docs/task-assignment.md](docs/task-assignment.md).
-
-## 4. Mục Lục Tài Liệu
-
-- [docs/requirements.md](docs/requirements.md): Yêu cầu chức năng, phi chức năng và ràng buộc AWS Learner Lab.
-- [docs/week1-plan.md](docs/week1-plan.md): Kế hoạch Tuần 1, phân định nhiệm vụ chính thức và các thử nghiệm tùy chọn.
-- [docs/task-assignment.md](docs/task-assignment.md): Phân công trách nhiệm, ma trận phụ thuộc và cam kết thời gian.
-- [docs/architecture/README.md](docs/architecture/README.md): Thiết kế kiến trúc, các luồng xử lý thất bại và checklist sơ đồ.
-- [docs/research/standard-vs-fifo.md](docs/research/standard-vs-fifo.md): Nghiên cứu SQS Standard vs FIFO, cơ chế DLQ và kịch bản test.
-- [docs/research/sv2-services.md](docs/research/sv2-services.md): Nghiên cứu dịch vụ SV2 (API Gateway, DynamoDB, SNS, Retry/Alerting).
-- [docs/integration-contract.md](docs/integration-contract.md): Hợp đồng dữ liệu đề xuất, cơ chế idempotency và xử lý lỗi theo lô.
-- [docs/aws-inventory.md](docs/aws-inventory.md): Danh mục tài nguyên AWS dự kiến (PLANNED) và ràng buộc tài khoản Lab.
-- [docs/worklog/week1.md](docs/worklog/week1.md): Biểu mẫu nhật ký làm việc Tuần 1 (mẫu trống chờ ghi nhận giờ thực tế).
-- [docs/evidence/week1/README.md](docs/evidence/week1/README.md): Hướng dẫn minh chứng và quy tắc che giấu thông tin nhạy cảm.
-- [docs/ai-usage.md](docs/ai-usage.md): Minh bạch việc sử dụng AI hỗ trợ phác thảo tài liệu nền tảng.
+Báo cáo tuần và khai báo AI theo yêu cầu giảng viên do Khôi tổng hợp, duy trì và nộp riêng.
