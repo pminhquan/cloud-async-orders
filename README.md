@@ -1,30 +1,102 @@
-# cloud-async-orders: Xử lý đơn hàng bất đồng bộ trên AWS
+# cloud-async-orders
 
-Dự án môn học sử dụng API Gateway, Lambda, SQS/DLQ, DynamoDB và CloudWatch/SNS trong AWS Learner Lab.
+Đề tài Cloud: **Hàng đợi xử lý đơn hàng bất đồng bộ với SQS, DLQ và Lambda**.
 
-## 1. Tiến độ Tuần 1
+Mục tiêu của hệ thống là tách Producer và Consumer bằng Amazon SQS, xử lý lỗi qua DLQ, lưu kết quả vào DynamoDB và giám sát/cảnh báo bằng CloudWatch + SNS.
 
-SV1 đã kiểm thử SQS Standard → Consumer tại `us-east-1`: tin nhắn hợp lệ có `POC_VALIDATED`, tin nhắn lỗi được retry và chuyển DLQ. Consumer hiện chỉ kiểm tra dữ liệu và ghi log, chưa ghi DynamoDB hoặc có idempotency ở mức production. Xem [cấu hình triển khai](docs/aws-inventory.md) và [minh chứng](docs/evidence/week1/README.md).
+## Kiến trúc đích
 
-SV2 đã kiểm thử API Gateway → Producer trả `202`, tạo DynamoDB `Orders` và SNS `order-dlq-alert` với email subscription `Confirmed`. Producer chưa gửi SQS; CloudWatch Alarm vẫn là kế hoạch.
+```text
+Client
+  ↓
+API Gateway
+  ↓
+Producer Lambda
+  ↓
+SQS Standard/FIFO
+  ↓
+Consumer Lambda
+  ↓
+DynamoDB
 
-Ba PR Tuần 1 đã merge vào `main`, gồm mã [Consumer](src/consumer/lambda_function.py), [Producer](src/producer/lambda_function.py), 8 Consumer unit tests và 32 ảnh minh chứng (26 SV1, 6 SV2). Hai PoC được kiểm thử riêng; chưa tích hợp E2E. [Sơ đồ Mermaid](docs/architecture/README.md) phân biệt các thành phần đã triển khai và luồng tương lai.
+Message lỗi → DLQ → CloudWatch Alarm → SNS → Email
+```
 
-## 2. Phân công và lộ trình
+## Trạng thái Tuần 1
 
-- **Quan (SV1, trưởng nhóm)**: SQS/DLQ, Consumer, kiểm thử, minh chứng SV1, sơ đồ kiến trúc và phối hợp tích hợp kỹ thuật.
-- **Khôi (SV2)**: API Gateway/Producer, DynamoDB, SNS/giám sát; tổng hợp README, báo cáo tuần và khai báo AI riêng.
-- Mỗi người cung cấp thông tin trung thực về đóng góp, giờ làm và việc dùng AI; Quan không duy trì báo cáo trùng. Chi tiết tại [phân công](docs/task-assignment.md).
+Tuần 1 tập trung **làm quen dịch vụ, thiết kế kiến trúc và dựng PoC riêng cho hai phía**, chưa coi là hệ thống E2E hoàn chỉnh.
 
-Lộ trình: Tuần 1 nghiên cứu, kiến trúc, môi trường Lab và hai PoC riêng; Tuần 2 tích hợp Producer → SQS → Consumer → DynamoDB; Tuần 3 hoàn thiện cảnh báo (IaC tùy chọn); Tuần 4 kiểm thử tải, chi phí, dọn Lab và demo. [Kế hoạch Tuần 1](docs/week1-plan.md) phân biệt phần kỹ thuật đã hoàn thành và các mục hành chính còn chờ.
+- **Quân (SV1):** SQS/DLQ, Consumer Lambda, retry/DLQ PoC, nghiên cứu Standard/FIFO và sơ đồ kiến trúc.
+- **Khôi (SV2):** API Gateway, Producer Lambda, DynamoDB, SNS Email Subscription và kiểm thử API `202`.
+- Hai PoC được kiểm thử riêng. Việc tích hợp `Producer → SQS → Consumer → DynamoDB` chuyển sang Tuần 2.
 
-## 3. Tài liệu
+Chi tiết:
+- [Báo cáo Tuần 1](docs/week1-report.md)
+- [Kế hoạch Tuần 1](docs/week1-plan.md)
+- [Phân công](docs/task-assignment.md)
+- [Sơ đồ kiến trúc](docs/architecture/README.md)
+- [Danh mục AWS](docs/aws-inventory.md)
+- [Hợp đồng tích hợp](docs/integration-contract.md)
+- [Worklog](docs/worklog/week1.md)
 
-- [Yêu cầu môn học và ràng buộc Lab](docs/requirements.md)
-- [Kế hoạch Tuần 1](docs/week1-plan.md) · [Phân công](docs/task-assignment.md)
-- [Kiến trúc](docs/architecture/README.md) · [Hợp đồng tích hợp](docs/integration-contract.md)
-- [SQS Standard/FIFO và DLQ](docs/research/standard-vs-fifo.md) · [Nghiên cứu SV2](docs/research/sv2-services.md)
-- [Danh mục AWS](docs/aws-inventory.md) · [Minh chứng Tuần 1](docs/evidence/week1/README.md)
-- [Hoạt động và giờ làm Tuần 1](docs/worklog/week1.md)
+## Cấu trúc repository
 
-Báo cáo tuần và khai báo AI theo yêu cầu giảng viên do Khôi tổng hợp, duy trì và nộp riêng; việc nộp vẫn chờ xác nhận.
+```text
+cloud-async-orders/
+├── src/
+│   ├── producer/
+│   └── consumer/
+├── tests/
+├── scripts/
+│   └── test-order-api.ps1
+├── docs/
+│   ├── architecture/
+│   ├── research/
+│   ├── evidence/
+│   ├── worklog/
+│   ├── week1-report.md
+│   └── ...
+├── screenshots/
+│   └── week1/
+│       ├── sv1/
+│       └── sv2/
+├── iac/
+│   └── README.md
+└── README.md
+```
+
+Cách tổ chức này ưu tiên: **mã nguồn riêng, script test riêng, tài liệu riêng và ảnh minh chứng riêng** để dễ kiểm tra trên GitHub.
+
+## Kiểm thử nhanh API PoC
+
+Windows PowerShell:
+
+```powershell
+./scripts/test-order-api.ps1
+```
+
+Kết quả Tuần 1 mong đợi:
+
+```text
+HTTP Status: 202
+```
+
+Lưu ý: `202` ở PoC hiện tại chỉ chứng minh API Gateway → Producer Lambda hoạt động; chưa chứng minh message đã vào SQS.
+
+## Region và quy ước
+
+- Region: `us-east-1`
+- IAM: dùng `LabRole` có sẵn, không tạo IAM User/Role mới.
+- Tags dự kiến thống nhất:
+  - `Project = AsyncOrderProcessing`
+  - `Owner = Khoi-Quan`
+
+## Bảo mật khi để repository Public
+
+Không commit:
+- AWS Access Key
+- Secret Access Key
+- Session Token
+- Mật khẩu hoặc file credentials
+
+Ảnh minh chứng có thể chứa Account ID hoặc email; nên kiểm tra lại thông tin cá nhân trước khi public repository.
