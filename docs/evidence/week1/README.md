@@ -20,7 +20,7 @@ Thời gian chụp, người thực hiện và kênh nộp chưa được xác n
 
 ### W1-Q-CONFIG
 
-[Cấu hình đầy đủ](../../aws-inventory.md): SQS Standard/SSE-SQS; `maxReceiveCount=3`, DLQ retention 14 ngày; Python 3.13, timeout 10 giây, memory 128 MB; trigger Enabled, batch 1/window 0 giây, maximum concurrency 2, partial batch failures Disabled. Ảnh thuộc nhóm SQS-CONFIG, LAMBDA và TRIGGER.
+[Cấu hình đầy đủ](../../aws-inventory.md): SQS Standard/SSE-SQS; `maxReceiveCount=3`, DLQ retention 14 ngày; Python 3.13, timeout 10 giây, memory 128 MB; trigger Enabled, batch 1/window 0 giây, maximum concurrency 2, partial batch failures Disabled. Các ảnh cấu hình thuộc nhóm SQS-CONFIG, LAMBDA và TRIGGER; riêng retention 14 ngày hiển thị ở trường `Message retention period` trong `week1-sqs-dlq-message-arrived.png` (nhóm SQS-INVALID), không phải ảnh cấu hình redrive/liên kết DLQ.
 
 Visibility timeout 60 giây, execution role `LabRole` và tags theo thông tin SV1; chưa có ảnh mở chi tiết visibility/role association/Tags. Theo báo cáo SV1, Lab hạn chế kiểm tra policy; invocation và log thành công không xác nhận toàn bộ quyền hoặc quyền cross-account.
 
@@ -40,7 +40,7 @@ Tên event được lưu và tên Execution Results trong ảnh valid khác nhau
 | `ORD-W1-Q-003`, quantity 2 | Gửi thành công; CloudWatch `/aws/lambda/order-processor` có `POC_VALIDATED` đúng orderId, sự kiện UTC `2026-10-11T05:48:42.106Z` | SQS-VALID |
 | `ORD-W1-Q-ERR-002`, quantity 0 | `INVALID_SCHEMA` lặp; có body cùng orderId/quantity trong `orders-dlq`; SV1 xác nhận chuỗi retry → DLQ | SQS-INVALID |
 
-Ảnh retry chưa mở đủ `messageId` để đối soát độc lập từng lần nhận; cần log mở rộng đã che dữ liệu nếu phải chứng minh toàn chuỗi. `maxReceiveCount=3` không cam kết đúng 3 invocation; receive count ở DLQ không thay cho số lần xử lý tại queue nguồn.
+Ảnh retry cho thấy lỗi lặp nhưng chưa hiển thị đầy đủ `messageId` để kiểm tra độc lập từng lần nhận hoặc đếm chính xác số lần xử lý. `maxReceiveCount=3` không cam kết đúng 3 invocation; receive count ở DLQ không thay cho số lần xử lý tại queue nguồn. Không suy ra có thêm lần kiểm thử ngoài các minh chứng này.
 
 PoC kiểm tra `orderId`, `items[].sku` và `quantity` là số nguyên dương, ghi log và ném exception khi lỗi. Chưa ghi DynamoDB hoặc xử lý lặp an toàn cho nghiệp vụ; batch lỗi áp dụng cả lô. ESM có thể xóa tin sau success mà chưa lưu nghiệp vụ, nên chỉ dùng dữ liệu synthetic. Các ảnh thủ công `ORD-W1-Q-001` dùng `productId`, không có `sku`; chúng không chứng minh Consumer chấp nhận schema đó hoặc tự xóa `ORD-W1-Q-003`.
 
@@ -78,4 +78,6 @@ Các ảnh trong `sv2/` ghi nhận PoC riêng của Khôi; xem [báo cáo Tuần
 
 ## 5. Bàn giao còn cần xác nhận
 
-[Sơ đồ Mermaid](../../architecture/README.md) đã có, chờ sinh viên rà soát/nộp. Còn thiếu ảnh Tags, xác nhận mô hình/quyền tích hợp tài khoản, biên bản họp nhóm và thông tin nộp minh chứng theo hướng dẫn giảng viên. [Nhật ký](../../worklog/week1.md) chưa có giờ thực tế xác nhận. Diff tài liệu hiện chưa commit, cần sinh viên duyệt trước khi lưu/nộp.
+Mã nguồn, [sơ đồ Mermaid](../../architecture/README.md) và 32 ảnh đã có trong `main` sau ba PR Tuần 1. Tags SV2 được báo cáo hoàn thành 80%, chưa có ảnh xác minh; nhóm không yêu cầu thêm ảnh Tags SV2 cho Tuần 1 và không coi toàn bộ tags là đã xác minh. Mô hình/quyền tài khoản cho tích hợp E2E sẽ được thống nhất ở Tuần 2.
+
+Nhóm khai báo cả hai thành viên đã đạt ≥ 8 giờ; [nhật ký](../../worklog/week1.md) ghi rõ chưa có ngày/giờ, tổng giờ chính xác hoặc phân bổ giờ để xác minh độc lập. Biên bản họp nhóm và thông tin nộp minh chứng còn chờ xác nhận theo hướng dẫn giảng viên. Khôi tổng hợp báo cáo tuần và khai báo AI riêng; việc nộp báo cáo, khai báo AI và bộ minh chứng vẫn chờ xác nhận.
