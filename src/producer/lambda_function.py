@@ -1,6 +1,12 @@
+
 import json
 import uuid
+import os
+import boto3
 from datetime import datetime, timezone
+
+sqs = boto3.client("sqs")
+QUEUE_URL = os.environ["QUEUE_URL"]
 
 
 def lambda_handler(event, context):
@@ -21,7 +27,12 @@ def lambda_handler(event, context):
             "createdAt": datetime.now(timezone.utc).isoformat()
         }
 
-        print("New order:")
+        sqs.send_message(
+            QueueUrl=QUEUE_URL,
+            MessageBody=json.dumps(order)
+        )
+
+        print("ORDER_SENT_TO_SQS")
         print(json.dumps(order))
 
         return {
@@ -36,7 +47,7 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
-        print(str(e))
+        print("ERROR:", str(e))
 
         return {
             "statusCode": 500,
