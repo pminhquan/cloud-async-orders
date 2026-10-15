@@ -3,7 +3,13 @@
 Tài liệu đặc tả hợp đồng dữ liệu, cơ chế idempotency (xử lý lặp an toàn) và cấu hình Event Source Mapping cho hệ thống **cloud-async-orders**, phân biệt PoC Tuần 1 với tích hợp Tuần 2.
 
 > [!NOTE]
-> **Schema phẳng ở mục 1.2 là hợp đồng Tuần 2 đã được nhóm thống nhất.** Mã Consumer của Quan mới hoàn thành local, chưa merge vào `main` hoặc triển khai AWS. Cấu hình và các ca AWS do Khôi báo cáo chưa được xác minh độc lập trong lượt cập nhật này; full E2E chưa được xác minh. Phân công và tiến độ xem [kế hoạch Tuần 2](week2-plan.md), giờ làm xem [nhật ký](worklog/week2.md).
+> **Mốc đối soát kỹ thuật ngày 15/10/2026 (Technical Checkpoint 15/10/2026)**:
+> *(Lưu ý: Ngày 15/10/2026 là ngày đối soát kỹ thuật dự án, không phải ngày làm việc thực tế của sinh viên; ngày/giờ làm việc và khai báo AI vẫn giữ TODO)*.
+> - **Schema phẳng ở mục 1.2 là hợp đồng Tuần 2 đã được nhóm thống nhất.**
+> - **PR #5 (Consumer DynamoDB & Idempotency)** đã được merge vào `main` tại commit `914de9b` (point-in-time local fetched ref `914de9baba6d1fd1c05537b4d37c696bfe3b6558`). Consumer đã triển khai trên AWS Lab của Quan và đạt full E2E PASS (`orderId=e918c4af-3a9e-47c9-8a0c-13adbdfef82e`), cùng các ca idempotency, conflict, retry/DLQ, direct Lambda batch và controlled load.
+> - **PR #6 (Tài liệu) và PR #7 (Producer SQS)** vẫn đang mở tại mốc đối soát này (snapshot người dùng xác nhận).
+> - **Producer validation** đã được triển khai, commit tại `835c840` và push lên `origin/feat/week2-producer-sqs` (PR #7 vẫn đang mở). 18/18 unit tests PASS; 26/26 combined worktree tests PASS. **CHƯA** deploy lên AWS; mã Lambda của Khôi trên AWS chưa được chứng minh là cùng code SHA với commit `835c840`.
+> - **Minh chứng của Khôi**: Gồm 8 ảnh direct Lambda invocation (1 valid trả 202; 7 invalid trả 400) và 2 ảnh snapshot trạng thái queue SQS (đều ghi nhận 8 tin nhắn khả dụng); xem [danh mục minh chứng Khôi](evidence/week2/khoi/README.md). Không suy diễn việc gửi/không gửi tin nhắn tuyệt đối hay E2E từ các ảnh này; full E2E trên Lab Khôi chưa được xác minh. Phân công và tiến độ xem [kế hoạch Tuần 2](week2-plan.md), giờ làm xem [nhật ký](worklog/week2.md).
 
 ## 1. Hợp đồng dữ liệu theo từng giai đoạn
 
@@ -54,7 +60,7 @@ Consumer Tuần 1 kiểm tra dữ liệu, log `POC_VALIDATED` và ném exception
   - Endpoint: `POST /orders`.
   - Client cung cấp dữ liệu nghiệp vụ `customerId`, `productId`, `quantity`; Producer chịu trách nhiệm kiểm tra đầu vào và tạo các trường còn lại theo mục 1.2.
   - Giao diện tích hợp yêu cầu **chỉ trả `202 Accepted` sau khi `SendMessage` vào SQS thành công**, trả `400 Bad Request` nếu input sai và `5xx` nếu gửi SQS thất bại. `202` xác nhận tiếp nhận vào queue, chưa xác nhận Consumer hoặc DynamoDB đã xử lý.
-  - Producer trên `main` local tại `942a709` vẫn là PoC Tuần 1, tạo UUID và trả `202` mà chưa gọi SQS. Bản Producer gửi SQS trên AWS là thông tin Khôi báo cáo; cần bàn giao mã và minh chứng để đối chiếu, không coi yêu cầu phản hồi lỗi trên là đã được kiểm chứng đầy đủ.
+  - Producer trên `main` local trước đó là PoC Tuần 1. Bản Producer validation đã được triển khai, commit tại `835c840` và push lên `origin/feat/week2-producer-sqs` (PR #7 vẫn đang mở), 18/18 unit tests PASS và 26/26 combined worktree tests PASS. Bản validated này chưa deploy lên AWS. Khôi có 10 ảnh minh chứng bàn giao gồm 8 ảnh direct Lambda invocation (trả 202 khi hợp lệ và 400 khi thiếu customerId/productId, quantity sai, JSON hỏng) và 2 ảnh snapshot trạng thái queue SQS, xem [danh mục minh chứng Khôi](evidence/week2/khoi/README.md). Không suy diễn việc gọi/không gọi SQS tuyệt đối hay E2E từ các ảnh chụp này; mã Lambda của Khôi trên AWS chưa được chứng minh là cùng code SHA với commit `835c840`.
 - **Producer Lambda -> Amazon SQS**:
   - Dùng `QUEUE_URL`, gửi JSON schema phẳng vào `MessageBody` của SQS Standard `orders-queue`. Cấu hình `QUEUE_URL` và ca Producer → SQS thành công hiện là thông tin Khôi báo cáo.
   - Producer hiện sinh UUID mới cho mỗi request; HTTP retry có thể tạo `orderId` mới. Chưa có cơ chế bảo đảm deduplicate các yêu cầu HTTP lặp. Idempotency ở Consumer chỉ bảo vệ các lần nhận lại cùng `orderId` và trường nghiệp vụ ổn định.
@@ -77,7 +83,7 @@ Consumer Tuần 1 kiểm tra dữ liệu, log `POC_VALIDATED` và ném exception
 3. **Retry và DLQ**: SQS redrive chuyển tin nhắn lỗi sang `orders-dlq` theo `maxReceiveCount`. Consumer không tự gửi thẳng vào DLQ. Ngưỡng receive count không chứng minh có đúng từng đó Lambda invocation, nhất là khi xử lý theo batch.
 4. **Log an toàn**: Chỉ ghi mã lỗi cố định và các định danh `orderId`/`messageId` đã làm sạch, giới hạn độ dài theo từng nhánh xử lý. Không log toàn bộ payload, item cũ/mới, dữ liệu khách hàng/sản phẩm hoặc thông tin nhạy cảm.
 
-Cơ chế trên đã có trong Consumer local tại [commit 0192d2b](https://github.com/pminhquan/cloud-async-orders/commit/0192d2b554cf9795e21eb1b0b20dba8c4102c243), cùng 15 unit tests đã qua theo kết quả local được bàn giao. Theo thông tin Quan, [PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5) đang mở, chưa merge; mã chưa triển khai AWS. Ca SQS → Consumer → DynamoDB do Khôi báo cáo không chứng minh bản đang triển khai có conditional write hoặc idempotency này.
+Cơ chế trên ban đầu được xây dựng tại [commit 0192d2b](https://github.com/pminhquan/cloud-async-orders/commit/0192d2b554cf9795e21eb1b0b20dba8c4102c243), và **[PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5) đã merge vào `main` tại commit `914de9b`** (point-in-time local fetched ref `914de9baba6d1fd1c05537b4d37c696bfe3b6558`), cùng 15 unit tests đã qua theo kết quả local. Mã Consumer từ PR #5 đã được triển khai trên AWS Lab của Quan và kiểm chứng thành công qua full E2E (`orderId=e918c4af-3a9e-47c9-8a0c-13adbdfef82e`), idempotency replay và conflict handling. Đối với Lab của Khôi, ca SQS → Consumer → DynamoDB tự báo cáo chưa chứng minh bản đang triển khai trên đó có conditional write hoặc idempotency này.
 
 ## 4. Cấu hình và giới hạn theo từng môi trường
 
@@ -111,6 +117,9 @@ Giữ nguyên tham chiếu thiết kế visibility timeout ≥ 6 × Lambda timeo
 
 ## 5. Minh chứng E2E và các xác nhận còn thiếu
 
-Khôi báo cáo hai luồng kiểm thử riêng thành công: Producer → SQS và SQS → Consumer → DynamoDB. **Full E2E chưa được xác minh.** `orderId=3435e200-ccd1-4664-90a8-633553d55188` do Producer tạo chưa có minh chứng đối chiếu trong log Consumer hoặc DynamoDB; không kết luận đơn đã được lưu, cũng không kết luận đơn bị mất.
-
-Cần bàn giao đúng mã Producer/Consumer đang triển khai và đối chiếu cùng `orderId` qua phản hồi API, SQS, log Consumer, item DynamoDB `PROCESSED`. Sau khi tích hợp bản Consumer được chấp thuận, tiếp tục kiểm tra duplicate/conflict, lỗi DB, retry/DLQ, batch có lỗi và tải nhỏ có giới hạn; kết quả phải có minh chứng thực tế theo [W2-04–W2-10](week2-plan.md). Không dùng các ca Tuần 1 hoặc unit tests local để thay bằng chứng AWS Tuần 2.
+- **Lab của Quan**: Full E2E đã **PASS** và được xác minh với `orderId=e918c4af-3a9e-47c9-8a0c-13adbdfef82e` từ phản hồi API `POST /orders` khớp chính xác với item trong DynamoDB `Orders` có `status=PROCESSED`. Các ca idempotency (identical duplicate giữ nguyên, conflicting duplicate từ chối với `ORDER_CONFLICT`), retry/DLQ (`INVALID_MESSAGE_WEEK2`), batch trực tiếp 2 record hợp lệ và batch hỗn hợp có lỗi, cùng tải nhỏ 10 request tuần tự đều đã có 19 ảnh minh chứng AWS đầy đủ trong `docs/evidence/week2/`.
+- **Lab của Khôi**: Đã có 10 ảnh minh chứng AWS gồm 8 ảnh Producer direct validation (trả 202 khi hợp lệ và 400 khi input sai) và 2 ảnh snapshot trạng thái queue SQS (cùng 8 messages available); xem chi tiết tại [danh mục minh chứng Khôi](evidence/week2/khoi/README.md). Số đếm 8 tin nhắn không đổi hỗ trợ nhận định request lỗi không gửi SQS nhưng không kết luận tuyệt đối dưới điều kiện bất đồng bộ/concurrency. **Full E2E trên Lab Khôi chưa được xác minh**: `orderId=3435e200-ccd1-4664-90a8-633553d55188` do Producer tạo chưa có minh chứng đối chiếu trong log Consumer hoặc DynamoDB `status=PROCESSED`.
+- **Phân định phạm vi kỹ thuật**:
+  - Direct batch invocation (gọi Lambda với event định dạng SQS) đã được kiểm chứng trên Lab Quan; cơ chế SQS trigger tự động gom batch nhiều record từ queue vẫn chưa được xác minh (trigger thực tế đặt batch size 1).
+  - Hành vi khi DynamoDB gặp lỗi tạm thời hoặc lỗi phân quyền trên AWS chưa có kết quả đối soát riêng.
+  - Bản mã Producer đã được triển khai, validated, commit tại `835c840` và push lên `origin/feat/week2-producer-sqs` (PR #7 vẫn đang mở). Mã Lambda thực tế trên Lab Khôi chưa được chứng minh đồng nhất với commit `835c840`.
