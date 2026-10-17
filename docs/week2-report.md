@@ -337,7 +337,7 @@ Trong Tuần 2, AI được sử dụng để hỗ trợ tham khảo kiến th�
 
 ### 9.1. Công cụ và phạm vi sử dụng
 
-Theo [bản khai báo AI trong repository](ai-declaration.md), Khôi đã tổng hợp việc sử dụng **ChatGPT**, ghi model là **GPT-5.6 Sol** trong hồ sơ hiện có. Thông tin công cụ/model thực tế của Quân chưa có xác nhận riêng nên không mặc định Quân dùng cùng công cụ hoặc model.
+Theo [bản khai báo AI trong repository](ai-declaration.md), Khôi ghi nhận sử dụng **ChatGPT / GPT-5.6 Sol**. Theo thông tin nhóm mới cung cấp, phần Quân được tổng hợp với **ChatGPT / GPT-6.0**. Mục khai báo của Quân đã cập nhật theo phạm vi công việc Consumer/DynamoDB/Retry/DLQ; đây là xác nhận **đã tổng hợp thông tin**, không phải đối soát độc lập lịch sử prompt nguyên văn.
 
 Các nội dung AI tham khảo gồm:
 
@@ -362,7 +362,19 @@ Các nội dung AI tham khảo gồm:
 | Thành viên | Thông tin AI đã có | Phạm vi ghi nhận | Ghi chú |
 |---|---|---|---|
 | Nguyễn Đoàn Minh Khôi | ChatGPT; model ghi trong hồ sơ: GPT-5.6 Sol | Producer/SQS, validation, troubleshooting, minh chứng, báo cáo | Đã tổng hợp theo khai báo trong GitHub |
-| Phạm Minh Quân | Chưa có xác nhận công cụ/model cá nhân | Phần Consumer, DynamoDB, idempotency, retry/DLQ, tests và tài liệu nếu có sử dụng AI | Không tự suy diễn công cụ/model Quân sử dụng |
+| Phạm Minh Quân | ChatGPT / GPT-6.0 (theo thông tin nhóm cung cấp) | Consumer Lambda, DynamoDB conditional write, idempotency, `ORDER_CONFLICT`, SQS trigger, retry/DLQ, E2E, batch/replay, unit tests, tải nhỏ và tài liệu | **Đã tổng hợp theo thông tin nhóm cung cấp** |
+
+### 9.4. Prompt và kết quả AI hỗ trợ phần Quân
+
+Các chủ đề yêu cầu AI đã tổng hợp tương ứng với phần việc của Quân (diễn giải nội dung, **không phải bản chép prompt nguyên văn**):
+
+- Gợi ý Consumer Python đọc SQS `Records`, validate JSON/schema và xử lý lỗi `INVALID_JSON`.
+- Tham khảo conditional `PutItem`, `ConsistentRead=True`, idempotency và `ORDER_CONFLICT` để không ghi đè item cũ.
+- Giải thích Event Source Mapping, redrive `maxReceiveCount=5`, retry/DLQ và CloudWatch Logs.
+- Gợi ý Test Event và kịch bản direct batch valid/mixed/replay, full-batch failure semantics.
+- Hỗ trợ thiết kế unit tests, E2E đối soát `orderId`, small load 10 request và cách trình bày 19 ảnh AWS.
+
+AI cung cấp giải thích kỹ thuật, ví dụ code/JSON và phương án test để **tham khảo**. Quân/nhóm trực tiếp kiểm tra mã nguồn, cấu hình và kết quả trên AWS Learner Lab. Xem [khai báo AI chi tiết](ai-declaration.md) và [minh chứng của Quân](evidence/week2/README.md).
 
 ---
 
