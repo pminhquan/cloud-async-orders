@@ -1,102 +1,265 @@
 # cloud-async-orders
 
-Đề tài Cloud: **Hàng đợi xử lý đơn hàng bất đồng bộ với SQS, DLQ và Lambda**.
+Dự án môn **Điện toán đám mây**: **Hàng đợi xử lý đơn hàng bất đồng bộ với SQS, DLQ và Lambda**.
 
-Mục tiêu của hệ thống là tách Producer và Consumer bằng Amazon SQS, xử lý lỗi qua DLQ, lưu kết quả vào DynamoDB và giám sát/cảnh báo bằng CloudWatch + SNS.
+- **Môn học:** CLC0332779_05UTExMC - Điện toán đám mây
+- **GVHD:** TS. Huỳnh Xuân Phụng
+- **Nhóm:** Serverless
+- **Thành viên:**
+  - 24110311 — Phạm Minh Quân
+  - 24110259 — Nguyễn Đoàn Minh Khôi
+- **AWS Region:** `us-east-1`
+- **IAM:** dùng `LabRole` có sẵn trong AWS Learner Lab, không tạo IAM User/Role mới.
 
-## Kiến trúc đích
+---
+
+## 1. Mục tiêu hệ thống
+
+Hệ thống tiếp nhận đơn hàng qua API, đưa đơn vào hàng đợi để xử lý bất đồng bộ, lưu trạng thái vào DynamoDB và cô lập message lỗi bằng DLQ.
 
 ```text
 Client
   ↓
 API Gateway
   ↓
-Producer Lambda
+order-producer
   ↓
-SQS Standard/FIFO
+orders-queue
   ↓
-Consumer Lambda
+order-consumer
   ↓
-DynamoDB
+DynamoDB Orders
 
-Message lỗi → DLQ → CloudWatch Alarm → SNS → Email
+Invalid / failed message
+  ↓
+Retry
+  ↓
+orders-dlq
 ```
 
-## Trạng thái Tuần 1
+Mục tiêu cuối kỳ còn bao gồm giám sát/cảnh báo CloudWatch + SNS và so sánh SQS Standard/FIFO.
 
-Tuần 1 tập trung **làm quen dịch vụ, thiết kế kiến trúc và dựng PoC riêng cho hai phía**, chưa coi là hệ thống E2E hoàn chỉnh.
+---
 
-- **Quân (SV1):** SQS/DLQ, Consumer Lambda, retry/DLQ PoC, nghiên cứu Standard/FIFO và sơ đồ kiến trúc.
-- **Khôi (SV2):** API Gateway, Producer Lambda, DynamoDB, SNS Email Subscription và kiểm thử API `202`.
-- Hai PoC được kiểm thử riêng. Việc tích hợp `Producer → SQS → Consumer → DynamoDB` chuyển sang Tuần 2.
+## 2. Tiến độ theo tuần
 
-Chi tiết:
+### Tuần 1 — Nền tảng và PoC riêng từng phía
+
+Tuần 1 tập trung nghiên cứu dịch vụ, thiết kế kiến trúc và dựng các PoC độc lập.
+
+**Phạm Minh Quân:**
+- SQS Standard `orders-queue`.
+- DLQ `orders-dlq`.
+- Consumer Lambda PoC.
+- Test valid / invalid / retry / DLQ.
+- Nghiên cứu Standard/FIFO.
+- Sơ đồ kiến trúc.
+
+**Nguyễn Đoàn Minh Khôi:**
+- DynamoDB `Orders`.
+- Producer Lambda `order-producer` PoC.
+- API Gateway `order-api`, route `POST /orders`.
+- Test API trả HTTP `202`.
+- SNS topic `order-dlq-alert` và email subscription.
+
+**Kết luận Tuần 1:** các thành phần đã được test riêng nhưng **chưa có Full E2E** `Producer → SQS → Consumer → DynamoDB`.
+
+Tài liệu:
 - [Báo cáo Tuần 1](docs/week1-report.md)
 - [Kế hoạch Tuần 1](docs/week1-plan.md)
-- [Phân công](docs/task-assignment.md)
-- [Sơ đồ kiến trúc](docs/architecture/README.md)
-- [Danh mục AWS](docs/aws-inventory.md)
-- [Hợp đồng tích hợp](docs/integration-contract.md)
-- [Worklog](docs/worklog/week1.md)
+- [Worklog Tuần 1](docs/worklog/week1.md)
+- [Minh chứng Tuần 1](docs/evidence/week1/README.md)
 
-## Cấu trúc repository
+### Tuần 2 — Tích hợp hoàn chỉnh và kiểm thử
+
+Tuần 2 nâng cấp Producer/Consumer và hoàn thiện luồng xử lý.
+
+**Producer:**
+- Gửi message thật vào SQS.
+- Validate input.
+- Valid request → `202`.
+- Invalid request → `400`.
+- Invalid request không enqueue SQS.
+
+**Consumer:**
+- Validate schema phẳng.
+- Ghi DynamoDB `Orders` với `status = PROCESSED`.
+- Idempotency bằng conditional write `attribute_not_exists(orderId)`.
+- Phát hiện `ORDER_CONFLICT` khi cùng `orderId` nhưng business payload khác.
+
+**Kiểm thử:**
+- Full E2E API → Producer → SQS → Consumer → DynamoDB: PASS trên Lab Quân.
+- Idempotency: PASS.
+- ORDER_CONFLICT: PASS.
+- Invalid JSON → Retry → DLQ: PASS.
+- Direct batch valid/mixed/replay: PASS theo thiết kế full-batch failure.
+- Small load test 10 request: 10/10 HTTP `202`, 10 item `PROCESSED` trên Lab Quân.
+- Producer validation trên Lab Khôi: PASS, có 10 ảnh minh chứng local.
+
+Tài liệu:
+- [Báo cáo Tuần 2](docs/week2-report.md)
+- [Kế hoạch Tuần 2](docs/week2-plan.md)
+- [Worklog Tuần 2](docs/worklog/week2.md)
+- [Minh chứng Tuần 2](docs/evidence/week2/README.md)
+
+---
+
+## 3. Schema message Tuần 2
+
+```json
+{
+  "orderId": "UUID",
+  "customerId": "CUS001",
+  "productId": "P001",
+  "quantity": 2,
+  "status": "PENDING",
+  "createdAt": "2026-10-15T00:00:00+00:00"
+}
+```
+
+Quy ước:
+- Producer tạo `orderId` và `createdAt`.
+- Producer gửi `status = PENDING`.
+- Consumer validate đủ field.
+- Consumer ghi DynamoDB với `status = PROCESSED`.
+
+Chi tiết: [Integration Contract](docs/integration-contract.md).
+
+---
+
+## 4. Cấu trúc repository
 
 ```text
 cloud-async-orders/
 ├── src/
 │   ├── producer/
+│   │   └── lambda_function.py
 │   └── consumer/
+│       └── lambda_function.py
 ├── tests/
+│   ├── fixtures/
+│   ├── test_producer.py
+│   └── test_consumer.py
 ├── scripts/
 │   └── test-order-api.ps1
 ├── docs/
 │   ├── architecture/
-│   ├── research/
 │   ├── evidence/
+│   │   ├── week1/
+│   │   └── week2/
+│   ├── research/
 │   ├── worklog/
+│   │   ├── week1.md
+│   │   └── week2.md
+│   ├── requirements.md
+│   ├── task-assignment.md
+│   ├── integration-contract.md
+│   ├── aws-inventory.md
+│   ├── week1-plan.md
 │   ├── week1-report.md
-│   └── ...
+│   ├── week2-plan.md
+│   └── week2-report.md
 ├── screenshots/
-│   └── week1/
-│       ├── sv1/
-│       └── sv2/
+│   ├── week1/
+│   └── week2/
+│       └── khoi/
 ├── iac/
-│   └── README.md
 └── README.md
 ```
 
-Cách tổ chức này ưu tiên: **mã nguồn riêng, script test riêng, tài liệu riêng và ảnh minh chứng riêng** để dễ kiểm tra trên GitHub.
+---
 
-## Kiểm thử nhanh API PoC
+## 5. Chạy unit tests
 
-Windows PowerShell:
+```bash
+python -m pytest -q
+```
+
+Trạng thái trên bộ source hiện tại:
+
+```text
+33 passed, 81 subtests passed
+```
+
+---
+
+## 6. Kiểm thử API
+
+Request hợp lệ:
+
+```json
+{
+  "customerId": "CUS001",
+  "productId": "P001",
+  "quantity": 2
+}
+```
+
+Kỳ vọng:
+
+```text
+HTTP 202
+```
+
+Các request thiếu `customerId`, thiếu `productId`, `quantity <= 0`, `quantity` sai kiểu hoặc malformed JSON phải trả:
+
+```text
+HTTP 400
+```
+
+Script hỗ trợ:
 
 ```powershell
 ./scripts/test-order-api.ps1
 ```
 
-Kết quả Tuần 1 mong đợi:
+---
+
+## 7. GitHub / Pull Request Tuần 2
+
+- PR #5 — Consumer + DynamoDB + idempotency: **Merged**.
+- PR #7 — Producer + SQS + validation: **Merged**.
+- PR #6 — tài liệu/evidence Tuần 2: trạng thái cần kiểm tra lại trước khi nộp cuối.
+
+Các hash đã ghi nhận trong quá trình làm:
 
 ```text
-HTTP Status: 202
+Consumer source commit: 0192d2b
+Consumer merge commit:  914de9b
+Producer SQS commit:     e04e1f2
+Producer validation:     835c840
+Producer squash main:    015d420
 ```
 
-Lưu ý: `202` ở PoC hiện tại chỉ chứng minh API Gateway → Producer Lambda hoạt động; chưa chứng minh message đã vào SQS.
+> Nếu GitHub hiện tại có hash khác do rebase/squash bổ sung, ưu tiên lịch sử thực tế trên GitHub tại thời điểm nộp.
 
-## Region và quy ước
+---
 
-- Region: `us-east-1`
-- IAM: dùng `LabRole` có sẵn, không tạo IAM User/Role mới.
-- Tags dự kiến thống nhất:
-  - `Project = AsyncOrderProcessing`
-  - `Owner = Khoi-Quan`
-
-## Bảo mật khi để repository Public
+## 8. Bảo mật khi Public repository
 
 Không commit:
 - AWS Access Key
 - Secret Access Key
 - Session Token
-- Mật khẩu hoặc file credentials
+- Password
+- File credentials
+- Thông tin đăng nhập Learner Lab
 
-Ảnh minh chứng có thể chứa Account ID hoặc email; nên kiểm tra lại thông tin cá nhân trước khi public repository.
+Ảnh minh chứng trước khi public cần rà soát email, Account ID và thông tin cá nhân không cần thiết.
+
+---
+
+## 9. Checklist trước khi nộp Tuần 2
+
+- [x] Source Producer.
+- [x] Source Consumer.
+- [x] Producer validation.
+- [x] Consumer idempotency.
+- [x] Unit tests.
+- [x] Full E2E có evidence trên Lab Quân.
+- [x] Retry/DLQ có evidence trên Lab Quân.
+- [x] Producer validation có evidence trên Lab Khôi.
+- [ ] Điền worklog giờ thực tế Tuần 2 của từng thành viên, tối thiểu 8 giờ/người.
+- [ ] Xác nhận khai báo AI của từng thành viên.
+- [ ] Kiểm tra lại link GitHub/PR/evidence sau push cuối.
+- [ ] Kiểm tra trạng thái PR #6 và merge nếu nhóm quyết định dùng PR này làm tài liệu nộp.
