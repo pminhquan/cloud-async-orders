@@ -30,6 +30,8 @@
 | Thành viên | Công cụ/model | Phạm vi dùng AI | Trạng thái xác nhận |
 |---|---|---|---|
 | Nguyễn Đoàn Minh Khôi | ChatGPT / GPT-5.6 Sol | AWS troubleshooting, Producer, validation, evidence, báo cáo | Đã tổng hợp |
-| Phạm Minh Quân | [điền đúng thực tế] | [điền đúng thực tế] | Chờ Quân xác nhận |
+| Phạm Minh Quân | Chưa có thông tin xác nhận cá nhân | Consumer, DynamoDB, idempotency, retry/DLQ; AI nếu được sử dụng thì khai đúng công cụ | Chưa nhận xác nhận từ Quân |
 
 Không tự điền công cụ/model AI của thành viên khác nếu người đó chưa xác nhận.
+
+**Lưu ý:** khai báo ChatGPT GPT-5.6 Sol chỉ được xác nhận theo nội dung đã cung cấp cho phần Khôi; không tự suy rộng sang Quân. Nếu GV yêu cầu tên prompt/model của từng người, Quân cần bổ sung đúng dữ liệu đã dùng.

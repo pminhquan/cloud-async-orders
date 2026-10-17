@@ -36,7 +36,7 @@ docs/worklog/week2.md
 docs/ai-declaration.md
 ```
 
-Điền các ô `[điền]` bằng dữ liệu thật trước khi nộp.
+Nhóm báo cáo đáp ứng thời gian tối thiểu; giờ/ngày chi tiết chưa có dữ liệu kiểm toán. Không tự tạo mốc thời gian giả.
 
 ## 4. Kiểm tra evidence
 
@@ -47,15 +47,15 @@ screenshots/week1/
 screenshots/week2/khoi/
 ```
 
-Bộ 19 ảnh phía Quân cần được đồng bộ từ branch/PR tài liệu Tuần 2 nếu muốn main chứa đầy đủ evidence của cả hai thành viên.
+Bộ 19 ảnh phía Quân được script đồng bộ trực tiếp từ branch PR #6 sang branch PR #8; xác nhận tồn tại bằng `Test-Path` và Git diff.
 
 ## 5. Push Git
 
 Trong repository local đang liên kết GitHub:
 
 ```powershell
-git switch main
-git pull origin main
+git switch docs/week1-week2-final-v2
+git fetch origin
 git status
 ```
 
@@ -67,7 +67,7 @@ git diff
 python -m pytest -q
 git add README.md docs screenshots src tests scripts iac .gitignore
 git commit -m "docs: organize detailed week1 and week2 submission"
-git push origin main
+git push origin docs/week1-week2-final-v2
 ```
 
 Nếu nhóm không cho push trực tiếp `main`, tạo branch mới và Pull Request.
@@ -78,7 +78,7 @@ Chỉ coi là sẵn sàng nộp khi:
 
 - source/tests PASS;
 - báo cáo Tuần 1/Tuần 2 rõ ràng;
-- worklog đủ ≥ 8 giờ thực tế/người/tuần;
+- người nộp báo cáo đạt ≥ 8 giờ/người/tuần; nhật ký giờ chi tiết chỉ bổ sung từ dữ liệu thực;
 - khai báo AI đúng thực tế;
 - evidence truy cập được;
 - GitHub Public và link không lỗi.

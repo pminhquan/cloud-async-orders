@@ -178,7 +178,7 @@ python -m pytest -q
 Trạng thái trên bộ source hiện tại:
 
 ```text
-33 passed, 81 subtests passed
+33 passed, 81 subtests passed (kết quả đã ghi nhận trên bộ mã nguồn trước; chưa chạy lại trên máy Khôi sau khi tạo PR #8)
 ```
 
 ---
@@ -259,7 +259,12 @@ Không commit:
 - [x] Full E2E có evidence trên Lab Quân.
 - [x] Retry/DLQ có evidence trên Lab Quân.
 - [x] Producer validation có evidence trên Lab Khôi.
-- [ ] Điền worklog giờ thực tế Tuần 2 của từng thành viên, tối thiểu 8 giờ/người.
+- [x] Người nộp báo cáo nhóm đã đáp ứng yêu cầu tối thiểu 8 giờ/người/tuần; phân bổ giờ chi tiết chưa được đối soát.
 - [ ] Xác nhận khai báo AI của từng thành viên.
 - [ ] Kiểm tra lại link GitHub/PR/evidence sau push cuối.
-- [ ] Kiểm tra trạng thái PR #6 và merge nếu nhóm quyết định dùng PR này làm tài liệu nộp.
+- [x] 19 ảnh AWS của Quân đã được đồng bộ từ PR #6 vào nhánh PR #8; PR #6 vẫn cần được nhóm quyết định đóng/merge để tránh tài liệu trùng.
+
+## 10. Ma trận đối chiếu nhanh
+
+- [Ma trận từng yêu cầu → người thực hiện → kết quả → ảnh/code](docs/TRACEABILITY-W1-W2.md).
+- [Chỉ mục 29 ảnh kiểm thử Tuần 2](docs/evidence/week2/README.md).

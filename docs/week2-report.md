@@ -24,7 +24,7 @@
 - Batch/replay.
 - Small load test.
 
-## 3. Kết quả tổng hợp
+## 2. Kết quả tổng hợp
 
 | Hạng mục | Kết quả |
 |---|---|
@@ -41,7 +41,7 @@
 | Direct mixed/replay | PASS theo full-batch semantics |
 | Small load test | PASS 10/10 trên Lab Quân |
 | Consumer unit tests | 15/15 PASS theo PR #5 |
-| Toàn bộ test local hiện tại | 33 passed, 81 subtests passed |
+| Kết quả test đã ghi nhận trong bản source trước | 33 passed, 81 subtests passed; chưa chạy lại trên máy Khôi sau PR #8 |
 
 ## 4. Phần Nguyễn Đoàn Minh Khôi — Producer/API
 
@@ -175,7 +175,7 @@ Trạng thái cần kiểm tra lại ngay trước khi nộp vì có thể thay 
 - [Evidence Tuần 2](evidence/week2/README.md)
 - [Ảnh Khôi](../screenshots/week2/khoi/README.md)
 
-Bộ 19 ảnh Lab Quân được quản lý ở nhánh/PR tài liệu Tuần 2; nếu chưa có trong working tree hiện tại thì cần pull/copy từ branch tài liệu trước khi nộp repository hoàn chỉnh.
+Bộ 19 ảnh Lab Quân đã được đồng bộ từ PR #6 vào `docs/evidence/week2/` trong gói cập nhật kèm theo. [Chỉ mục 29 ảnh Tuần 2](evidence/week2/README.md) có liên kết riêng từng ảnh.
 
 ## 8. AI hỗ trợ
 
@@ -195,8 +195,13 @@ Nhóm trực tiếp triển khai, kiểm thử và xác nhận kết quả thự
 
 Xem [worklog/week2.md](worklog/week2.md).
 
-**Bắt buộc:** mỗi thành viên điền ngày và số giờ thực tế, tổng tối thiểu 8 giờ/người trước khi nộp. Không tự suy ra giờ từ commit/log.
+**Xác nhận của nhóm:** người nộp báo cáo cả hai đã đạt mức tối thiểu 8 giờ/người; hiện không có số giờ/ngày chi tiết để kiểm toán. Xem worklog, chỉ điền giờ chi tiết khi có dữ liệu thật.
 
 ## 10. Kết luận
 
 Tuần 2 đã đạt mục tiêu tích hợp lõi. Producer, SQS, Consumer và DynamoDB đã hoạt động theo pipeline bất đồng bộ; validation, idempotency và DLQ đã được kiểm thử. Các phần CloudWatch Alarm/SNS alert hoàn chỉnh, benchmark Standard/FIFO và load lớn được chuyển sang tuần sau.
+
+
+## Đối chiếu yêu cầu theo người thực hiện và bằng chứng
+
+Xem [ma trận Tuần 1–Tuần 2](TRACEABILITY-W1-W2.md) và [chỉ mục 29 ảnh AWS Tuần 2](evidence/week2/README.md). Số lượng 29 gồm 19 ảnh Quân và 10 ảnh Khôi.

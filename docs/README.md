@@ -34,7 +34,11 @@
 
 ## Trước khi nộp
 
-- Điền giờ làm thực tế trong worklog.
+- Nhóm báo cáo đạt tối thiểu 8 giờ/người/tuần; không tự dựng số giờ/ngày khi chưa có dữ liệu đối soát.
 - Xác nhận thông tin AI của Quân.
 - Kiểm tra link GitHub/PR sau lần push cuối.
-- Nếu muốn repo local chứa đủ 19 ảnh Lab Quân, đồng bộ ảnh từ PR/branch tài liệu Tuần 2 trước khi nộp.
+- Bộ 19 ảnh Lab Quân đã đồng bộ từ PR #6 vào PR #8 bằng script cập nhật.
+
+## Ma trận đối chiếu
+
+- [Từng yêu cầu và minh chứng](TRACEABILITY-W1-W2.md)
