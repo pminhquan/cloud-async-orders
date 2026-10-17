@@ -1,8 +1,18 @@
 # Infrastructure as Code
 
-Tuần 1 nhóm triển khai và kiểm thử tài nguyên trực tiếp trên AWS Learner Lab bằng AWS Console.
+## Tuần 1–2
 
-Thư mục này được chuẩn bị cho giai đoạn sau nếu nhóm chọn tự động hóa bằng CloudFormation/SAM.
-Hiện tại **chưa có template IaC được xem là đã triển khai**.
+Nhóm triển khai tài nguyên trực tiếp trên AWS Learner Lab bằng Console để tập trung hiểu dịch vụ và hoàn thiện luồng xử lý.
 
-Không đưa Access Key, Secret Key, Session Token hoặc thông tin đăng nhập Learner Lab vào repository.
+Hiện **không coi IaC là deliverable đã triển khai**.
+
+## Giai đoạn sau
+
+Nếu thời gian cho phép có thể dùng CloudFormation/SAM để mô tả:
+- SQS main/DLQ;
+- Lambda Producer/Consumer;
+- DynamoDB;
+- API Gateway;
+- CloudWatch Alarm/SNS.
+
+Không commit AWS credential vào template/repository.
