@@ -260,7 +260,7 @@ Không commit:
 - [x] Retry/DLQ có evidence trên Lab Quân.
 - [x] Producer validation có evidence trên Lab Khôi.
 - [x] Người nộp báo cáo nhóm đã đáp ứng yêu cầu tối thiểu 8 giờ/người/tuần; phân bổ giờ chi tiết chưa được đối soát.
-- [ ] Xác nhận khai báo AI của từng thành viên.
+- [x] Đã tổng hợp khai báo AI của Khôi (ChatGPT / GPT-5.6 Sol) và Quân (ChatGPT / GPT-6.0 theo thông tin nhóm cung cấp); xem [docs/ai-declaration.md](docs/ai-declaration.md).
 - [ ] Kiểm tra lại link GitHub/PR/evidence sau push cuối.
 - [x] 19 ảnh AWS của Quân đã được đồng bộ từ PR #6 vào nhánh PR #8; PR #6 vẫn cần được nhóm quyết định đóng/merge để tránh tài liệu trùng.
 

@@ -35,7 +35,7 @@
 ## Trước khi nộp
 
 - Nhóm báo cáo đạt tối thiểu 8 giờ/người/tuần; không tự dựng số giờ/ngày khi chưa có dữ liệu đối soát.
-- Xác nhận thông tin AI của Quân.
+- Đã tổng hợp thông tin AI của Quân (ChatGPT / GPT-6.0 theo thông tin nhóm cung cấp); xem [ai-declaration.md](ai-declaration.md).
 - Kiểm tra link GitHub/PR sau lần push cuối.
 - Bộ 19 ảnh Lab Quân đã đồng bộ từ PR #6 vào PR #8 bằng script cập nhật.
 

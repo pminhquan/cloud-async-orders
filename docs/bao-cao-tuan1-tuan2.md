@@ -306,6 +306,8 @@ ChatGPT hỗ trợ:
 - phân tích backlog/DLQ;
 - tổ chức evidence/report.
 
+Theo thông tin nhóm cung cấp, **Phạm Minh Quân sử dụng ChatGPT / GPT-6.0** để tham khảo xử lý Consumer/SQS, DynamoDB conditional write, idempotency, `ORDER_CONFLICT`, retry/DLQ, batch/replay, E2E và tests. Các nhóm nội dung yêu cầu AI và kết quả gợi ý đã được tổng hợp tại [docs/ai-declaration.md](ai-declaration.md); đây không phải bản chép lịch sử prompt nguyên văn.
+
 Nhóm trực tiếp triển khai, kiểm thử và xác nhận kết quả thực tế.
 
 ## 9. Worklog
@@ -328,7 +330,7 @@ Tuần 2 đã đạt mục tiêu tích hợp lõi. Producer, SQS, Consumer và D
 - [x] Evidence Producer Tuần 2 phía Khôi.
 - [x] Evidence Tuần 2 phía Quân đã được báo cáo/push qua PR tài liệu.
 - [ ] Điền giờ làm thực tế Tuần 1 và Tuần 2.
-- [ ] Quân xác nhận phần khai báo AI của mình.
+- [x] Phần AI của Quân đã được tổng hợp theo thông tin nhóm cung cấp (ChatGPT / GPT-6.0); xem [khai báo chi tiết](ai-declaration.md).
 - [ ] Kiểm tra trạng thái PR #6 và toàn bộ link sau push cuối.
 
 
