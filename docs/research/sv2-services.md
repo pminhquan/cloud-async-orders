@@ -1,24 +1,54 @@
-# Báo Cáo Nghiên Cứu Kỹ Thuật: Dịch Vụ Phụ Trách Của SV2 (Khôi)
+# Nghiên cứu kỹ thuật — phần Khôi phụ trách
 
-Tài liệu tổng hợp nghiên cứu kỹ thuật các thành phần do SV2 (Khôi) phụ trách trong dự án **cloud-async-orders**: Amazon API Gateway, Producer Lambda (`order-producer`), Amazon DynamoDB (`Orders`), CloudWatch Alarms, Amazon SNS Topic và cơ chế retry/DLQ/alerting. Quan cung cấp thông tin DLQ và kết quả kiểm thử Consumer để phối hợp giám sát.
+Tài liệu này tách **kiến thức/nguyên tắc thiết kế** khỏi **trạng thái triển khai thực tế**.
 
-## 1. Ghi Chú Kỹ Thuật Có Trích Dẫn (Technical Notes)
+## 1. API Gateway + Producer
 
-| Dịch vụ / Khía cạnh | Ghi chú kỹ thuật & Phân tích giải pháp | Trích dẫn tài liệu AWS |
-| :--- | :--- | :--- |
-| **Amazon API Gateway** | **HTTP API vs REST API**: HTTP API có chi phí thấp hơn và hỗ trợ payload format 2.0 cho Lambda; REST API hỗ trợ request validation tại gateway và API keys. Đề xuất (**PROPOSED**): sử dụng HTTP API cho luồng tiếp nhận đơn hàng đơn giản hoặc REST API nếu cần validate schema tại gateway. | [API Gateway HTTP vs REST](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html)<br>[Lambda API Gateway](https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html) |
-| **Producer Lambda (`order-producer`)** | **Xử lý phản hồi & lỗi SQS**: Producer chỉ trả về `202 Accepted` sau khi gọi thành công `SendMessage` vào SQS; trả về `400 Bad Request` nếu payload sai; trả về `5xx` nếu gửi SQS thất bại để client retry với cùng `orderId`. AWS SDK có thể thử lại lệnh gửi trong giới hạn cấu hình; Producer không tự retry vô hạn. | [SQS SendMessage API](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html)<br>[AWS SDK Retry Behavior](https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html) |
-| **Amazon DynamoDB (`Orders`)** | **Ghi nguyên tử có điều kiện**: Sử dụng `PutItem` với Condition Expression `attribute_not_exists(orderId)` để tránh ghi đè đơn hàng đã có. Khi trùng `orderId`, Consumer đọc và so sánh payload theo [hợp đồng tích hợp](../integration-contract.md) để phân biệt yêu cầu lặp với dữ liệu xung đột. | [DynamoDB Condition Expressions](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)<br>[DynamoDB GetItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html) |
-| **CloudWatch Alarm & Amazon SNS** | **Giám sát DLQ & Cảnh báo Email**: Dự kiến đặt ngưỡng `ApproximateNumberOfMessagesVisible >= 1` trên DLQ; cần chốt period, số kỳ đánh giá và cách xử lý dữ liệu thiếu. SNS topic policy phải cho phép CloudWatch gửi thông báo; người nhận phải xác nhận đăng ký email (Confirmed Subscription). Chưa có minh chứng triển khai cảnh báo. | [CloudWatch Alarm Notifications](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Notify_Users_Alarm_Changes.html)<br>[SNS Email Notifications](https://docs.aws.amazon.com/sns/latest/dg/sns-email-notifications.html) |
+Thiết kế dùng `POST /orders`.
 
-## 2. Các Câu Hỏi Kỹ Thuật Tồn Đọng (Unresolved Questions)
+Producer cần:
+- parse JSON;
+- validate `customerId`, `productId`, `quantity`;
+- tạo `orderId`;
+- tạo `createdAt`;
+- tạo `status=PENDING`;
+- gọi `SQS SendMessage`;
+- trả `202` chỉ khi gửi thành công;
+- trả `400` khi input sai;
+- trả `500` khi gửi SQS lỗi.
 
-- **Lựa chọn loại API Gateway**: Cần thống nhất chọn HTTP API hay REST API (**PROPOSED**, chờ nhóm chốt).
-- **Quyền hạn LabRole thực tế**: Cần kiểm tra quyền `sqs:SendMessage` cho Producer và `dynamodb:PutItem` / `dynamodb:GetItem` cho Consumer theo thiết kế ghi có điều kiện và đọc đối chiếu khi trùng `orderId`. Quyền CloudWatch gửi đến SNS cần đối soát riêng qua topic policy; chưa xác minh đầy đủ các quyền cho giai đoạn tích hợp.
-- **Tương thích Region & Hai tài khoản Lab**: PoC SV1 đã dùng `us-east-1`; cần xác nhận các thành phần SV2 tương thích Region này và chốt mô hình 1 tài khoản hay cross-account theo [docs/aws-inventory.md](../aws-inventory.md) (**CHƯA XÁC MINH / UNVERIFIED**).
-- **Phân bổ giới hạn Concurrency**: Thống nhất phân bổ trần 10 concurrency giữa Producer Lambda và Consumer Lambda để không vượt quota tài khoản Lab.
+Trạng thái Tuần 2: **đã triển khai**.
 
-## 3. Tiêu Chuẩn Bàn Giao & Nghiệm Thu (Acceptance Criteria)
+## 2. DynamoDB
 
-- Báo cáo nghiên cứu bao quát đầy đủ các dịch vụ phụ trách, trích dẫn tài liệu AWS chính thức, phân định rõ nội dung đề xuất (PROPOSED) và hiện trạng thực tế (UNVERIFIED).
-- Tích hợp nhất quán với hợp đồng dữ liệu tại [docs/integration-contract.md](../integration-contract.md) và danh mục tài nguyên tại [docs/aws-inventory.md](../aws-inventory.md).
+Table `Orders`, key `orderId`.
+
+Consumer dùng:
+
+```text
+ConditionExpression = attribute_not_exists(orderId)
+```
+
+Nếu conditional write fail vì item đã tồn tại, đọc consistent item và so sánh business fields để phân biệt replay hợp lệ với conflict.
+
+Trạng thái Tuần 2: **đã triển khai trên Consumer**.
+
+## 3. SNS / CloudWatch Alarm
+
+SNS topic `order-dlq-alert` đã tạo từ Tuần 1.
+
+CloudWatch Alarm tự động cảnh báo DLQ là phần giai đoạn sau; không mô tả là đã nghiệm thu trong Tuần 2 nếu chưa có evidence.
+
+## 4. Standard/FIFO
+
+Tuần 2 chủ yếu dùng Standard queue. Benchmark/so sánh Standard/FIFO hoàn chỉnh được chuyển sang giai đoạn sau.
+
+## 5. Tài liệu AWS tham khảo
+
+- API Gateway HTTP vs REST: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
+- Lambda + API Gateway: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
+- SQS SendMessage: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html
+- DynamoDB condition expressions: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html
+- DynamoDB GetItem: https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
+- CloudWatch alarm notifications: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Notify_Users_Alarm_Changes.html
+- SNS email: https://docs.aws.amazon.com/sns/latest/dg/sns-email-notifications.html

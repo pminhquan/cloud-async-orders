@@ -1,33 +1,48 @@
-# SQS Standard, FIFO và DLQ
+# Nghiên cứu SQS Standard và FIFO
 
-## 1. So sánh kỹ thuật
+## 1. SQS Standard
 
-| Khía cạnh | Standard | FIFO |
-| :--- | :--- | :--- |
-| Thứ tự | Best-effort; có thể nhận lệch thứ tự | Giữ thứ tự trong từng `MessageGroupId`, không bảo đảm thứ tự chung giữa các nhóm |
-| Phân phối / chống gửi trùng | At-least-once; có thể nhận lại tin nhắn | Chặn gửi trùng trong 5 phút bằng `MessageDeduplicationId` hoặc hash body khi bật content-based deduplication |
-| Thông lượng | Phù hợp tải lớn không yêu cầu thứ tự nghiêm ngặt | Phụ thuộc nhóm tin nhắn, cấu hình queue và Region |
-| DLQ | Cùng loại với queue nguồn | Cùng loại, tên có hậu tố `.fifo`; chuyển tin lỗi sang DLQ có thể phá vỡ thứ tự nghiệp vụ |
+Đặc điểm phù hợp với đề tài:
+- throughput cao;
+- delivery at-least-once;
+- có thể có duplicate;
+- thứ tự không đảm bảo tuyệt đối.
 
-Deduplication ở FIFO không thay thế idempotency: Consumer vẫn có thể nhận lại tin nhắn nếu đã ghi DB nhưng chưa xóa tin khỏi SQS. Hệ thống đích cần xử lý lặp an toàn theo [hợp đồng tích hợp](../integration-contract.md).
+Vì vậy Consumer phải có idempotency theo `orderId`.
 
-`maxReceiveCount` đếm số lần nhận, gồm lần đầu, không phải số lần retry thuần túy. SQS chuyển tin sang DLQ theo redrive policy khi chưa xử lý thành công; cấu hình 3 không cam kết đúng 3 invocation hoặc thời điểm cố định.
+## 2. SQS FIFO
 
-Nguồn AWS: [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html), [FIFO ordering](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues-understanding-logic.html), [FIFO deduplication](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues-exactly-once-processing.html), [DLQ](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
+Đặc điểm:
+- duy trì thứ tự trong message group;
+- hỗ trợ deduplication;
+- tên queue phải có hậu tố `.fifo`;
+- source queue và DLQ phải cùng loại khi cấu hình redrive.
 
-## 2. Kết quả Tuần 1 và phạm vi kiểm thử
+## 3. Áp dụng trong dự án
 
-PoC dùng Standard. Tin nhắn `ORD-W1-Q-003` có `POC_VALIDATED`; `ORD-W1-Q-ERR-002` có `INVALID_SCHEMA` lặp và được xác nhận trong `orders-dlq`. Nguồn: [minh chứng SQS → Consumer](../evidence/week1/README.md#w1-q-e2e). Consumer chỉ validate/log, chưa ghi DynamoDB hoặc có idempotency production.
+Tuần 1:
+- nghiên cứu Standard/FIFO;
+- PoC chính dùng Standard.
 
-Các ca dưới đây là kế hoạch cho giai đoạn sau, **chưa được thực thi trong PoC SV1 Tuần 1**. Kết quả SV2 riêng cần đối soát trước khi dùng làm bằng chứng tích hợp.
+Tuần 2:
+- luồng tích hợp/Retry-DLQ và load nhỏ tập trung Standard queue;
+- idempotency được hoàn thiện ở Consumer để xử lý khả năng duplicate.
 
-| Ca kiểm thử | Kết quả cần kiểm tra |
-| :--- | :--- |
-| API nhận payload sai | Trả `400`, không gửi SQS |
-| Hai yêu cầu cùng `orderId` và payload | Conditional write giữ một bản ghi, xử lý lặp an toàn |
-| FIFO gửi trùng trong/sau 5 phút | Cùng deduplication ID trong 5 phút chỉ tạo một tin; sau 5 phút có thể gửi lại nhưng DB vẫn giữ một bản ghi |
-| Lô có tin hợp lệ và tin lỗi | Khi bật `ReportBatchItemFailures`, chỉ retry phần lỗi; FIFO dừng ở lỗi đầu tiên và trả cả tin lỗi/chưa xử lý |
-| FIFO cùng `MessageGroupId` | Xử lý đúng thứ tự gửi |
-| Cảnh báo DLQ | Alarm chuyển `ALARM` và xác nhận email SNS được giao |
+Giai đoạn sau:
+- tạo/kiểm thử FIFO có kiểm soát;
+- đo/so sánh ordering, duplicate behavior, throughput và cấu hình message group/deduplication;
+- không kết luận Standard/FIFO chỉ từ lý thuyết nếu chưa có benchmark thực tế.
 
-Tải nhỏ có thể không tự phát sinh đảo thứ tự hoặc phân phối lặp trên Standard; cần chủ động gửi cùng `orderId` để kiểm tra idempotency.
+## 4. Tiêu chí so sánh dự kiến
+
+| Tiêu chí | Standard | FIFO |
+|---|---|---|
+| Ordering | Best-effort | Theo message group |
+| Duplicate | Có thể | Có cơ chế deduplication |
+| Throughput | Cao | Có giới hạn/cơ chế riêng |
+| Độ phức tạp Producer | Thấp | Cần group/dedup config |
+| Idempotency Consumer | Vẫn cần | Vẫn nên có |
+
+## 5. Kết luận tạm
+
+Standard phù hợp để kiểm thử pipeline bất đồng bộ ban đầu. FIFO là nhánh so sánh của đề tài, cần benchmark riêng ở tuần sau.
