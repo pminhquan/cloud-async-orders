@@ -1,0 +1,271 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Week 3 Observability & Alerting for AsyncOrderProcessing (AWS Learner Lab compatible).
+  Defines CloudWatch Alarms for SQS Dead Letter Queue (DLQ) visible messages,
+  optional main queue backlog, and Lambda consumer errors/throttles, wired to an
+  existing Amazon SNS Topic ARN without creating IAM roles or duplicate topics.
+
+Parameters:
+  AWSRegionName:
+    Type: String
+    Default: us-east-1
+    AllowedValues:
+      - us-east-1
+      - us-west-2
+    Description: >
+      Expected AWS Region for stack deployment (Learner Lab default is us-east-1).
+      Validated against AWS::Region via TemplateRule / Condition so the stack cannot
+      be deployed into a mismatched region.
+
+  MainQueueName:
+    Type: String
+    Default: orders-queue
+    MinLength: 1
+    MaxLength: 80
+    AllowedPattern: "^[a-zA-Z0-9_-]+(\\.fifo)?$"
+    Description: Name of the primary Amazon SQS queue.
+
+  DLQName:
+    Type: String
+    Default: orders-dlq
+    MinLength: 1
+    MaxLength: 80
+    AllowedPattern: "^[a-zA-Z0-9_-]+(\\.fifo)?$"
+    Description: Name of the Dead Letter Queue (DLQ) monitored for failed order messages.
+
+  ConsumerFunctionName:
+    Type: String
+    Default: order-consumer
+    MinLength: 1
+    MaxLength: 64
+    AllowedPattern: "^[a-zA-Z0-9_-]+$"
+    Description: Name of the AWS Lambda Consumer function.
+
+  AlertSnsTopicArn:
+    Type: String
+    AllowedPattern: "^arn:aws:sns:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9_-]+(\\.fifo)?$"
+    Description: >
+      ARN of the existing SNS Topic (e.g. order-dlq-alert) to receive alarm notifications.
+      No account ID or personal ARN is hard-coded in this template.
+
+  DLQAlarmThreshold:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    Description: >
+      Minimum visible messages in DLQ required to trigger ALARM state (>= 1 message).
+
+  DLQEvaluationPeriods:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 10
+    Description: Number of evaluation periods for the DLQ visible messages alarm.
+
+  AlarmPeriodSeconds:
+    Type: Number
+    Default: 60
+    AllowedValues:
+      - 60
+      - 300
+    Description: Metric evaluation period in seconds.
+
+  EnableConsumerErrorAlarms:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Whether to create auxiliary CloudWatch alarms for Consumer Lambda Errors and Throttles.
+
+  ConsumerErrorThreshold:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    Description: Minimum Lambda Errors within the period to trigger ConsumerErrorsAlarm (>= 1).
+
+  ConsumerThrottleThreshold:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    Description: Minimum Lambda Throttles within the period to trigger ConsumerThrottlesAlarm (>= 1).
+
+  EnableBacklogAlarm:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: >
+      Optional backlog alarm on MainQueueName. Disabled by default so no arbitrary operational
+      threshold is assumed before baseline measurement.
+
+  MainQueueBacklogThreshold:
+    Type: Number
+    Default: 100
+    MinValue: 1
+    Description: Explicit threshold for main queue visible messages when EnableBacklogAlarm is true.
+
+  ProjectTag:
+    Type: String
+    Default: AsyncOrderProcessing
+    MinLength: 1
+    Description: Project tag value applied to supported resources.
+
+  OwnerTag:
+    Type: String
+    Default: Khoi-Quan
+    MinLength: 1
+    Description: Owner tag value applied to supported resources.
+
+Rules:
+  EnforceMatchingStackRegion:
+    Assertions:
+      - Assert: !Equals [!Ref AWSRegionName, !Ref "AWS::Region"]
+        AssertDescription: "AWSRegionName parameter must match the actual deployment region (AWS::Region)."
+
+Conditions:
+  RegionMatchesStack: !Equals [!Ref AWSRegionName, !Ref "AWS::Region"]
+  CreateConsumerAlarms: !And
+    - !Condition RegionMatchesStack
+    - !Equals [!Ref EnableConsumerErrorAlarms, "true"]
+  CreateMainBacklogAlarm: !And
+    - !Condition RegionMatchesStack
+    - !Equals [!Ref EnableBacklogAlarm, "true"]
+
+Resources:
+  DLQVisibleMessagesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ProjectTag}-${DLQName}-VisibleMessages"
+      AlarmDescription: !Sub >
+        Triggers when ${DLQName} in ${AWS::Region} (configured ${AWSRegionName}) has at least
+        ${DLQAlarmThreshold} visible message(s). Missing data is treated as notBreaching so idle
+        queues without recent activity or sparse metric reporting remain OK rather than false-alarming.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref DLQName
+      Statistic: Maximum
+      Period: !Ref AlarmPeriodSeconds
+      EvaluationPeriods: !Ref DLQEvaluationPeriods
+      DatapointsToAlarm: 1
+      Threshold: !Ref DLQAlarmThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AlertSnsTopicArn
+      OKActions:
+        - !Ref AlertSnsTopicArn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTag
+        - Key: Owner
+          Value: !Ref OwnerTag
+
+  ConsumerErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateConsumerAlarms
+    Properties:
+      AlarmName: !Sub "${ProjectTag}-${ConsumerFunctionName}-Errors"
+      AlarmDescription: !Sub >
+        Triggers when Lambda function ${ConsumerFunctionName} in ${AWS::Region} records >=
+        ${ConsumerErrorThreshold} error(s) within ${AlarmPeriodSeconds}s. TreatMissingData=notBreaching
+        keeps idle intervals OK.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ConsumerFunctionName
+      Statistic: Sum
+      Period: !Ref AlarmPeriodSeconds
+      EvaluationPeriods: !Ref DLQEvaluationPeriods
+      DatapointsToAlarm: 1
+      Threshold: !Ref ConsumerErrorThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AlertSnsTopicArn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTag
+        - Key: Owner
+          Value: !Ref OwnerTag
+
+  ConsumerThrottlesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateConsumerAlarms
+    Properties:
+      AlarmName: !Sub "${ProjectTag}-${ConsumerFunctionName}-Throttles"
+      AlarmDescription: !Sub >
+        Triggers when Lambda function ${ConsumerFunctionName} in ${AWS::Region} experiences >=
+        ${ConsumerThrottleThreshold} throttle(s) within ${AlarmPeriodSeconds}s under Learner Lab
+        concurrency limits.
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ConsumerFunctionName
+      Statistic: Sum
+      Period: !Ref AlarmPeriodSeconds
+      EvaluationPeriods: !Ref DLQEvaluationPeriods
+      DatapointsToAlarm: 1
+      Threshold: !Ref ConsumerThrottleThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AlertSnsTopicArn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTag
+        - Key: Owner
+          Value: !Ref OwnerTag
+
+  MainQueueBacklogAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateMainBacklogAlarm
+    Properties:
+      AlarmName: !Sub "${ProjectTag}-${MainQueueName}-Backlog"
+      AlarmDescription: !Sub >
+        Optional backlog alarm when ${MainQueueName} in ${AWS::Region} visible messages >= ${MainQueueBacklogThreshold}.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref MainQueueName
+      Statistic: Maximum
+      Period: !Ref AlarmPeriodSeconds
+      EvaluationPeriods: !Ref DLQEvaluationPeriods
+      DatapointsToAlarm: 1
+      Threshold: !Ref MainQueueBacklogThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AlertSnsTopicArn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectTag
+        - Key: Owner
+          Value: !Ref OwnerTag
+
+Outputs:
+  DeploymentRegion:
+    Description: Actual AWS Region where the monitoring stack is deployed
+    Value: !Ref "AWS::Region"
+  DLQAlarmName:
+    Description: CloudWatch Alarm name monitoring visible messages in DLQ
+    Value: !Ref DLQVisibleMessagesAlarm
+  TargetSnsTopicArn:
+    Description: Existing SNS Topic ARN wired to alarm actions
+    Value: !Ref AlertSnsTopicArn
+  MonitoredDLQName:
+    Description: Dead Letter Queue monitored by DLQVisibleMessagesAlarm
+    Value: !Ref DLQName
+  MonitoredMainQueueName:
+    Description: Primary SQS queue name configured for monitoring
+    Value: !Ref MainQueueName

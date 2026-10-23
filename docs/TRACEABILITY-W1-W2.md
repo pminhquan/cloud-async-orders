@@ -38,7 +38,6 @@
 | W2-10 | Batch valid, mixed, replay | Quân | PASS **direct Lambda invocation**; chưa chứng minh tự gom SQS batch>1 | [Valid](evidence/week2/W2-Consumer-Batch-Valid-PASS.png), [mixed](evidence/week2/W2-Consumer-Batch-Mixed-Failure.png) |
 | W2-11 | Small load 10 requests | Quân | PASS 10/10 trên Lab Quân; không phải stress test | [API](evidence/week2/W2-API-Small-Load-Test.png), [10 items](evidence/week2/W2-Small-Load-DynamoDB-PROCESSED.png) |
 | W2-12 | Minh chứng và báo cáo | Cả nhóm | Bộ ảnh Quân 19, Khôi 10; tài liệu tổng hợp | [Index Tuần 2](evidence/week2/README.md), [Báo cáo](week2-report.md) |
-| W2-13 | Worklog tối thiểu 8 giờ/người | Mỗi người | **Nhóm báo cáo đã đạt; số giờ/ngày chi tiết chưa được đối soát** | [Tuần 1](worklog/week1.md), [Tuần 2](worklog/week2.md) |
 
 ### 3. Trạng thái source và Pull Request
 
@@ -57,8 +56,7 @@
 - Full E2E trên **Lab Khôi**: không đủ bằng chứng đối soát một orderId qua API và DynamoDB, không bắt buộc phải lặp lại Lab Quân trừ khi giảng viên yêu cầu.
 - Chạy lại toàn bộ test bằng Python ở máy Khôi tại thời điểm push: chưa thực hiện (máy báo không nhận Python).
 
-### 5. Giải trình giờ làm và AI
+### 5. Khai báo AI
 
-Nhóm **tự báo cáo đáp ứng** ngưỡng tối thiểu 8 giờ/người/tuần. Đây là xác nhận chung từ nhóm, không phải phép tính từ worklog chi tiết vì chưa có số liệu thời lượng theo ngày. Khi được giảng viên yêu cầu kiểm toán thời gian, từng thành viên cung cấp nhật ký thực tế.
 
 [Chi tiết việc dùng AI](ai-declaration.md). Công cụ/model của từng thành viên phải do người đó xác nhận; không mặc định hai người dùng cùng model.

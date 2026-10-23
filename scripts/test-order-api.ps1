@@ -1,21 +1,53 @@
-# Week 1 - API Gateway -> Producer Lambda smoke test
-# Run in Windows PowerShell.
+# Week 3 - Safe API Gateway -> Producer Lambda smoke test wrapper
+# Delegates to the canonical bounded Python tool (scripts/load_test_orders.py) so all
+# URL validation, finite timeouts, rate bounds, and dry-run/execute safeguards are shared
+# in one place (ONE RULE -> ONE OWNER).
 
-$body = @{
-    customerId = "CUS001"
-    productId  = "P001"
-    quantity   = 2
-} | ConvertTo-Json
+param(
+    [string]$EndpointUrl = $env:ORDER_API_URL,
+    [string]$CustomerPrefix = "CUS001",
+    [string]$ProductId = "P001",
+    [int]$Count = 1,
+    [double]$Rate = 1.0,
+    [double]$TimeoutSec = 5.0,
+    [switch]$DryRun,
+    [switch]$Execute
+)
 
-# Replace this with the current Invoke URL if the Learner Lab is rebuilt.
-$uri = "https://a3tbe1kpq0.execute-api.us-east-1.amazonaws.com/orders"
+if ($DryRun -and $Execute) {
+    Write-Error "Conflicting switches: -DryRun and -Execute cannot be used together."
+    exit 2
+}
 
-$response = Invoke-WebRequest `
-  -Uri $uri `
-  -Method POST `
-  -ContentType "application/json" `
-  -Body $body
+if ([string]::IsNullOrWhiteSpace($EndpointUrl)) {
+    Write-Error "EndpointUrl is required. Pass -EndpointUrl https://<api-id>.execute-api.us-east-1.amazonaws.com/orders or set ORDER_API_URL."
+    exit 2
+}
 
-Write-Host "HTTP Status:" $response.StatusCode
-Write-Host "Response:"
-$response.Content
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$loadScript = Join-Path $scriptDir "load_test_orders.py"
+
+$cliArgs = @(
+    $loadScript,
+    "--endpoint", $EndpointUrl.Trim(),
+    "--count", "$Count",
+    "--rate", "$Rate",
+    "--timeout", "$TimeoutSec",
+    "--customer-prefix", $CustomerPrefix,
+    "--product-id", $ProductId,
+    "--no-reconcile"
+)
+
+if ($Execute) {
+    $parsedUri = $null
+    if (-not [System.Uri]::TryCreate($EndpointUrl.Trim(), [System.UriKind]::Absolute, [ref]$parsedUri) -or $parsedUri.Scheme -ne "https") {
+        Write-Error "EndpointUrl must be a valid https:// URL."
+        exit 2
+    }
+    $cliArgs += @("--execute", "--confirm-target", $parsedUri.Host)
+} else {
+    $cliArgs += "--dry-run"
+}
+
+& python @cliArgs
+exit $LASTEXITCODE

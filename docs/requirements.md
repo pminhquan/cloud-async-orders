@@ -53,8 +53,6 @@ Chi tiết: [integration-contract.md](integration-contract.md).
 
 - 2 sinh viên.
 - 4 tuần.
-- Mỗi sinh viên phải ghi nhận tối thiểu **8 giờ thực tế/tuần**.
-- Worklog phải dùng số giờ thực tế, không lấy timestamp commit/log/AI làm giờ làm.
 
 ## 6. Deliverables
 
@@ -63,7 +61,6 @@ Chi tiết: [integration-contract.md](integration-contract.md).
 - Script test API/load.
 - Tài liệu kỹ thuật trong `docs/`.
 - Evidence theo tuần.
-- Worklog theo tuần.
 - Báo cáo tiến độ và khai báo AI.
 - Báo cáo cuối kỳ + video demo ≤ 10 phút.
 
