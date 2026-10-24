@@ -296,6 +296,66 @@ class TestLoadTestOrders(unittest.TestCase):
             rec_miss_then_denied["orderIdsRequested"],
         )
 
+        # Evidence test 1: reconcile=False marks collected orderIds as unverified without any DynamoDB reads
+        no_read_table = FakeEventualDynamoDBTable({"ORD-NR-1": (1, "PROCESSED"), "ORD-NR-2": (1, "PROCESSED")})
+        nr_counter = {"n": 0}
+
+        def fake_post_nr(url: str, payload: Dict[str, Any], timeout: float) -> Tuple[int, str]:
+            nr_counter["n"] += 1
+            return 202, json.dumps({"order": {"orderId": f"ORD-NR-{nr_counter['n']}", "status": "PENDING"}})
+
+        res_no_reconcile = load_tool.run_controlled_load_test(
+            endpoint="https://example-api.execute-api.us-east-1.amazonaws.com/orders",
+            request_count=2,
+            rate_limit=2.0,
+            reconcile=False,
+            execute=True,
+            confirm_target="example-api.execute-api.us-east-1.amazonaws.com",
+            http_post_fn=fake_post_nr,
+            dynamodb_table=no_read_table,
+            sleep_fn=lambda _: None,
+        )
+        rec_disabled = res_no_reconcile["reconciliation"]
+        self.assertEqual(rec_disabled["verificationStatus"], "RECONCILIATION_DISABLED")
+        self.assertEqual(rec_disabled["orderIdsRequested"], 2)
+        self.assertEqual(rec_disabled["processedCount"], 0)
+        self.assertEqual(rec_disabled["pendingOrOtherStatusCount"], 0)
+        self.assertEqual(rec_disabled["notFoundCount"], 0)
+        self.assertEqual(rec_disabled["unverifiedCount"], 2)
+        self.assertEqual(rec_disabled["pollsExecuted"], 0)
+        self.assertEqual(no_read_table.get_calls, [])
+        self.assertTrue(all(r["reconciledState"] == "NOT_CHECKED" for r in res_no_reconcile["requests"]))
+
+        # Evidence test 2: ResourceNotFoundException classifies as QUERY_ERROR / unverified (not missing or pending)
+        class ResourceNotFoundDynamoTable:
+            def __init__(self):
+                self.calls = 0
+
+            def get_item(self, Key: Dict[str, Any], ConsistentRead: bool = False) -> Dict[str, Any]:
+                self.calls += 1
+                err = Exception("Requested resource not found: Table: Orders not found")
+                err.response = {"Error": {"Code": "ResourceNotFoundException"}}
+                raise err
+
+        rnf_table = ResourceNotFoundDynamoTable()
+        rec_rnf = load_tool.reconcile_orders_dynamodb(
+            order_ids=["ORD-RNF-1", "ORD-RNF-2"],
+            table_name="Orders",
+            max_polls=2,
+            dynamodb_table=rnf_table,
+            sleep_fn=lambda _: None,
+        )
+        self.assertEqual(rec_rnf["verificationStatus"], "UNVERIFIED")
+        self.assertEqual(rec_rnf["orderIdsRequested"], 2)
+        self.assertEqual(rec_rnf["processedCount"], 0)
+        self.assertEqual(rec_rnf["pendingOrOtherStatusCount"], 0)
+        self.assertEqual(rec_rnf["notFoundCount"], 0)
+        self.assertEqual(rec_rnf["unverifiedCount"], 2)
+        self.assertEqual(rec_rnf["perOrder"]["ORD-RNF-1"]["state"], "QUERY_ERROR")
+        self.assertEqual(rec_rnf["perOrder"]["ORD-RNF-1"]["errorCode"], "ResourceNotFoundException")
+        self.assertEqual(rec_rnf["perOrder"]["ORD-RNF-2"]["state"], "QUERY_ERROR")
+        self.assertEqual(rec_rnf["perOrder"]["ORD-RNF-2"]["errorCode"], "ResourceNotFoundException")
+
     def test_reconcile_boto_config_and_per_order_deadline_cutoff(self):
         cfg_short = load_tool.build_bounded_boto_config(0.2)
         self.assertEqual(cfg_short.connect_timeout, 0.2)

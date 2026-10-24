@@ -39,6 +39,8 @@ orders-dlq
 CloudWatch Alarm → SNS (order-dlq-alert) → Email
 ```
 
+Mục tiêu cuối kỳ còn bao gồm giám sát/cảnh báo CloudWatch + SNS và so sánh SQS Standard/FIFO.
+
 ---
 
 ## 2. Tiến độ theo tuần
@@ -67,7 +69,7 @@ Tuần 1 tập trung nghiên cứu dịch vụ, thiết kế kiến trúc và d�
 Tài liệu:
 - [Báo cáo Tuần 1](docs/week1-report.md)
 - [Kế hoạch Tuần 1](docs/week1-plan.md)
-- [Công việc và minh chứng Tuần 1](docs/worklog/week1.md)
+- [Worklog Tuần 1](docs/worklog/week1.md)
 - [Minh chứng Tuần 1](docs/evidence/week1/README.md)
 
 ### Tuần 2 — Tích hợp hoàn chỉnh và kiểm thử
@@ -99,7 +101,7 @@ Tuần 2 nâng cấp Producer/Consumer và hoàn thiện luồng xử lý.
 Tài liệu:
 - [Báo cáo Tuần 2](docs/week2-report.md)
 - [Kế hoạch Tuần 2](docs/week2-plan.md)
-- [Công việc và minh chứng Tuần 2](docs/worklog/week2.md)
+- [Worklog Tuần 2](docs/worklog/week2.md)
 - [Minh chứng Tuần 2](docs/evidence/week2/README.md)
 
 ### Tuần 3 — Giám sát CloudWatch/SNS, Benchmark Standard vs FIFO & Controlled Load Test
@@ -181,8 +183,7 @@ cloud-async-orders/
 │   ├── research/
 │   ├── worklog/
 │   │   ├── week1.md
-│   │   ├── week2.md
-│   │   └── week3.md
+│   │   └── week2.md
 │   ├── requirements.md
 │   ├── task-assignment.md
 │   ├── integration-contract.md
@@ -210,7 +211,7 @@ cloud-async-orders/
 
 ---
 
-## 5. Chạy unit tests (Offline)
+## 5. Chạy unit tests
 
 ```bash
 python -m pytest -q
@@ -219,13 +220,41 @@ python -B -m unittest discover -s tests -p "test_*.py"
 python -m compileall -q src scripts tests
 ```
 
-Kết quả kiểm thử và các lệnh đã chạy được ghi trong [báo cáo offline Tuần 3](docs/week3-report.md).
+Trạng thái trên bộ source Tuần 2:
+
+```text
+33 passed, 81 subtests passed (kết quả đã ghi nhận trên bộ mã nguồn trước; chưa chạy lại trên máy Khôi sau khi tạo PR #8)
+```
+
+Trạng thái mở rộng Tuần 3 (bảo toàn 33 test methods gốc + bổ sung 21 test methods công cụ Tuần 3 = 54 passed, 104 subtests passed) và các lệnh kiểm tra chi tiết được ghi trong [báo cáo offline Tuần 3](docs/week3-report.md).
 
 ---
 
 ## 6. Kiểm thử API & Công cụ Tuần 3
 
-Kiểm tra nhanh CLI ở chế độ an toàn `--dry-run` (không gọi AWS):
+Request hợp lệ:
+
+```json
+{
+  "customerId": "CUS001",
+  "productId": "P001",
+  "quantity": 2
+}
+```
+
+Kỳ vọng:
+
+```text
+HTTP 202
+```
+
+Các request thiếu `customerId`, thiếu `productId`, `quantity <= 0`, `quantity` sai kiểu hoặc malformed JSON phải trả:
+
+```text
+HTTP 400
+```
+
+Kiểm tra nhanh CLI Tuần 3 ở chế độ an toàn `--dry-run` (không gọi AWS):
 
 ```bash
 python scripts/collect_cloudwatch_metrics.py --dry-run
@@ -233,7 +262,7 @@ python scripts/benchmark_sqs.py --queue-type standard --queue-url orders-benchma
 python scripts/load_test_orders.py --endpoint https://example-api.execute-api.us-east-1.amazonaws.com/orders --dry-run
 ```
 
-Script PowerShell smoke test (yêu cầu truyền `-EndpointUrl` và `-Execute` khi gửi thật):
+Script PowerShell smoke test (yêu cầu truyền `-EndpointUrl`, kèm `-Execute` khi gửi thật):
 
 ```powershell
 ./scripts/test-order-api.ps1 -EndpointUrl "https://<api-id>.execute-api.us-east-1.amazonaws.com/orders"
@@ -241,7 +270,27 @@ Script PowerShell smoke test (yêu cầu truyền `-EndpointUrl` và `-Execute` 
 
 ---
 
-## 7. Bảo mật khi Public repository
+## 7. GitHub / Pull Request Tuần 2
+
+- PR #5 — Consumer + DynamoDB + idempotency: **Merged**.
+- PR #7 — Producer + SQS + validation: **Merged**.
+- PR #6 — tài liệu/evidence Tuần 2: trạng thái cần kiểm tra lại trước khi nộp cuối.
+
+Các hash đã ghi nhận trong quá trình làm:
+
+```text
+Consumer source commit: 0192d2b
+Consumer merge commit:  914de9b
+Producer SQS commit:     e04e1f2
+Producer validation:     835c840
+Producer squash main:    015d420
+```
+
+> Nếu GitHub hiện tại có hash khác do rebase/squash bổ sung, ưu tiên lịch sử thực tế trên GitHub tại thời điểm nộp.
+
+---
+
+## 8. Bảo mật khi Public repository
 
 Không commit:
 - AWS Access Key
@@ -255,8 +304,23 @@ Không commit:
 
 ---
 
-## 8. Ma trận đối chiếu nhanh
+## 9. Checklist trước khi nộp Tuần 2
 
-- [Ma trận từng yêu cầu → người thực hiện → kết quả → ảnh/code (Tuần 1–2)](docs/TRACEABILITY-W1-W2.md).
+- [x] Source Producer.
+- [x] Source Consumer.
+- [x] Producer validation.
+- [x] Consumer idempotency.
+- [x] Unit tests.
+- [x] Full E2E có evidence trên Lab Quân.
+- [x] Retry/DLQ có evidence trên Lab Quân.
+- [x] Producer validation có evidence trên Lab Khôi.
+- [x] Người nộp báo cáo nhóm đã đáp ứng yêu cầu tối thiểu 8 giờ/người/tuần; phân bổ giờ chi tiết chưa được đối soát.
+- [x] Đã tổng hợp khai báo AI của Khôi (ChatGPT / GPT-5.6 Sol) và Quân (ChatGPT / GPT-6.0 theo thông tin nhóm cung cấp); xem [docs/ai-declaration.md](docs/ai-declaration.md).
+- [ ] Kiểm tra lại link GitHub/PR/evidence sau push cuối.
+- [x] 19 ảnh AWS của Quân đã được đồng bộ từ PR #6 vào nhánh PR #8; PR #6 vẫn cần được nhóm quyết định đóng/merge để tránh tài liệu trùng.
+
+## 10. Ma trận đối chiếu nhanh
+
+- [Ma trận từng yêu cầu → người thực hiện → kết quả → ảnh/code](docs/TRACEABILITY-W1-W2.md).
 - [Chỉ mục 29 ảnh kiểm thử Tuần 2](docs/evidence/week2/README.md).
 - [Báo cáo tiến độ và trạng thái Tuần 3](docs/week3-report.md).

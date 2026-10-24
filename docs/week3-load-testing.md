@@ -34,8 +34,8 @@ Khi chạy với `--output-dir`, công cụ xuất hai file:
      - `orderIdsCollectedCount`, `missingOrderIdOn202Count`, `malformed202ResponseCount`
      - `apiLatencyMs` (`minMs`, `maxMs`, `meanMs`, `medianMs`, `p95Ms`)
    - `reconciliation`:
-     - `verificationStatus` (`ALL_PROCESSED`, `PARTIALLY_PROCESSED`, `NONE_PROCESSED_WITHIN_TIMEOUT`, `UNVERIFIED_DYNAMODB_ACCESS_ERROR`, `DRY_RUN_NOT_EXECUTED`)
-     - `orderIdsRequested`, `processedCount`, `pendingOrOtherStatusCount`, `notFoundCount`, `unverifiedCount`
+     - `verificationStatus` (`ALL_PROCESSED`, `PARTIALLY_PROCESSED`, `NONE_PROCESSED_WITHIN_TIMEOUT`, `UNVERIFIED`, `UNVERIFIED_DYNAMODB_ACCESS_ERROR`, `DRY_RUN_NOT_EXECUTED`)
+     - `orderIdsRequested`, `processedCount`, `pendingOrOtherStatusCount` (đã đọc được item nhưng `status != PROCESSED`), `notFoundCount` (item chưa xuất hiện `NOT_FOUND_YET`), `unverifiedCount` (chưa kiểm tra được do hết ngân sách, lỗi truy vấn hoặc `AccessDeniedException`); bốn nhóm này phân hoạch đầy đủ `orderIdsRequested` và được `scripts/generate_week3_report.py` hiển thị chi tiết cùng tổng `Remaining`
      - `reconciliationDurationSeconds`, `pollsExecuted`
 2. **`load-test-results.csv`**:
    - Ghi nhận chi tiết từng request: `runId`, `requestId`, `timestampUtc`, `httpStatus`, `responseTimeMs`, `orderId`, `errorCategory`, `reconciledState`.

@@ -31,6 +31,7 @@ và xác minh:
 | W2-10 | Direct batch/replay | Quân | PASS theo kỳ vọng |
 | W2-11 | Small load 10 request | Quân | PASS 10/10 |
 | W2-12 | Evidence/report | Cả hai | Đang chốt |
+| W2-13 | Worklog ≥ 8h/người | Mỗi người | Nhóm báo cáo đạt tối thiểu 8 giờ; giờ/ngày chi tiết chưa đối soát |
 
 ## 3. Cấu hình quan trọng
 

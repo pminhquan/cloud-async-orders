@@ -401,8 +401,118 @@ class TestMonitoringAndMetrics(unittest.TestCase):
             ),
             1499,
         )
+        # Reachable 15-day threshold crossing case (5-day window within 7-day cap, Period=300):
+        # start 2026-10-09T12:04:00Z, end 2026-10-14T12:04:00Z -> conservatively 1441 on both sides of 2026-10-24T12:04:00Z
+        s_15d = datetime(2026, 10, 9, 12, 4, 0, tzinfo=timezone.utc)
+        e_15d = datetime(2026, 10, 14, 12, 4, 0, tzinfo=timezone.utc)
+        for boundary_now in (
+            datetime(2026, 10, 24, 12, 3, 59, 900000, tzinfo=timezone.utc),
+            datetime(2026, 10, 24, 12, 4, 0, tzinfo=timezone.utc),
+            datetime(2026, 10, 24, 12, 4, 0, 100000, tzinfo=timezone.utc),
+        ):
+            with self.subTest(boundary_now=boundary_now.isoformat()):
+                self.assertEqual(
+                    collector_mod.estimate_get_metric_statistics_datapoints(
+                        s_15d, e_15d, 300, now_utc=boundary_now
+                    ),
+                    1441,
+                )
+                boundary_client = FakeCloudWatchClient()
+                with self.assertRaises(collector_mod.MetricsCollectionError):
+                    collector_mod.collect_cloudwatch_metrics(
+                        region="us-east-1",
+                        period_seconds=300,
+                        start_time=s_15d,
+                        end_time=e_15d,
+                        execute=True,
+                        cloudwatch_client=boundary_client,
+                        now_utc=boundary_now,
+                    )
+                self.assertEqual(boundary_client.calls, [])
+        # Outside the 5-minute receipt safety margin before 15d (e.g. 10 minutes before 15d), normal <15d behavior (1440) is preserved
+        safe_before_15d = datetime(2026, 10, 24, 11, 50, 0, tzinfo=timezone.utc)
+        self.assertEqual(
+            collector_mod.estimate_get_metric_statistics_datapoints(
+                s_15d, e_15d, 300, now_utc=safe_before_15d
+            ),
+            1440,
+        )
+        # 5-minute-aligned start (2026-10-09T12:00:00Z to 2026-10-14T12:00:00Z) stays <= 1440 even across the 15-day boundary
+        res_aligned_15d = collector_mod.collect_cloudwatch_metrics(
+            region="us-east-1",
+            period_seconds=300,
+            start_time=datetime(2026, 10, 9, 12, 0, 0, tzinfo=timezone.utc),
+            end_time=datetime(2026, 10, 14, 12, 0, 0, tzinfo=timezone.utc),
+            execute=False,
+            now_utc=datetime(2026, 10, 24, 11, 59, 59, 900000, tzinfo=timezone.utc),
+        )
+        self.assertEqual(res_aligned_15d["periodSeconds"], 300)
+        # 63-day pure-helper boundary crossing case (start 2026-08-22T12:05:00Z, end 2026-10-21T12:05:00Z, Period=3600):
+        s_63d = datetime(2026, 8, 22, 12, 5, 0, tzinfo=timezone.utc)
+        e_63d = datetime(2026, 10, 21, 12, 5, 0, tzinfo=timezone.utc)
+        for boundary_now_63d in (
+            datetime(2026, 10, 24, 12, 4, 59, 900000, tzinfo=timezone.utc),
+            datetime(2026, 10, 24, 12, 5, 0, tzinfo=timezone.utc),
+            datetime(2026, 10, 24, 12, 5, 0, 100000, tzinfo=timezone.utc),
+        ):
+            with self.subTest(boundary_now_63d=boundary_now_63d.isoformat()):
+                self.assertEqual(
+                    collector_mod.estimate_get_metric_statistics_datapoints(
+                        s_63d, e_63d, 3600, now_utc=boundary_now_63d
+                    ),
+                    1441,
+                )
         with self.assertRaises(collector_mod.MetricsCollectionError):
             collector_mod.parse_utc_timestamp("not-a-timestamp")
+
+        # Sequential per-request guard test: initially safe 15d/Period=300 window crosses into unsafe (>1440) mid-loop
+        # First metric call succeeds at 11:58:00Z (1440 datapoints); clock advances to 12:00:00Z so remaining 5 metric calls are blocked
+        clock_state = {"now": datetime(2026, 10, 24, 11, 58, 0, tzinfo=timezone.utc)}
+
+        class FakeDateTime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return clock_state["now"]
+
+        class ClockAdvancingCloudWatchClient(FakeCloudWatchClient):
+            def get_metric_statistics(self, **kwargs):
+                res = super().get_metric_statistics(**kwargs)
+                # Advance clock into the 5-minute receipt margin (11:59:00Z..12:04:00Z) after first metric request completes
+                clock_state["now"] = datetime(2026, 10, 24, 12, 0, 0, tzinfo=timezone.utc)
+                return res
+
+        seq_dp = {
+            ("AWS/SQS", "ApproximateNumberOfMessagesVisible", "orders-dlq"): [
+                {"Timestamp": "2026-10-14T12:00:00Z", "Maximum": 4.0, "Unit": "Count"}
+            ]
+        }
+        seq_client = ClockAdvancingCloudWatchClient(datapoints_by_metric=seq_dp)
+        with patch.object(collector_mod, "datetime", FakeDateTime):
+            res_seq = collector_mod.collect_cloudwatch_metrics(
+                region="us-east-1",
+                queues=["orders-dlq"],
+                functions=[],
+                alarm_names=[],
+                start_time=s_15d,
+                end_time=e_15d,
+                period_seconds=300,
+                execute=True,
+                cloudwatch_client=seq_client,
+                now_utc=datetime(2026, 10, 24, 11, 50, 0, tzinfo=timezone.utc),
+            )
+        # Only the first metric call was sent to AWS SDK; remaining 5 SQS metrics were blocked pre-request
+        self.assertEqual(len(seq_client.calls), 1)
+        self.assertEqual(res_seq["metrics"][0]["metricName"], "ApproximateNumberOfMessagesVisible")
+        self.assertEqual(res_seq["metrics"][0]["status"], "OK")
+        self.assertEqual(res_seq["metrics"][0]["latestValue"], 4.0)
+        for skipped_m in res_seq["metrics"][1:]:
+            self.assertEqual(skipped_m["status"], "API_ERROR")
+            self.assertEqual(skipped_m["errorCode"], "DATAPOINT_LIMIT_EXCEEDED")
+            self.assertIsNone(skipped_m["latestValue"])
+            self.assertIsNone(skipped_m["minValue"])
+            self.assertIsNone(skipped_m["maxValue"])
+            self.assertIsNone(skipped_m["meanValue"])
+            self.assertIsNone(skipped_m["sumValue"])
 
     def test_report_generator_omits_absent_sections_and_watermarks_synthetic_or_dryrun(self):
         md_empty = report_mod.generate_markdown_report()

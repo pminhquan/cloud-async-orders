@@ -72,13 +72,23 @@ def validate_resource_name(name: str, label: str) -> str:
     return candidate
 
 
+CW_RECEIPT_MARGIN_SECONDS = 300
+
+
 def estimate_get_metric_statistics_datapoints(
     start_time: datetime,
     end_time: datetime,
     period_seconds: int,
     now_utc: Optional[datetime] = None,
 ) -> int:
-    """Estimate effective CloudWatch GetMetricStatistics datapoints accounting for AWS StartTime floor rounding."""
+    """Estimate conservative upper-bound CloudWatch GetMetricStatistics datapoints.
+
+    AWS evaluates StartTime age when receiving each request and floors StartTime to
+    60s (<15d), 300s (15..63d), or 3600s (>63d). Taking the worst-case across
+    [ref_utc, ref_utc + CW_RECEIPT_MARGIN_SECONDS] prevents a request validated just
+    before the 15-day or 63-day boundary from crossing into a coarser floor grid on
+    receipt and exceeding 1440 datapoints.
+    """
     s_utc = start_time.astimezone(timezone.utc) if start_time.tzinfo else start_time.replace(tzinfo=timezone.utc)
     e_utc = end_time.astimezone(timezone.utc) if end_time.tzinfo else end_time.replace(tzinfo=timezone.utc)
     ref_utc = (
@@ -86,16 +96,22 @@ def estimate_get_metric_statistics_datapoints(
         if now_utc is not None
         else datetime.now(timezone.utc)
     )
-    age_seconds = max(0.0, (ref_utc - s_utc).total_seconds())
-    if age_seconds > 63 * 86400:
-        grid = 3600
-    elif age_seconds >= 15 * 86400:
-        grid = 300
-    else:
-        grid = 60
+    age_now = max(0.0, (ref_utc - s_utc).total_seconds())
+    age_receipt = age_now + CW_RECEIPT_MARGIN_SECONDS
 
-    s_epoch = math.floor(s_utc.timestamp() / grid) * grid
-    return math.ceil((e_utc.timestamp() - s_epoch) / period_seconds)
+    grids = set()
+    for age in (age_now, age_receipt):
+        if age > 63 * 86400:
+            grids.add(3600)
+        elif age >= 15 * 86400:
+            grids.add(300)
+        else:
+            grids.add(60)
+
+    return max(
+        math.ceil((e_utc.timestamp() - (math.floor(s_utc.timestamp() / g) * g)) / period_seconds)
+        for g in grids
+    )
 
 
 def validate_config(
@@ -107,6 +123,7 @@ def validate_config(
     end_time: datetime,
     dry_run: bool = False,
     execute: bool = False,
+    now_utc: Optional[datetime] = None,
 ) -> None:
     """Validate collector parameters before dry-run or live execution."""
     if dry_run and execute:
@@ -128,7 +145,7 @@ def validate_config(
     window_seconds = (end_time - start_time).total_seconds()
     if window_seconds > 86400 * 7:
         raise MetricsCollectionError("Observation window cannot exceed 7 days.")
-    if estimate_get_metric_statistics_datapoints(start_time, end_time, period_seconds) > 1440:
+    if estimate_get_metric_statistics_datapoints(start_time, end_time, period_seconds, now_utc=now_utc) > 1440:
         raise MetricsCollectionError(
             "Requested window and period would exceed CloudWatch GetMetricStatistics limit of 1440 datapoints."
         )
@@ -281,10 +298,16 @@ def collect_cloudwatch_metrics(
     execute: bool = False,
     cloudwatch_client: Any = None,
     run_id: Optional[str] = None,
+    now_utc: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     """Collect or dry-run CloudWatch metrics and optional alarm states."""
-    now_utc = datetime.now(timezone.utc).replace(microsecond=0)
-    resolved_end = end_time or now_utc
+    raw_now = (
+        (now_utc.astimezone(timezone.utc) if now_utc.tzinfo else now_utc.replace(tzinfo=timezone.utc))
+        if now_utc is not None
+        else datetime.now(timezone.utc)
+    )
+    now_ts = raw_now.replace(microsecond=0)
+    resolved_end = end_time or now_ts
     resolved_start = start_time or (resolved_end - timedelta(minutes=30))
     validate_config(
         region,
@@ -295,12 +318,13 @@ def collect_cloudwatch_metrics(
         resolved_end,
         dry_run=dry_run,
         execute=execute,
+        now_utc=raw_now,
     )
 
     for alarm in alarm_names:
         validate_resource_name(alarm, "alarm name")
 
-    resolved_run_id = run_id or f"metrics-{now_utc.strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+    resolved_run_id = run_id or f"metrics-{now_ts.strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
     specs = build_metric_specs(queues, functions)
 
     if not execute and cloudwatch_client is None:
@@ -339,7 +363,7 @@ def collect_cloudwatch_metrics(
             "schemaVersion": "1.0",
             "sourceType": "DRY_RUN_PLAN",
             "runId": resolved_run_id,
-            "collectedAt": format_utc(now_utc),
+            "collectedAt": format_utc(now_ts),
             "region": region,
             "windowStart": format_utc(resolved_start),
             "windowEnd": format_utc(resolved_end),
@@ -370,6 +394,32 @@ def collect_cloudwatch_metrics(
     records = []
     for spec in specs:
         try:
+            call_now = datetime.now(timezone.utc)
+            if (
+                estimate_get_metric_statistics_datapoints(
+                    resolved_start, resolved_end, period_seconds, now_utc=call_now
+                )
+                > 1440
+            ):
+                records.append(
+                    {
+                        **spec,
+                        "periodSeconds": period_seconds,
+                        "startTime": format_utc(resolved_start),
+                        "endTime": format_utc(resolved_end),
+                        "status": "API_ERROR",
+                        "datapointCount": 0,
+                        "latestValue": None,
+                        "latestTimestamp": None,
+                        "minValue": None,
+                        "maxValue": None,
+                        "meanValue": None,
+                        "sumValue": None,
+                        "errorCode": "DATAPOINT_LIMIT_EXCEEDED",
+                        "note": "Skipped CloudWatch get_metric_statistics because current UTC age would exceed 1440 datapoints.",
+                    }
+                )
+                continue
             response = cloudwatch_client.get_metric_statistics(
                 Namespace=spec["namespace"],
                 MetricName=spec["metricName"],
@@ -485,7 +535,7 @@ def collect_cloudwatch_metrics(
         "schemaVersion": "1.0",
         "sourceType": "CLOUDWATCH_METRICS",
         "runId": resolved_run_id,
-        "collectedAt": format_utc(now_utc),
+        "collectedAt": format_utc(now_ts),
         "region": region,
         "windowStart": format_utc(resolved_start),
         "windowEnd": format_utc(resolved_end),

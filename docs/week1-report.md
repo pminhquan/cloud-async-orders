@@ -75,7 +75,7 @@ Full E2E chưa hoàn thành trong Tuần 1.
 ## 7. Evidence
 
 - [Chỉ mục evidence Tuần 1](evidence/week1/README.md)
-- [Công việc và minh chứng Tuần 1](worklog/week1.md)
+- [Worklog Tuần 1](worklog/week1.md)
 - [Kiến trúc](architecture/README.md)
 - [AWS Inventory](aws-inventory.md)
 

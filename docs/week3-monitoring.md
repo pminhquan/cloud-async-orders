@@ -55,7 +55,9 @@ Script [`scripts/collect_cloudwatch_metrics.py`](../scripts/collect_cloudwatch_m
   - `Invocations` (`Sum`), `Errors` (`Sum`), `Throttles` (`Sum`).
   - `Duration` (`Average`, `Maximum`), `ConcurrentExecutions` (`Maximum`).
 - **Alarm State (`describe_alarms`):**
-  - Ghi nhận `StateValue` (`OK`, `ALARM`, `INSUFFICIENT_DATA`) và `StateUpdatedTimestamp`.
+  - Ghi nhận `StateValue` (`OK`, `ALARM`, `INSUFFICIENT_DATA`) và `StateUpdatedTimestamp` (hỗ trợ phân trang `NextToken` và được `scripts/generate_week3_report.py` xuất thành bảng trạng thái Alarm trong báo cáo Markdown).
+- **Giới hạn truy vấn CloudWatch (`<= 1440` datapoints):**
+  - Tự động tính số lượng datapoint hiệu dụng theo lưới làm tròn `StartTime` của CloudWatch (1 phút cho dữ liệu `< 15` ngày, 5 phút cho `15..63` ngày, 1 giờ cho `> 63` ngày), bao gồm biên độ an toàn 5 phút (`CW_RECEIPT_MARGIN_SECONDS = 300`) cho độ trễ nhận request phía AWS và lệch đồng hồ, và kiểm tra lại theo thời gian UTC thực tế ngay trước **từng** lệnh `get_metric_statistics` để chặn mọi request vượt quá `1440` datapoints mà vẫn giữ nguyên các metric đã thu thập hợp lệ trước đó.
 
 ### Cách sử dụng CLI
 

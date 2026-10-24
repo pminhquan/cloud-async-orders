@@ -44,13 +44,10 @@ Dùng Python có các package `pytest`, `boto3`, `PyYAML`; `cfn-lint` phục v�
 
 | SHA | Nội dung |
 | --- | --- |
-| eb47cc0 | docs: remove work-time attestations from course reports |
-| e5f0487 | feat(week3): add bounded SQS benchmark and order load tools |
-| 50b1e51 | feat(week3): add CloudWatch monitoring and measured report tools |
-| af72a13 | ci: run offline Python regression and CLI checks |
+| `710c8f0` | `feat: implement Week 3 monitoring, benchmarks and tests` |
 
-## Kết quả kiểm thử
+## Kết quả kiểm thử & CI
 
-Python 3.14.5: pytest 53 passed và 94 subtests passed; unittest Ran 53 tests, OK. Compileall exit 0, cfn-lint exit 0, các kiểm tra CLI offline và report CLI cp1252 đều qua. Chi tiết lệnh, phiên bản và phạm vi test tại [báo cáo offline](week3-report.md).
+Python 3.14.5: focused Week 3 suite `21 passed, 23 subtests passed`; full pytest `54 passed, 104 subtests passed`; unittest `Ran 54 tests, OK`. Compileall exit 0, `cfn-lint iac/week3-monitoring.yaml` exit 0 (và đã được tích hợp trực tiếp vào `.github/workflows/python-tests.yml`), các kiểm tra CLI offline và report CLI cp1252 đều qua. Baseline GitHub Actions CI run [`39987033004`](https://github.com/pminhquan/cloud-async-orders/actions/runs/39987033004) trên commit `710c8f0` hoàn tất với `conclusion=success`; trạng thái CI của HEAD hiện tại và SHA/kết quả cuối cùng được theo dõi tại [PR #11 Checks](https://github.com/pminhquan/cloud-async-orders/pull/11/checks) và phần mô tả của PR #11. Chi tiết lệnh, phiên bản và phạm vi test tại [báo cáo offline](week3-report.md).
 
-Source Producer/Consumer và hai tệp test gốc khớp byte với base commit. Bộ kiểm thử gồm 33 methods gốc và 20 methods mới. Tham số thực thi, ranh giới thao tác và ngân sách polling được mô tả trong tài liệu từng công cụ.
+Source Producer/Consumer và hai tệp test gốc khớp byte với base commit. Bộ kiểm thử gồm 33 methods gốc và 21 methods mới (tổng 54 test methods). Tham số thực thi, ranh giới thao tác và ngân sách polling được mô tả trong tài liệu từng công cụ.

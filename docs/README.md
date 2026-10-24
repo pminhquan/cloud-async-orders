@@ -13,15 +13,26 @@
 
 - [Kế hoạch Tuần 1](week1-plan.md)
 - [Báo cáo Tuần 1](week1-report.md)
-- [Công việc và minh chứng Tuần 1](worklog/week1.md)
+- [Worklog Tuần 1](worklog/week1.md)
 - [Evidence Tuần 1](evidence/week1/README.md)
 
 ## Tuần 2
 
 - [Kế hoạch Tuần 2](week2-plan.md)
 - [Báo cáo Tuần 2](week2-report.md)
-- [Công việc và minh chứng Tuần 2](worklog/week2.md)
+- [Worklog Tuần 2](worklog/week2.md)
 - [Evidence Tuần 2](evidence/week2/README.md)
+
+## Tuần 3
+
+- [Kế hoạch Tuần 3](week3-plan.md)
+- [Báo cáo Tuần 3](week3-report.md)
+- [Thiết kế Giám sát CloudWatch & SNS](week3-monitoring.md)
+- [Thiết kế Benchmark Standard vs FIFO](week3-benchmark.md)
+- [Thiết kế Controlled Load Test & Reconciliation](week3-load-testing.md)
+- [AWS Manual Runbook](week3-aws-manual-runbook.md)
+- [Evidence Tuần 3](evidence/week3/README.md)
+- [Bàn giao Kỹ thuật Tuần 3](WEEK3_AGENT_HANDOFF.md)
 
 ## Nghiên cứu
 
@@ -34,6 +45,7 @@
 
 ## Trước khi nộp
 
+- Nhóm báo cáo đạt tối thiểu 8 giờ/người/tuần; không tự dựng số giờ/ngày khi chưa có dữ liệu đối soát.
 - Đã tổng hợp thông tin AI của Quân (ChatGPT / GPT-6.0 theo thông tin nhóm cung cấp); xem [ai-declaration.md](ai-declaration.md).
 - Kiểm tra link GitHub/PR sau lần push cuối.
 - Bộ 19 ảnh Lab Quân đã đồng bộ từ PR #6 vào PR #8 bằng script cập nhật.

@@ -41,13 +41,15 @@ Môi trường local: Python 3.14.5, pytest 9.1.1, boto3 1.43.118, PyYAML 6.0.3,
 
 | Kiểm tra | Kết quả quan sát |
 | --- | --- |
-| `python -B -m pytest -q` | 53 passed, 94 subtests passed; 0 failed, 0 skipped. |
-| `python -B -m unittest discover -s tests -p "test_*.py"` | Ran 53 tests; OK, exit 0. |
+| `python -B -m pytest -q tests/test_monitoring_and_metrics.py tests/test_benchmark_sqs.py tests/test_load_test_orders.py` | 21 passed, 23 subtests passed; 0 failed, 0 skipped. |
+| `python -B -m pytest -q` | 54 passed, 104 subtests passed; 0 failed, 0 skipped. |
+| `python -B -m unittest discover -s tests -p "test_*.py"` | Ran 54 tests; OK, exit 0. |
 | `python -m compileall -q src scripts tests` | Exit 0. |
-| `cfn-lint iac/week3-monitoring.yaml` | Exit 0 trên template có ràng buộc region. |
+| `cfn-lint iac/week3-monitoring.yaml` | Exit 0 trên template có ràng buộc region (và được thực thi tự động trong `.github/workflows/python-tests.yml`). |
+| GitHub Actions CI | Baseline commit `710c8f0` hoàn tất tại run [`39987033004`](https://github.com/pminhquan/cloud-async-orders/actions/runs/39987033004) (`Python Regression & Offline IaC Validation`, `status=completed`, `conclusion=success`); trạng thái CI của HEAD hiện tại và SHA/kết quả cuối cùng được ghi nhận tại [PR #11 Checks](https://github.com/pminhquan/cloud-async-orders/pull/11/checks) và phần mô tả của PR #11. |
 | So sánh source và hai tệp regression gốc với base commit | Không đổi; 33 test methods gốc được giữ nguyên. |
 | CLI offline | 9 ca help/default dry-run/từ chối queue chính qua khi socket và SDK client/resource bị chặn. |
 | Report CLI trên cp1252 Windows | Exit 0; tệp UTF-8 hợp lệ, giữ nhãn dry-run và bỏ phần không có input. |
 | PowerShell wrapper dry-run | Exit 0. |
 
-Bộ test gồm 18 Producer, 15 Consumer, 8 benchmark, 4 load/reconciliation và 8 monitoring/report methods. Có regression cho message ownership, deadline/polling, SDK không retry ngầm, cờ mâu thuẫn, timestamp thiếu, dữ liệu report thiếu và encoding Windows.
+Bộ test gồm 18 Producer, 15 Consumer, 9 benchmark, 4 load/reconciliation và 8 monitoring/report methods (tổng 54 test methods, trong đó 21 methods thuộc bộ công cụ Tuần 3). Có regression cho giải phân giải URL queue (`GetQueueUrl`), message ownership, deadline/polling, SDK không retry ngầm, cờ mâu thuẫn, timestamp thiếu, giới hạn `<= 1440` datapoints của CloudWatch, dữ liệu report thiếu (bao gồm bảng trạng thái Alarm và phân rã đối soát DynamoDB) và encoding Windows.

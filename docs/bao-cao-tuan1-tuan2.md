@@ -89,7 +89,7 @@ Full E2E chưa hoàn thành trong Tuần 1.
 ## 7. Evidence
 
 - [Chỉ mục evidence Tuần 1](evidence/week1/README.md)
-- [Công việc và minh chứng Tuần 1](worklog/week1.md)
+- [Worklog Tuần 1](worklog/week1.md)
 - [Kiến trúc](architecture/README.md)
 - [AWS Inventory](aws-inventory.md)
 
@@ -310,10 +310,11 @@ Theo thông tin nhóm cung cấp, **Phạm Minh Quân sử dụng ChatGPT / GPT-
 
 Nhóm trực tiếp triển khai, kiểm thử và xác nhận kết quả thực tế.
 
-## 9. Hoạt động và minh chứng
+## 9. Worklog
 
 Xem [worklog/week2.md](worklog/week2.md).
 
+**Xác nhận của nhóm:** người nộp báo cáo cả hai đã đạt mức tối thiểu 8 giờ/người; hiện không có số giờ/ngày chi tiết để kiểm toán. Xem worklog, chỉ điền giờ chi tiết khi có dữ liệu thật.
 
 ## 10. Kết luận
 
@@ -328,6 +329,7 @@ Tuần 2 đã đạt mục tiêu tích hợp lõi. Producer, SQS, Consumer và D
 - [x] Evidence Tuần 1.
 - [x] Evidence Producer Tuần 2 phía Khôi.
 - [x] Evidence Tuần 2 phía Quân đã được báo cáo/push qua PR tài liệu.
+- [ ] Điền giờ làm thực tế Tuần 1 và Tuần 2.
 - [x] Phần AI của Quân đã được tổng hợp theo thông tin nhóm cung cấp (ChatGPT / GPT-6.0); xem [khai báo chi tiết](ai-declaration.md).
 - [ ] Kiểm tra trạng thái PR #6 và toàn bộ link sau push cuối.
 

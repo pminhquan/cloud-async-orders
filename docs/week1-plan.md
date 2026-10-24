@@ -24,6 +24,7 @@ Không đặt mục tiêu Full E2E trong Tuần 1.
 | W1-07 | Test `POST /orders` → `202` | Khôi | Hoàn thành |
 | W1-08 | Tạo SNS topic/email | Khôi | Hoàn thành |
 | W1-09 | Chuẩn hóa repository/evidence | Cả hai | Hoàn thành |
+| W1-10 | Worklog ≥ 8h/người | Mỗi người | Nhóm tự khai đạt; cần giữ thông tin giờ thực tế trung thực |
 
 ## 3. Tiêu chí hoàn thành Tuần 1
 
