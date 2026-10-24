@@ -1,0 +1,562 @@
+{
+  "schemaVersion": "1.0",
+  "benchmarkScope": "SQS_API_ISOLATED",
+  "sourceType": "SQS_BENCHMARK_RUN",
+  "runId": "b1-fifo-g5-20261024T054259Z-03",
+  "timestampUtc": "2026-10-24T05:43:38Z",
+  "executeMode": true,
+  "configuration": {
+    "queueType": "fifo",
+    "queueName": "orders-benchmark.fifo",
+    "messageCount": 20,
+    "batchSize": 1,
+    "rateLimitPerSec": 20.0,
+    "timeoutSeconds": 15.0,
+    "maxPolls": 25,
+    "groupCount": 5,
+    "deduplicationMode": "explicit"
+  },
+  "metrics": {
+    "attemptedMessages": 20,
+    "acceptedSends": 20,
+    "failedSends": 0,
+    "uniqueReceivedMessages": 20,
+    "duplicateObservations": 0,
+    "receiveCompletenessRatio": 1.0,
+    "pollsExecuted": 20,
+    "elapsedSendSeconds": 9.9641,
+    "elapsedReceiveSeconds": 12.7654,
+    "totalElapsedSeconds": 22.7295,
+    "sendThroughputMsgPerSec": 2.007,
+    "receiveThroughputMsgPerSec": 1.567,
+    "sendLatencyMs": {
+      "count": 20,
+      "minMs": 295.639,
+      "maxMs": 1870.541,
+      "meanMs": 450.362,
+      "medianMs": 298.031,
+      "p95Ms": 957.534
+    },
+    "receivePollLatencyMs": {
+      "count": 20,
+      "minMs": 247.647,
+      "maxMs": 1484.711,
+      "meanMs": 376.387,
+      "medianMs": 249.615,
+      "p95Ms": 689.208
+    }
+  },
+  "ordering": {
+    "evaluatedGroups": 5,
+    "allGroupsInOrder": true,
+    "outOfOrderGroups": 0,
+    "totalOutOfOrderTransitions": 0,
+    "perGroup": {
+      "bench-group-01": {
+        "receivedCount": 4,
+        "inOrder": true,
+        "outOfOrderTransitions": 0,
+        "sequenceSample": [
+          1,
+          6,
+          11,
+          16
+        ]
+      },
+      "bench-group-02": {
+        "receivedCount": 4,
+        "inOrder": true,
+        "outOfOrderTransitions": 0,
+        "sequenceSample": [
+          2,
+          7,
+          12,
+          17
+        ]
+      },
+      "bench-group-03": {
+        "receivedCount": 4,
+        "inOrder": true,
+        "outOfOrderTransitions": 0,
+        "sequenceSample": [
+          3,
+          8,
+          13,
+          18
+        ]
+      },
+      "bench-group-04": {
+        "receivedCount": 4,
+        "inOrder": true,
+        "outOfOrderTransitions": 0,
+        "sequenceSample": [
+          4,
+          9,
+          14,
+          19
+        ]
+      },
+      "bench-group-05": {
+        "receivedCount": 4,
+        "inOrder": true,
+        "outOfOrderTransitions": 0,
+        "sequenceSample": [
+          5,
+          10,
+          15,
+          20
+        ]
+      }
+    },
+    "note": "FIFO guarantees ordering within each MessageGroupId, not global ordering across distinct groups."
+  },
+  "records": [
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 1,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0001",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "73a35f2d-c9cd-4942-886f-9f5d0c07bf52",
+      "status": "ACCEPTED",
+      "latencyMs": 1870.541,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 2,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0002",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "4b1272f0-d840-41b8-8492-ba55267325ad",
+      "status": "ACCEPTED",
+      "latencyMs": 295.639,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 3,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0003",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "07d8f631-08b1-4b57-8439-8ad15911984d",
+      "status": "ACCEPTED",
+      "latencyMs": 672.773,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 4,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0004",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "4ad224f1-8abf-4ba6-8e2a-c19de4d7dce5",
+      "status": "ACCEPTED",
+      "latencyMs": 296.286,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 5,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0005",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "af8ad38d-5035-4023-8f0c-af894e19a147",
+      "status": "ACCEPTED",
+      "latencyMs": 297.045,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 6,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0006",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "ba6695d1-e3fb-48c7-bcb2-a24aa2e06d01",
+      "status": "ACCEPTED",
+      "latencyMs": 743.111,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 7,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0007",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "146accb8-64f8-4064-a108-cc2848787c33",
+      "status": "ACCEPTED",
+      "latencyMs": 299.487,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 8,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0008",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "6b8e83f5-2701-48a1-9768-03467fe5ffe0",
+      "status": "ACCEPTED",
+      "latencyMs": 300.018,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 9,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0009",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "22fffdef-2406-4785-9be7-2f2e895847ea",
+      "status": "ACCEPTED",
+      "latencyMs": 297.859,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 10,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0010",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "435fdf75-65f7-4516-a99c-aeee05c2d4ce",
+      "status": "ACCEPTED",
+      "latencyMs": 297.586,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 11,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0011",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "b0e75b05-7cae-42fe-a94a-24ff5eb76332",
+      "status": "ACCEPTED",
+      "latencyMs": 296.796,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 12,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0012",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "bef7caa1-1344-4598-a4b7-19badb247582",
+      "status": "ACCEPTED",
+      "latencyMs": 297.682,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 13,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0013",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "fdab9c34-9db6-412a-8a53-4c15a2ecda11",
+      "status": "ACCEPTED",
+      "latencyMs": 298.535,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 14,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0014",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "5c364223-7d77-4200-8beb-89ac869a6bd7",
+      "status": "ACCEPTED",
+      "latencyMs": 296.081,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 15,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0015",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "c250a540-0080-4115-9391-c04ef8c105fd",
+      "status": "ACCEPTED",
+      "latencyMs": 300.113,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 16,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0016",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "04d512f1-fba4-46f4-93e2-95bdd87c1124",
+      "status": "ACCEPTED",
+      "latencyMs": 957.534,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 17,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0017",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "3206123d-45d3-41ff-8d57-a2db30e43d7a",
+      "status": "ACCEPTED",
+      "latencyMs": 296.133,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 18,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0018",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "e966f0d7-dad2-494f-94aa-3651b247e5a6",
+      "status": "ACCEPTED",
+      "latencyMs": 296.424,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 19,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0019",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "c090c01a-d822-4a6a-ba79-657bfcd2e5bc",
+      "status": "ACCEPTED",
+      "latencyMs": 299.384,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "SEND",
+      "sequenceNumber": 20,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0020",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "b069bcda-85be-460f-af7f-3e4b32ebae4b",
+      "status": "ACCEPTED",
+      "latencyMs": 298.203,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 1,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0001",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "73a35f2d-c9cd-4942-886f-9f5d0c07bf52",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 1484.711,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 2,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0002",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "4b1272f0-d840-41b8-8492-ba55267325ad",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 250.701,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 3,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0003",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "07d8f631-08b1-4b57-8439-8ad15911984d",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.596,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 4,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0004",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "4ad224f1-8abf-4ba6-8e2a-c19de4d7dce5",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 249.046,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 5,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0005",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "af8ad38d-5035-4023-8f0c-af894e19a147",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.957,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 6,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0006",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "ba6695d1-e3fb-48c7-bcb2-a24aa2e06d01",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.746,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 7,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0007",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "146accb8-64f8-4064-a108-cc2848787c33",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 249.789,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 8,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0008",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "6b8e83f5-2701-48a1-9768-03467fe5ffe0",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 250.338,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 9,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0009",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "22fffdef-2406-4785-9be7-2f2e895847ea",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 686.194,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 10,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0010",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "435fdf75-65f7-4516-a99c-aeee05c2d4ce",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 250.853,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 11,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0011",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "b0e75b05-7cae-42fe-a94a-24ff5eb76332",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 251.052,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 12,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0012",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "bef7caa1-1344-4598-a4b7-19badb247582",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 247.647,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 13,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0013",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "fdab9c34-9db6-412a-8a53-4c15a2ecda11",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 249.44,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 14,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0014",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "5c364223-7d77-4200-8beb-89ac869a6bd7",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 689.208,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 15,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0015",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "c250a540-0080-4115-9391-c04ef8c105fd",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.895,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 16,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0016",
+      "messageGroupId": "bench-group-01",
+      "sqsMessageId": "04d512f1-fba4-46f4-93e2-95bdd87c1124",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 249.86,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 17,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0017",
+      "messageGroupId": "bench-group-02",
+      "sqsMessageId": "3206123d-45d3-41ff-8d57-a2db30e43d7a",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 249.03,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 18,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0018",
+      "messageGroupId": "bench-group-03",
+      "sqsMessageId": "e966f0d7-dad2-494f-94aa-3651b247e5a6",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.901,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 19,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0019",
+      "messageGroupId": "bench-group-04",
+      "sqsMessageId": "c090c01a-d822-4a6a-ba79-657bfcd2e5bc",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 677.047,
+      "errorCode": ""
+    },
+    {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "phase": "RECEIVE",
+      "sequenceNumber": 20,
+      "orderId": "BENCH-b1-fifo-g5-20261024T054259Z-03-0020",
+      "messageGroupId": "bench-group-05",
+      "sqsMessageId": "b069bcda-85be-460f-af7f-3e4b32ebae4b",
+      "status": "UNIQUE_RECEIVED",
+      "latencyMs": 248.725,
+      "errorCode": ""
+    }
+  ],
+  "limitations": [
+    "SQS API benchmark measures direct SQS SendMessage/ReceiveMessage behavior, not Consumer Lambda + DynamoDB processing time.",
+    "Redelivered messages with the same orderId are counted under duplicateObservations and never inflated as uniqueReceivedMessages.",
+    "FIFO ordering applies within each MessageGroupId; multi-group runs interleave across groups by design.",
+    "Absence of duplicates in a small Standard queue sample does not prove Standard queues never duplicate messages.",
+    "Observation timeout bounds when new poll/delete calls are issued and caps per-call socket connect/read timeouts with single-attempt SDK execution (no hidden retries), rather than forcibly killing an in-flight OS socket call."
+  ]
+}
