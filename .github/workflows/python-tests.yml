@@ -1,0 +1,58 @@
+name: Python Regression & Offline IaC Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Offline Unit Tests & Template Check
+    runs-on: ubuntu-latest
+    env:
+      AWS_EC2_METADATA_DISABLED: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install offline test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest boto3 pyyaml cfn-lint
+
+      - name: Validate CloudFormation monitoring template with cfn-lint
+        run: |
+          cfn-lint iac/week3-monitoring.yaml
+
+      - name: Compile Python sources, scripts, and tests
+        run: |
+          python -m compileall -q src scripts tests
+
+      - name: Run pytest suite (offline)
+        run: |
+          python -m pytest -q
+
+      - name: Run unittest discovery (offline)
+        run: |
+          python -B -m unittest discover -s tests -p "test_*.py"
+
+      - name: Verify CLI dry-run and help interfaces without AWS credentials
+        run: |
+          python scripts/collect_cloudwatch_metrics.py --help >/dev/null
+          python scripts/benchmark_sqs.py --help >/dev/null
+          python scripts/load_test_orders.py --help >/dev/null
+          python scripts/generate_week3_report.py --help >/dev/null
+          python scripts/collect_cloudwatch_metrics.py --dry-run >/dev/null
+          python scripts/benchmark_sqs.py --queue-type standard --queue-url orders-benchmark-standard --dry-run >/dev/null
+          python scripts/load_test_orders.py --endpoint https://example-api.execute-api.us-east-1.amazonaws.com/orders --dry-run >/dev/null

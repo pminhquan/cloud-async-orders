@@ -23,6 +23,17 @@
 - [Worklog Tuần 2](worklog/week2.md)
 - [Evidence Tuần 2](evidence/week2/README.md)
 
+## Tuần 3
+
+- [Kế hoạch Tuần 3](week3-plan.md)
+- [Báo cáo Tuần 3](week3-report.md)
+- [Thiết kế Giám sát CloudWatch & SNS](week3-monitoring.md)
+- [Thiết kế Benchmark Standard vs FIFO](week3-benchmark.md)
+- [Thiết kế Controlled Load Test & Reconciliation](week3-load-testing.md)
+- [AWS Manual Runbook](week3-aws-manual-runbook.md)
+- [Evidence Tuần 3](evidence/week3/README.md)
+- [Bàn giao Kỹ thuật Tuần 3](WEEK3_AGENT_HANDOFF.md)
+
 ## Nghiên cứu
 
 - [Standard vs FIFO](research/standard-vs-fifo.md)

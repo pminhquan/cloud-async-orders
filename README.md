@@ -15,7 +15,7 @@ Dự án môn **Điện toán đám mây**: **Hàng đợi xử lý đơn hàng 
 
 ## 1. Mục tiêu hệ thống
 
-Hệ thống tiếp nhận đơn hàng qua API, đưa đơn vào hàng đợi để xử lý bất đồng bộ, lưu trạng thái vào DynamoDB và cô lập message lỗi bằng DLQ.
+Hệ thống tiếp nhận đơn hàng qua API, đưa đơn vào hàng đợi để xử lý bất đồng bộ, lưu trạng thái vào DynamoDB và cô lập message lỗi bằng DLQ, đồng thời giám sát/cảnh báo qua CloudWatch Alarm + SNS.
 
 ```text
 Client
@@ -35,6 +35,8 @@ Invalid / failed message
 Retry
   ↓
 orders-dlq
+  ↓
+CloudWatch Alarm → SNS (order-dlq-alert) → Email
 ```
 
 Mục tiêu cuối kỳ còn bao gồm giám sát/cảnh báo CloudWatch + SNS và so sánh SQS Standard/FIFO.
@@ -102,9 +104,29 @@ Tài liệu:
 - [Worklog Tuần 2](docs/worklog/week2.md)
 - [Minh chứng Tuần 2](docs/evidence/week2/README.md)
 
+### Tuần 3 — Giám sát CloudWatch/SNS, Benchmark Standard vs FIFO & Controlled Load Test
+
+Tuần 3 bổ sung hạ tầng giám sát dưới dạng code (IaC), bộ công cụ đo kiểm tự động hóa có chốt an toàn (`--dry-run` mặc định), kiểm thử hồi quy và CI:
+
+- **CloudWatch Monitoring & SNS Alert (`W3-01`):** Template [`iac/week3-monitoring.yaml`](iac/week3-monitoring.yaml) định nghĩa `DLQVisibleMessagesAlarm` (`ApproximateNumberOfMessagesVisible >= 1` trên `orders-dlq`, `TreatMissingData=notBreaching`) kết nối tới SNS Topic `order-dlq-alert` hiện có, kèm [`scripts/collect_cloudwatch_metrics.py`](scripts/collect_cloudwatch_metrics.py).
+- **SQS Standard vs FIFO Benchmark (`W3-02`):** Công cụ [`scripts/benchmark_sqs.py`](scripts/benchmark_sqs.py) đo thông lượng, độ trễ (`mean/median/p95`), duplicate và thứ tự nhận (`single-group` vs `multi-group`) trên queue thử nghiệm riêng, chặn cứng việc ghi/xóa trên `orders-queue` và `orders-dlq`.
+- **Controlled Load Test & DynamoDB Reconciliation (`W3-03`):** Công cụ [`scripts/load_test_orders.py`](scripts/load_test_orders.py) gửi tải trong giới hạn concurrency `<= 10` và đối soát read-only `GetItem` theo từng `orderId` để xác minh `status = PROCESSED`.
+- **Report Generator, Unit Tests & CI (`W3-04..W3-06`):** Công cụ [`scripts/generate_week3_report.py`](scripts/generate_week3_report.py), bổ sung tests hồi quy và tests công cụ offline, và thiết lập [`.github/workflows/python-tests.yml`](.github/workflows/python-tests.yml).
+- **Hướng dẫn thao tác:** [`docs/week3-aws-manual-runbook.md`](docs/week3-aws-manual-runbook.md).
+
+Tài liệu Tuần 3:
+- [Kế hoạch Tuần 3](docs/week3-plan.md)
+- [Báo cáo Tuần 3](docs/week3-report.md)
+- [Thiết kế Giám sát CloudWatch & SNS](docs/week3-monitoring.md)
+- [Thiết kế Benchmark Standard vs FIFO](docs/week3-benchmark.md)
+- [Thiết kế Controlled Load Test & Reconciliation](docs/week3-load-testing.md)
+- [AWS Manual Runbook (Dành cho Quân & Khôi)](docs/week3-aws-manual-runbook.md)
+- [Chỉ mục Minh chứng Tuần 3](docs/evidence/week3/README.md)
+- [Bàn giao Kỹ thuật Tuần 3](docs/WEEK3_AGENT_HANDOFF.md)
+
 ---
 
-## 3. Schema message Tuần 2
+## 3. Schema message Tuần 2–3
 
 ```json
 {
@@ -131,6 +153,9 @@ Chi tiết: [Integration Contract](docs/integration-contract.md).
 
 ```text
 cloud-async-orders/
+├── .github/
+│   └── workflows/
+│       └── python-tests.yml
 ├── src/
 │   ├── producer/
 │   │   └── lambda_function.py
@@ -139,14 +164,22 @@ cloud-async-orders/
 ├── tests/
 │   ├── fixtures/
 │   ├── test_producer.py
-│   └── test_consumer.py
+│   ├── test_consumer.py
+│   ├── test_monitoring_and_metrics.py
+│   ├── test_benchmark_sqs.py
+│   └── test_load_test_orders.py
 ├── scripts/
-│   └── test-order-api.ps1
+│   ├── test-order-api.ps1
+│   ├── collect_cloudwatch_metrics.py
+│   ├── benchmark_sqs.py
+│   ├── load_test_orders.py
+│   └── generate_week3_report.py
 ├── docs/
 │   ├── architecture/
 │   ├── evidence/
 │   │   ├── week1/
-│   │   └── week2/
+│   │   ├── week2/
+│   │   └── week3/
 │   ├── research/
 │   ├── worklog/
 │   │   ├── week1.md
@@ -158,12 +191,21 @@ cloud-async-orders/
 │   ├── week1-plan.md
 │   ├── week1-report.md
 │   ├── week2-plan.md
-│   └── week2-report.md
+│   ├── week2-report.md
+│   ├── week3-plan.md
+│   ├── week3-report.md
+│   ├── week3-monitoring.md
+│   ├── week3-benchmark.md
+│   ├── week3-load-testing.md
+│   ├── week3-aws-manual-runbook.md
+│   └── WEEK3_AGENT_HANDOFF.md
 ├── screenshots/
 │   ├── week1/
 │   └── week2/
 │       └── khoi/
 ├── iac/
+│   ├── README.md
+│   └── week3-monitoring.yaml
 └── README.md
 ```
 
@@ -173,17 +215,22 @@ cloud-async-orders/
 
 ```bash
 python -m pytest -q
+# Hoặc dùng stdlib unittest:
+python -B -m unittest discover -s tests -p "test_*.py"
+python -m compileall -q src scripts tests
 ```
 
-Trạng thái trên bộ source hiện tại:
+Trạng thái trên bộ source Tuần 2:
 
 ```text
 33 passed, 81 subtests passed (kết quả đã ghi nhận trên bộ mã nguồn trước; chưa chạy lại trên máy Khôi sau khi tạo PR #8)
 ```
 
+Trạng thái mở rộng Tuần 3 (bảo toàn 33 test methods gốc + bổ sung 21 test methods công cụ Tuần 3 = 54 passed, 104 subtests passed) và các lệnh kiểm tra chi tiết được ghi trong [báo cáo offline Tuần 3](docs/week3-report.md).
+
 ---
 
-## 6. Kiểm thử API
+## 6. Kiểm thử API & Công cụ Tuần 3
 
 Request hợp lệ:
 
@@ -207,10 +254,18 @@ Các request thiếu `customerId`, thiếu `productId`, `quantity <= 0`, `quanti
 HTTP 400
 ```
 
-Script hỗ trợ:
+Kiểm tra nhanh CLI Tuần 3 ở chế độ an toàn `--dry-run` (không gọi AWS):
+
+```bash
+python scripts/collect_cloudwatch_metrics.py --dry-run
+python scripts/benchmark_sqs.py --queue-type standard --queue-url orders-benchmark-standard --dry-run
+python scripts/load_test_orders.py --endpoint https://example-api.execute-api.us-east-1.amazonaws.com/orders --dry-run
+```
+
+Script PowerShell smoke test (yêu cầu truyền `-EndpointUrl`, kèm `-Execute` khi gửi thật):
 
 ```powershell
-./scripts/test-order-api.ps1
+./scripts/test-order-api.ps1 -EndpointUrl "https://<api-id>.execute-api.us-east-1.amazonaws.com/orders"
 ```
 
 ---
@@ -268,3 +323,4 @@ Không commit:
 
 - [Ma trận từng yêu cầu → người thực hiện → kết quả → ảnh/code](docs/TRACEABILITY-W1-W2.md).
 - [Chỉ mục 29 ảnh kiểm thử Tuần 2](docs/evidence/week2/README.md).
+- [Báo cáo tiến độ và trạng thái Tuần 3](docs/week3-report.md).

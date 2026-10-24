@@ -78,7 +78,6 @@ Chỉ coi là sẵn sàng nộp khi:
 
 - source/tests PASS;
 - báo cáo Tuần 1/Tuần 2 rõ ràng;
-- người nộp báo cáo đạt ≥ 8 giờ/người/tuần; nhật ký giờ chi tiết chỉ bổ sung từ dữ liệu thực;
 - khai báo AI đúng thực tế;
 - evidence truy cập được;
 - GitHub Public và link không lỗi.

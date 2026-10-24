@@ -19,7 +19,7 @@
 - Gợi ý Python `boto3`, `QUEUE_URL`, `send_message()`, dữ liệu JSON và Lambda Test Event cho Producer.
 - Tham khảo validation với `customerId`, `productId`, `quantity`, malformed JSON và phản hồi `202/400/500`.
 - Phân tích lỗi AWS Learner Lab và phương pháp đối soát invalid request không enqueue vào SQS.
-- Hỗ trợ tổ chức source, ảnh AWS, README, worklog và báo cáo Markdown.
+- Hỗ trợ tổ chức source, ảnh AWS, README, bảng công việc và báo cáo Markdown.
 
 ## 3. Phạm vi AI hỗ trợ — Phạm Minh Quân
 
@@ -31,7 +31,7 @@
 - **SQS trigger, retry và DLQ:** giải thích Event Source Mapping, visibility timeout, redrive policy `maxReceiveCount=5`, CloudWatch Logs và lỗi `INVALID_JSON`.
 - **Batch/replay:** gợi ý cách thử batch hợp lệ, mixed batch và full-batch failure semantics bằng **direct Lambda invocation**, không đồng nhất với SQS batch thực tế.
 - **Kiểm thử tích hợp:** tham khảo cách đối soát `orderId` xuyên suốt API Gateway → Producer → SQS → Consumer → DynamoDB và tổ chức small load test 10 request.
-- **Unit tests/tài liệu:** tham khảo test cases, cấu trúc test, mô tả minh chứng AWS, README, worklog và báo cáo tiến độ.
+- **Unit tests/tài liệu:** tham khảo test cases, cấu trúc test, mô tả minh chứng AWS, README, bảng công việc và báo cáo tiến độ.
 
 ### 3.2. Nhóm prompt / nội dung yêu cầu AI hỗ trợ (đã tổng hợp)
 
