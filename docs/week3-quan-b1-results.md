@@ -66,9 +66,9 @@ All three scenarios ran sequentially using `scripts/benchmark_sqs.py` with `--me
 
 | Scenario | `sendLatencyMs` (min / median / mean / p95 / max) | `receivePollLatencyMs` (min / median / mean / p95 / max) | Notes (Observed Numbers Only) |
 | :--- | :--- | :--- | :--- |
-| **1. Standard** | `242.342 / 243.891 / 299.421 / 260.606 / 1321.362` | `240.809 / 243.346 / 276.38 / 550.847 / 582.248` | Send sequence `#1` was `1321.362 ms`; sends `#2–#20` ranged from `242.342 ms` to `260.606 ms`. Receive polls ranged from `240.809 ms` to `582.248 ms`. |
-| **2. FIFO Single-Group** | `244.293 / 246.461 / 317.977 / 254.454 / 1667.827` | `243.629 / 245.667 / 276.029 / 547.561 / 548.105` | Send sequence `#1` was `1667.827 ms`; sends `#2–#20` ranged from `244.293 ms` to `254.454 ms`. Receive polls ranged from `243.629 ms` to `548.105 ms`. |
-| **3. FIFO Multi-Group** | `295.639 / 298.031 / 450.362 / 957.534 / 1870.541` | `247.647 / 249.615 / 376.387 / 689.208 / 1484.711` | Send sequence `#1` was `1870.541 ms`; sends `#9–#11` were `826.551–957.534 ms`; remaining sends ranged from `295.639 ms` to `473.184 ms`. Receive polls ranged from `247.647 ms` to `1484.711 ms`. |
+| **1. Standard** | `242.342 / 243.891 / 299.421 / 260.606 / 1321.362` | `240.809 / 243.346 / 276.38 / 550.847 / 582.248` | Observed send median `243.891 ms` (`p95=260.606 ms`, range `242.342–1321.362 ms`); observed receive-poll median `243.346 ms` (`p95=550.847 ms`, range `240.809–582.248 ms`). |
+| **2. FIFO Single-Group** | `244.293 / 246.461 / 317.977 / 254.454 / 1667.827` | `243.629 / 245.667 / 276.029 / 547.561 / 548.105` | Observed send median `246.461 ms` (`p95=254.454 ms`, range `244.293–1667.827 ms`); observed receive-poll median `245.667 ms` (`p95=547.561 ms`, range `243.629–548.105 ms`). |
+| **3. FIFO Multi-Group** | `295.639 / 298.031 / 450.362 / 957.534 / 1870.541` | `247.647 / 249.615 / 376.387 / 689.208 / 1484.711` | Observed send median `298.031 ms` (`p95=957.534 ms`, range `295.639–1870.541 ms`); observed receive-poll median `249.615 ms` (`p95=689.208 ms`, range `247.647–1484.711 ms`). |
 
 ### 4.3 Ordering Verification (`ordering`)
 
