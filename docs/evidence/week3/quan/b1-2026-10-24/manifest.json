@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "2026-10-24-003",
+  "phase": "B1-isolated-sqs-benchmark",
+  "baseMainCommit": "71095c0e362af41c9740a94990ccb7087a29486e",
+  "benchmarkScript": {
+    "path": "scripts/benchmark_sqs.py",
+    "gitBlobSha1": "b827bf7ece8b109d5dd05c0fda1aa0dbe27f12dd",
+    "sha256": "7b8e7f718eceb2326be6ec30bf49f8b5c858137949619989b36369d97a20cff8",
+    "modified": false
+  },
+  "executionWindowUtc": {
+    "startedAt": "2026-10-24T05:42:52Z",
+    "completedAt": "2026-10-24T05:44:03Z"
+  },
+  "targetAccount": "<ACCOUNT_ID>",
+  "region": "us-east-1",
+  "redactionPolicy": "Public repository evidence redacts 12-digit AWS account IDs as <ACCOUNT_ID>, omits raw QueueUrls/ARNs/credentials/session tokens/local paths, and preserves exact measured latency, throughput, ordering, and run-owned message correlation data.",
+  "awsWriteSummary": {
+    "createQueueCalls": 2,
+    "queuesCreated": [
+      {
+        "queueName": "orders-benchmark-standard",
+        "queueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-benchmark-standard",
+        "createdTimestamp": "1792820500",
+        "visibilityTimeoutSeconds": 30,
+        "messageRetentionPeriodSeconds": 345600,
+        "sqsManagedSseEnabled": true,
+        "redrivePolicy": null,
+        "eventSourceMappings": 0
+      },
+      {
+        "queueName": "orders-benchmark.fifo",
+        "queueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-benchmark.fifo",
+        "createdTimestamp": "1792820581",
+        "fifoQueue": true,
+        "contentBasedDeduplication": false,
+        "deduplicationScope": "queue",
+        "fifoThroughputLimit": "perQueue",
+        "visibilityTimeoutSeconds": 30,
+        "messageRetentionPeriodSeconds": 345600,
+        "sqsManagedSseEnabled": true,
+        "redrivePolicy": null,
+        "eventSourceMappings": 0
+      }
+    ],
+    "totalMessagesSent": 60,
+    "totalRunOwnedMessagesDeleted": 60,
+    "purgeQueueCalls": 0,
+    "deleteQueueCalls": 0,
+    "productionWrites": 0
+  },
+  "productionInvariants": {
+    "ordersQueueVisible": 0,
+    "ordersQueueNotVisible": 0,
+    "ordersQueueDelayed": 0,
+    "ordersQueueLastModifiedTimestamp": "1792060948",
+    "ordersDlqVisible": 2,
+    "ordersDlqNotVisible": 0,
+    "ordersDlqDelayed": 0,
+    "ordersDlqLastModifiedTimestamp": "1791692962",
+    "orderConsumerEsmUuid": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+    "orderConsumerEsmState": "Disabled",
+    "orderProcessorEsmUuid": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+    "orderProcessorEsmState": "Disabled"
+  },
+  "scenarios": {
+    "standard": {
+      "runId": "b1-std-20261024T054259Z-01",
+      "timestampUtc": "2026-10-24T05:43:00Z",
+      "queueType": "standard",
+      "queueName": "orders-benchmark-standard",
+      "messageCount": 20,
+      "groupCount": 1,
+      "deduplicationMode": "not_applicable",
+      "files": {
+        "summaryJson": {
+          "relativePath": "standard/benchmark-summary.json",
+          "bytes": 16850,
+          "rawSha256": "36c2ebfbf0a690878b9c6a496fd4cf2e181e7f11947d2cc1b59a3ea113121d7d",
+          "publishedSha256": "36c2ebfbf0a690878b9c6a496fd4cf2e181e7f11947d2cc1b59a3ea113121d7d",
+          "byteIdenticalToRaw": true
+        },
+        "resultsCsv": {
+          "relativePath": "standard/benchmark-results.csv",
+          "bytes": 5470,
+          "rawSha256": "7f1f455b61b239f2f84648cc8d0943abdeabc2c5ceb92eeea07718fd23bdaf9f",
+          "publishedSha256": "7f1f455b61b239f2f84648cc8d0943abdeabc2c5ceb92eeea07718fd23bdaf9f",
+          "byteIdenticalToRaw": true,
+          "totalRowsExcludingHeader": 40,
+          "sendRowCount": 20,
+          "receiveRowCount": 20
+        }
+      }
+    },
+    "fifo-single": {
+      "runId": "b1-fifo-g1-20261024T054259Z-02",
+      "timestampUtc": "2026-10-24T05:43:19Z",
+      "queueType": "fifo",
+      "queueName": "orders-benchmark.fifo",
+      "messageCount": 20,
+      "groupCount": 1,
+      "deduplicationMode": "explicit",
+      "files": {
+        "summaryJson": {
+          "relativePath": "fifo-single/benchmark-summary.json",
+          "bytes": 17717,
+          "rawSha256": "4df38eccb02ce8273978540d007e9f8ff758ea8f56cc0c5abad2c7c7451cf5ce",
+          "publishedSha256": "4df38eccb02ce8273978540d007e9f8ff758ea8f56cc0c5abad2c7c7451cf5ce",
+          "byteIdenticalToRaw": true
+        },
+        "resultsCsv": {
+          "relativePath": "fifo-single/benchmark-results.csv",
+          "bytes": 6347,
+          "rawSha256": "4ee5c42d741b4dcdebcd646a185355ab33ed113fe4a7d1693b2a8f0281279ee8",
+          "publishedSha256": "4ee5c42d741b4dcdebcd646a185355ab33ed113fe4a7d1693b2a8f0281279ee8",
+          "byteIdenticalToRaw": true,
+          "totalRowsExcludingHeader": 40,
+          "sendRowCount": 20,
+          "receiveRowCount": 20
+        }
+      }
+    },
+    "fifo-multi": {
+      "runId": "b1-fifo-g5-20261024T054259Z-03",
+      "timestampUtc": "2026-10-24T05:43:38Z",
+      "queueType": "fifo",
+      "queueName": "orders-benchmark.fifo",
+      "messageCount": 20,
+      "groupCount": 5,
+      "deduplicationMode": "explicit",
+      "files": {
+        "summaryJson": {
+          "relativePath": "fifo-multi/benchmark-summary.json",
+          "bytes": 18394,
+          "rawSha256": "7feea6562de96dee5703e960ba88b6bcf14ee84b42886af128e10071f8c3208d",
+          "publishedSha256": "7feea6562de96dee5703e960ba88b6bcf14ee84b42886af128e10071f8c3208d",
+          "byteIdenticalToRaw": true
+        },
+        "resultsCsv": {
+          "relativePath": "fifo-multi/benchmark-results.csv",
+          "bytes": 6352,
+          "rawSha256": "5414a9b5ddd33e82afbde2c14781fdca95a59f14f973f4931a3c4b2b93d6633c",
+          "publishedSha256": "5414a9b5ddd33e82afbde2c14781fdca95a59f14f973f4931a3c4b2b93d6633c",
+          "byteIdenticalToRaw": true,
+          "totalRowsExcludingHeader": 40,
+          "sendRowCount": 20,
+          "receiveRowCount": 20
+        }
+      }
+    }
+  }
+}
