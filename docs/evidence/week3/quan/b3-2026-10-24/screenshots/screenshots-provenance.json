@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "b3-run-20261024T160006Z-63133f25",
+  "captureStage": "After B3 execution and restoration",
+  "policy": "Genuine native browser crop; no generated or reconstructed content; personal account header excluded. File save time is capture time, not test execution time.",
+  "files": [
+    {
+      "file": "W3-B3-CloudWatch-Two-Record-Batch.jpg",
+      "sourceKind": "AWS_CONSOLE_CROP",
+      "subject": "Two genuine INFO PROCESSED SQS records between START and END/REPORT in one Lambda invocation",
+      "source": "CloudWatch Logs /aws/lambda/order-consumer, stream 2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+      "lambdaRequestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+      "note": "Read-only log event viewer, exact RequestId filter, native Display/View in plain text; full two message IDs and order IDs visible; no tailing or metric filter created.",
+      "sha256": "6c70e23875d1dade3f7147db675f3fb5daa70f091676a38eec7c05389ae4be81",
+      "bytes": 66434,
+      "savedAtUtc": "2026-10-24T16:07:59.0832831Z"
+    }
+  ]
+}

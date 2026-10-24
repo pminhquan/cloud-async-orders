@@ -1,0 +1,48 @@
+{
+  "batchVerified": true,
+  "lambdaRequestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+  "logStreamName": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+  "matchedOrders": [
+    "12c1bb70-25eb-43b2-936f-ee62714236b5",
+    "e40094f0-f303-4eca-be0a-0fb57b1836c1"
+  ],
+  "sqsMessageIds": [
+    "6e052d51-b729-43fa-aa71-ecf74384582f",
+    "fa670c23-cfcc-4b62-808a-3bca29c7711e"
+  ],
+  "startEvent": {
+    "message": "START RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a Version: $LATEST",
+    "timestamp": 1792857616051
+  },
+  "endEvent": {
+    "message": "END RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+    "timestamp": 1792857618836
+  },
+  "reportEvent": {
+    "message": "REPORT RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a\tDuration: 2784.26 ms\tBilled Duration: 3139 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\tInit Duration: 354.04 ms",
+    "timestamp": 1792857618836
+  },
+  "infoEvents": [
+    {
+      "orderId": "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+      "messageId": "6e052d51-b729-43fa-aa71-ecf74384582f",
+      "level": "INFO",
+      "status": "PROCESSED",
+      "message": "[INFO]\t2026-10-24T16:00:18.758Z\t669f8c38-d85a-55dd-9a5a-ef6e0015632a\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"6e052d51-b729-43fa-aa71-ecf74384582f\", \"orderId\": \"e40094f0-f303-4eca-be0a-0fb57b1836c1\"}",
+      "requestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+      "logStream": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+      "timestamp": 1792857618774
+    },
+    {
+      "orderId": "12c1bb70-25eb-43b2-936f-ee62714236b5",
+      "messageId": "fa670c23-cfcc-4b62-808a-3bca29c7711e",
+      "level": "INFO",
+      "status": "PROCESSED",
+      "message": "[INFO]\t2026-10-24T16:00:18.795Z\t669f8c38-d85a-55dd-9a5a-ef6e0015632a\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"fa670c23-cfcc-4b62-808a-3bca29c7711e\", \"orderId\": \"12c1bb70-25eb-43b2-936f-ee62714236b5\"}",
+      "requestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+      "logStream": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+      "timestamp": 1792857618795
+    }
+  ],
+  "status": "VERIFIED_2_RECORD_BATCH"
+}

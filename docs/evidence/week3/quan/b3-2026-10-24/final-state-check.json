@@ -1,0 +1,54 @@
+{
+  "timestampUtc": "2026-10-24T16:05:41.141679+00:00",
+  "boundedCheck": true,
+  "ordersQueue": {
+    "ApproximateNumberOfMessages": "0",
+    "ApproximateNumberOfMessagesNotVisible": "0",
+    "ApproximateNumberOfMessagesDelayed": "0",
+    "VisibilityTimeout": "60"
+  },
+  "ordersDlq": {
+    "ApproximateNumberOfMessages": "2",
+    "ApproximateNumberOfMessagesNotVisible": "0",
+    "ApproximateNumberOfMessagesDelayed": "0",
+    "VisibilityTimeout": "30"
+  },
+  "functions": {
+    "orderConsumer": {
+      "FunctionName": "order-consumer",
+      "Runtime": "python3.13",
+      "Timeout": 3,
+      "State": "Active",
+      "CodeSha256": "cAglL/yZX4JdPU+NM3pAYTTK5C4hG11FopmcTbYZLpA=",
+      "LastModified": "2026-10-24T16:00:31.000+0000"
+    },
+    "orderProducer": {
+      "FunctionName": "order-producer",
+      "Runtime": "python3.13",
+      "Timeout": 3,
+      "State": "Active",
+      "CodeSha256": "AVeX+UvbRSOL/m7KEdY+vPO2B6dhwv/lozuHAvUoLMk=",
+      "LastModified": "2026-10-15T11:09:32.000+0000"
+    }
+  },
+  "eventSourceMappings": {
+    "consumerEsm": {
+      "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+      "State": "Disabled",
+      "BatchSize": 1,
+      "MaximumBatchingWindowInSeconds": 0,
+      "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+      "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+      "LastModified": "2026-10-24 23:00:25.646000+07:00"
+    },
+    "legacyEsm": {
+      "UUID": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+      "State": "Disabled",
+      "BatchSize": 1,
+      "MaximumBatchingWindowInSeconds": 0,
+      "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-processor",
+      "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+      "LastModified": "2026-10-11 22:18:23.282000+07:00"
+    }
+  }
+}

@@ -56,7 +56,7 @@ Bộ test gồm 18 Producer, 15 Consumer, 9 benchmark, 4 load/reconciliation và
 
 ---
 
-# Kết quả kiểm thử vận hành thực tế Tuần 3 (Phase B1 & B2 — 24/10/2026)
+# Kết quả kiểm thử vận hành thực tế Tuần 3 (Phase B1, B2 & B3 — 24/10/2026)
 
 ## 1. Đo kiểm độc lập SQS Standard vs FIFO (Phase B1)
 
@@ -82,7 +82,7 @@ Kịch bản Phase B2 được người dùng phê duyệt chạy đúng **01 l�
 - **Kiểm tra sau thực thi & Bằng chứng nguyên vẹn DLQ:**
   - Hàng đợi `orders-queue` trống hoàn toàn (`0/0/0`). Cả 2 hàng đợi benchmark giữ nguyên `0/0/0`.
   - Hàng đợi `orders-dlq` giữ nguyên chính xác `2/0/0` messages lịch sử.
-  - **Bằng chứng thao tác:** Quá trình chạy B2 ghi nhận đúng **0** lệnh `ReceiveMessage`, **0** lệnh `DeleteMessage`, **0** lệnh `DeleteMessageBatch`, và **0** lệnh `PurgeQueue` đối với `orders-dlq`. Duy nhất 2 lệnh đọc chỉ số `GetQueueAttributes` được gọi, chứng minh danh tính 2 message lịch sử không bị can thiệp (chỉ số đếm không tự coi là bằng chứng danh tính độc lập).
+  - **Bảo toàn hàng đợi DLQ qua nguyên tắc không can thiệp (Non-interference):** Quá trình chạy B2 ghi nhận đúng **0** lệnh đọc (`ReceiveMessage`), **0** lệnh ghi/xóa (`DeleteMessage`, `DeleteMessageBatch`, `PurgeQueue`) đối với `orders-dlq`. Chỉ số đếm trước và sau thực thi đều giữ nguyên `2/0/0`. Việc không phát sinh bất kỳ lệnh đọc hay can thiệp nào khẳng định các message lịch sử được bảo toàn nguyên vẹn; danh tính nội dung chi tiết của từng message không được đọc hay đối chiếu độc lập.
 
 ### 3.2. Kết quả kiểm thử tải API & Đối soát DynamoDB (W3-03)
 - **Mã lần chạy (`runId`):** `b2-run-20261024T122952Z-01`
@@ -110,18 +110,60 @@ Kịch bản Phase B2 được người dùng phê duyệt chạy đúng **01 l�
   - `order-consumer`: `Invocations = 10.0`, `Errors = 0.0`, `Throttles = 0.0`, `ConcurrentExecutions` Max = 3.0.
   - Alarm `AsyncOrderProcessing-orders-dlq-VisibleMessages`: Trạng thái `NOT_FOUND` (tên alarm vắng mặt trên tài khoản thực thi tại thời điểm kiểm tra).
 
+### 3.4. Kết quả kiểm thử xử lý theo lô B3 (Batch Processing - BatchSize=2, BatchingWindow=5s)
+- **Mã lần chạy (`runId`):** `b3-run-20261024T160006Z-63133f25`
+- **Thời gian thực thi (UTC):** `2026-10-24T15:59:50Z` đến `2026-10-24T16:00:35Z` (kiểm tra trạng thái đối soát cuối lúc `16:05:41Z`).
+- **Phê duyệt phạm vi:** Phase B3 gồm đúng **02 đơn hàng hợp lệ bổ sung** được người dùng phê duyệt riêng biệt (với tốc độ $\le 2\text{ req/s}$), tiếp nối sau Phase B2 gồm 10 đơn hàng (được giảm từ mức 20 trong runbook theo phê duyệt phạm vi).
+- **Cấu hình:** Consumer timeout tạm thời tăng lên 8s; ESM `ab1f7f06-157c-429b-bfcf-5cb15689f47f` tạm thời cấu hình `BatchSize=2`, `MaximumBatchingWindowInSeconds=5`, sau đó kích hoạt `Enabled`.
+- **Thực thi tải & Thiết kế đối soát:**
+  - Gửi đúng 2 orders hợp lệ (`e40094f0-f303-4eca-be0a-0fb57b1836c1`, `12c1bb70-25eb-43b2-936f-ee62714236b5`) qua API POST với tốc độ $\le 2\text{ req/s}$; cả 2/2 requests được chấp nhận HTTP 202.
+  - *Thiết kế đối soát B3:* Lệnh chạy load script cấu hình `reconcileEnabled: false` theo chủ đích thiết kế để không thực hiện polling DynamoDB khi ESM đang Disabled; việc đối soát `GetItem` được script wrapper thực hiện trực tiếp sau khi kích hoạt ESM và được ghi nhận đầy đủ trong [`b3-execution-log.json`](evidence/week3/quan/b3-2026-10-24/b3-execution-log.json) (bảo toàn nguyên vẹn tệp dữ liệu thô `load-test-summary.json`).
+- **Đối soát DynamoDB:** Cả 2 đơn hàng đều ghi nhận trạng thái `PROCESSED` thành công trong DynamoDB `Orders`.
+- **Bằng chứng xử lý lô CloudWatch Logs (`batch-proof.json` & ảnh chụp Console):**
+  - Xác nhận cả 2 message SQS (`6e052d51-b729-43fa-aa71-ecf74384582f`, `fa670c23-cfcc-4b62-808a-3bca29c7711e`) được xử lý trong **cùng 1 invocation** duy nhất của Consumer Lambda:
+  - Lambda RequestId: `669f8c38-d85a-55dd-9a5a-ef6e0015632a`
+  - Log Stream: `2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d`
+  - Thời lượng thực thi: Duration 2784.26 ms, Billed Duration 3139 ms.
+  - Cả 2 log event `[INFO] ... "status": "PROCESSED"` tương ứng với 2 orderId nằm trọn vẹn giữa START và END/REPORT của cùng RequestId.
+  - Minh chứng trực quan: Bản chụp AWS Console CloudWatch log events được lưu tại [`docs/evidence/week3/quan/b3-2026-10-24/screenshots/W3-B3-CloudWatch-Two-Record-Batch.jpg`](evidence/week3/quan/b3-2026-10-24/screenshots/W3-B3-CloudWatch-Two-Record-Batch.jpg) (xem [`screenshots-provenance.json`](evidence/week3/quan/b3-2026-10-24/screenshots/screenshots-provenance.json)).
+- **Hoàn nguyên an toàn & Báo cáo trung thực số liệu hàng đợi:**
+  - Timeout Consumer được hoàn nguyên về mức mặc định 3s (`timeoutRestoreConfirmedAtUtc: 16:00:35Z`).
+  - ESM Consumer được hoàn nguyên về trạng thái `Disabled`, `BatchSize=1`, `MaximumBatchingWindowInSeconds=0` (`esmRestoreConfirmedAtUtc: 16:00:31Z`).
+  - ESM legacy giữ nguyên `Disabled`.
+  - Hàng đợi `orders-dlq` giữ nguyên chính xác `2/0/0` messages lịch sử (0 thao tác can thiệp).
+  - *Số liệu đếm hàng đợi chính (`orders-queue`):* Tại thời điểm hoàn tất chạy B3 (`16:00:35Z`), chỉ số SQS xấp xỉ ghi nhận thô là `2/0/0` (visible: 2, notVisible: 0, delayed: 0); tệp kiểm tra trạng thái cuối [`final-state-check.json`](evidence/week3/quan/b3-2026-10-24/final-state-check.json) (thực hiện lúc `16:05:41Z`) xác nhận `orders-queue` trống hoàn toàn (`0/0/0`). Độ trễ cập nhật xấp xỉ của SQS là một suy luận kỹ thuật; cả hai giá trị thô quan sát được đều được báo cáo minh bạch, không sửa đổi dữ liệu gốc.
+
 ## 4. Sai lệch mã nguồn Producer & Giới hạn kỹ thuật
 
 1. **Sai lệch kiểm tra đầu vào của Producer deployed (Validation Drift):**
    - Mã nguồn `order-producer` trên Lambda có timestamp `2026-10-15T11:09:32Z` (trước thời điểm tích hợp PR #7).
    - Bản deployed này thiếu hàm `_validate` để trả về HTTP 400 khi thiếu trường (nó tự gán `UNKNOWN` và `quantity=1`), và trả HTTP 500 khi gặp JSON sai cú pháp.
    - Khi chạy bài test B2 với 10 payload chuẩn gồm đầy đủ `{customerId, productId, quantity}`, Producer xử lý hoàn toàn hợp lệ và trả về HTTP 202. Mã nguồn deployed được giữ nguyên để tuân thủ phạm vi quyền hạn được cấp phép.
-2. **Minh chứng giao diện AWS Management Console:**
-   - Phiên làm việc trên browser hiện tại chưa xác thực đăng nhập IAM/SSO vào AWS Console, và môi trường không có công cụ chụp màn hình native.
-   - Nhóm không tạo ảnh dựng hay mockup giả mạo. Các ảnh chụp Console riêng của Quân còn thiếu gồm: trạng thái Event Source Mapping của Consumer, giao diện API load / đối soát DynamoDB, và biểu đồ CloudWatch Metrics tương ứng. Bằng chứng kỹ thuật được bảo đảm thông qua dữ liệu đo kiểm thô (JSON/CSV), nhật ký thực thi chi tiết, mã băm SHA-256 trong `manifest.json` và số liệu API chính thức từ AWS.
+2. **Minh chứng giao diện trực quan (Visual Evidence):**
+   - **Minh chứng Phase B2 (5 ảnh):** Đã thu thập và lưu trữ tại [`docs/evidence/week3/quan/b2-2026-10-24/screenshots/`](evidence/week3/quan/b2-2026-10-24/screenshots/) kèm [`screenshots-provenance.json`](evidence/week3/quan/b2-2026-10-24/screenshots/screenshots-provenance.json):
+     - `W3-B2-Consumer-Disabled.jpg` (AWS Console crop): Giao diện cấu hình trigger Lambda `order-consumer` thể hiện Event Source Mapping ở trạng thái Disabled (batch size 1, window None).
+     - `W3-B2-CloudWatch-Consumer.jpg` (AWS Console crop): Widget CloudWatch tích hợp trong tab Monitor của Lambda `order-consumer` ghi nhận 10 invocations.
+     - `W3-B2-DynamoDB-Console-Order.jpg` (AWS Console crop): Chi tiết item đơn hàng B2 `1145a7cf-4861-4d3c-b90b-8c2cfe66d07d` trong bảng `Orders` ở trạng thái `PROCESSED` (truy vấn theo partition key, dùng Cancel để đóng, không lưu thay đổi).
+     - `W3-B2-API-Recorded-Results.jpg` (Recorded SDK view): Bản chụp trình duyệt hiển thị tệp kết quả thực thi kiểm thử tải ghi nhận 10/10 HTTP 202 accepted và 0 lỗi.
+     - `W3-B2-DynamoDB-Recorded-GetItem.jpg` (Recorded SDK view): Bản chụp trình duyệt hiển thị tệp đối soát DynamoDB GetItem ghi nhận toàn bộ 10 đơn hàng đạt trạng thái PROCESSED trong 3.5846 giây.
+   - **Minh chứng Phase B3 (1 ảnh):** Đã thu thập và lưu trữ tại [`docs/evidence/week3/quan/b3-2026-10-24/screenshots/`](evidence/week3/quan/b3-2026-10-24/screenshots/) kèm [`screenshots-provenance.json`](evidence/week3/quan/b3-2026-10-24/screenshots/screenshots-provenance.json):
+     - `W3-B3-CloudWatch-Two-Record-Batch.jpg` (AWS Console crop): Trình xem log CloudWatch của `order-consumer` thể hiện 2 bản ghi INFO PROCESSED hoàn chỉnh (kèm đầy đủ orderId và messageId) nằm giữa START và END/REPORT trong cùng RequestId `669f8c38-d85a-55dd-9a5a-ef6e0015632a`.
+   - Toàn bộ ảnh được lưu giữ nguyên gốc với mã băm SHA-256 được kiểm tra đối chiếu; vùng tài khoản và thông tin cá nhân được che/cắt bằng native crop tự nhiên khi lưu.
 
 ## 5. Cập nhật Kiểm thử Hồi quy (Regression & CI Status)
 
-- **Kiểm thử offline hiện tại:** Bộ test suite Tuần 3 (bao gồm bổ sung `NoRedirectHandler` và test regression chuyển hướng cho script load) đạt **56 passed, 114 subtests passed** trong 5.68s (trích xuất từ kết quả thực thi kiểm thử cục bộ Job 006).
+- **Kiểm thử offline hiện tại:**
+  - Bộ unit test chạy trực tiếp: `python -m unittest discover -s tests -v` đạt **56 passed** trong 5.616s.
+  - Bộ kiểm thử hồi quy đầy đủ: `pytest` đạt **56 passed, 114 subtests passed** (ghi nhận từ phiên kiểm thử offline trước đó).
 - **Linter CloudFormation:** `cfn-lint iac/week3-monitoring.yaml` đạt kết quả exit 0.
-- **Trạng thái GitHub Actions CI:** Trạng thái CI cho commit của PR cuối cùng được đối chiếu tại tab Checks và phần Validation trong mô tả PR; không suy từ CI lịch sử.
+- **Trạng thái GitHub Actions CI:** Trạng thái CI cho commit của PR cuối cùng được đối chiếu trực tiếp tại tab Checks của [PR #14](https://github.com/pminhquan/cloud-async-orders/pull/14/checks); không suy từ CI lịch sử.
+
+## 6. Bảng tổng hợp bàn giao nghiệm thu Tuần 3 (Handoff Summary)
+
+| Mã hàng mục | Hạng mục (W3) | Trạng thái thực tế | Bằng chứng & Tham chiếu chéo |
+|---|---|---|---|
+| **W3-01** | CloudWatch Monitoring & DLQ Alarm | **HOÀN THÀNH** | Template `iac/week3-monitoring.yaml` (exit 0 cfn-lint); Tham chiếu chéo minh chứng của Khôi tại [`docs/week3-khoi-evidence.md`](week3-khoi-evidence.md) & [`docs/evidence/week3/khoi/`](evidence/week3/khoi/) (xác minh SNS Topic `order-dlq-alert`, subscription email confirmed và kích hoạt alarm thử nghiệm). Số liệu CloudWatch metrics B2 thu thập khép kín tại [`docs/evidence/week3/quan/b2-2026-10-24/metrics/`](evidence/week3/quan/b2-2026-10-24/metrics/). |
+| **W3-02** | SQS Standard vs FIFO Benchmark | **HOÀN THÀNH** | Đã tích hợp qua [PR #13](https://github.com/pminhquan/cloud-async-orders/pull/13); Tham chiếu chéo báo cáo phân tích B1 tại [`docs/week3-quan-b1-results.md`](week3-quan-b1-results.md) và minh chứng độc lập tại [`docs/evidence/week3/quan/b1-2026-10-24/`](evidence/week3/quan/b1-2026-10-24/) (3 kịch bản x 20 messages, so sánh throughput/latency/ordering). |
+| **W3-03** | Controlled Load Test & Batch Processing (B2 + B3) | **HOÀN THÀNH** | **Phase B2:** 10/10 orders HTTP 202, 10/10 DynamoDB PROCESSED trong 3.58s ([`docs/evidence/week3/quan/b2-2026-10-24/load/`](evidence/week3/quan/b2-2026-10-24/load/)).<br>**Phase B3:** 2/2 orders HTTP 202, 2/2 PROCESSED; chứng minh batch 2 bản ghi trong cùng Lambda RequestId `669f8c38-d85a-55dd-9a5a-ef6e0015632a` ([`docs/evidence/week3/quan/b3-2026-10-24/batch-proof.json`](evidence/week3/quan/b3-2026-10-24/batch-proof.json)). |
+| **W3-04** | Metrics Collector, Safe Restoration & CI Status | **HOÀN THÀNH** | Tệp kiểm tra trạng thái cuối [`docs/evidence/week3/quan/b3-2026-10-24/final-state-check.json`](evidence/week3/quan/b3-2026-10-24/final-state-check.json) xác nhận: Consumer timeout = 3s, ESM Disabled, `orders-queue` = 0/0/0, `orders-dlq` = 2/0/0.<br>**Trạng thái CI:** Trực tiếp đối soát kết quả kiểm thử hồi quy tại [PR #14 Checks](https://github.com/pminhquan/cloud-async-orders/pull/14/checks); 56 unit test offline PASS (`tests/`). |
+

@@ -1,0 +1,277 @@
+{
+  "startedAtUtc": "2026-10-24T15:59:50Z",
+  "status": "SUCCESS",
+  "preflight": {
+    "oqUrl": "https://sqs.us-east-1.amazonaws.com/<ACCOUNT_ID>/orders-queue",
+    "dlqUrl": "https://sqs.us-east-1.amazonaws.com/<ACCOUNT_ID>/orders-dlq",
+    "initialTimeout": 3,
+    "initialBatchSize": 1,
+    "initialWindow": 0
+  },
+  "prefill": {
+    "runId": "b3-run-20261024T160006Z-63133f25",
+    "orderIds": [
+      "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+      "12c1bb70-25eb-43b2-936f-ee62714236b5"
+    ],
+    "summary": {
+      "requestsAttempted": 2,
+      "http202AcceptedCount": 2,
+      "http400Count": 0,
+      "http429Count": 0,
+      "http5xxCount": 0,
+      "timeoutCount": 0,
+      "otherErrorCount": 0,
+      "orderIdsCollectedCount": 2,
+      "missingOrderIdOn202Count": 0,
+      "malformed202ResponseCount": 0,
+      "apiLatencyMs": {
+        "count": 2,
+        "minMs": 918.781,
+        "maxMs": 1794.42,
+        "meanMs": 1356.601,
+        "medianMs": 1356.601,
+        "p95Ms": 1794.42
+      },
+      "totalSendElapsedSeconds": 3.2137
+    }
+  },
+  "reconciliation": {
+    "ddbResults": {
+      "e40094f0-f303-4eca-be0a-0fb57b1836c1": "PROCESSED",
+      "12c1bb70-25eb-43b2-936f-ee62714236b5": "PROCESSED"
+    },
+    "allProcessed": true,
+    "batchProof": {
+      "batchVerified": true,
+      "lambdaRequestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+      "logStreamName": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+      "matchedOrders": [
+        "12c1bb70-25eb-43b2-936f-ee62714236b5",
+        "e40094f0-f303-4eca-be0a-0fb57b1836c1"
+      ],
+      "sqsMessageIds": [
+        "6e052d51-b729-43fa-aa71-ecf74384582f",
+        "fa670c23-cfcc-4b62-808a-3bca29c7711e"
+      ],
+      "startEvent": {
+        "message": "START RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a Version: $LATEST",
+        "timestamp": 1792857616051
+      },
+      "endEvent": {
+        "message": "END RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+        "timestamp": 1792857618836
+      },
+      "reportEvent": {
+        "message": "REPORT RequestId: 669f8c38-d85a-55dd-9a5a-ef6e0015632a\tDuration: 2784.26 ms\tBilled Duration: 3139 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\tInit Duration: 354.04 ms",
+        "timestamp": 1792857618836
+      },
+      "infoEvents": [
+        {
+          "orderId": "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+          "messageId": "6e052d51-b729-43fa-aa71-ecf74384582f",
+          "level": "INFO",
+          "status": "PROCESSED",
+          "message": "[INFO]\t2026-10-24T16:00:18.758Z\t669f8c38-d85a-55dd-9a5a-ef6e0015632a\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"6e052d51-b729-43fa-aa71-ecf74384582f\", \"orderId\": \"e40094f0-f303-4eca-be0a-0fb57b1836c1\"}",
+          "requestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+          "logStream": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+          "timestamp": 1792857618774
+        },
+        {
+          "orderId": "12c1bb70-25eb-43b2-936f-ee62714236b5",
+          "messageId": "fa670c23-cfcc-4b62-808a-3bca29c7711e",
+          "level": "INFO",
+          "status": "PROCESSED",
+          "message": "[INFO]\t2026-10-24T16:00:18.795Z\t669f8c38-d85a-55dd-9a5a-ef6e0015632a\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"fa670c23-cfcc-4b62-808a-3bca29c7711e\", \"orderId\": \"12c1bb70-25eb-43b2-936f-ee62714236b5\"}",
+          "requestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+          "logStream": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+          "timestamp": 1792857618795
+        }
+      ],
+      "status": "VERIFIED_2_RECORD_BATCH"
+    }
+  },
+  "restoration": {
+    "esmRestored": true,
+    "timeoutRestored": true,
+    "codeHashUnchanged": true,
+    "legacyEsmDisabled": true,
+    "ordersQueueCounts": {
+      "visible": 2,
+      "notVisible": 0,
+      "delayed": 0
+    },
+    "ordersDlqCounts": {
+      "visible": 2,
+      "notVisible": 0,
+      "delayed": 0
+    }
+  },
+  "error": null,
+  "completedAtUtc": "2026-10-24T16:00:35Z",
+  "ledger": [
+    {
+      "timestampUtc": "2026-10-24T15:59:52Z",
+      "service": "sts",
+      "operation": "get_caller_identity",
+      "details": {
+        "account": "<ACCOUNT_ID>",
+        "role": "verified"
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T15:59:54Z",
+      "service": "sqs",
+      "operation": "get_queue_attributes",
+      "details": {
+        "ordersQueue": "0/0/0",
+        "ordersDlq": "2/0/0",
+        "visTimeout": 60
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:02Z",
+      "service": "lambda",
+      "operation": "preflight_verified",
+      "details": {
+        "producer": "Active",
+        "consumer": "Active",
+        "esm": "Disabled"
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:02Z",
+      "service": "lambda",
+      "operation": "update_function_configuration",
+      "details": {
+        "FunctionName": "order-consumer",
+        "Timeout": 8
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:05Z",
+      "service": "lambda",
+      "operation": "update_event_source_mapping",
+      "details": {
+        "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+        "BatchSize": 2,
+        "MaximumBatchingWindowInSeconds": 5
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:09Z",
+      "service": "apigateway",
+      "operation": "load_prefill_orders",
+      "details": {
+        "runId": "b3-run-20261024T160006Z-63133f25",
+        "attempted": 2,
+        "accepted": 2,
+        "orderIds": [
+          "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+          "12c1bb70-25eb-43b2-936f-ee62714236b5"
+        ]
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:09Z",
+      "service": "sqs",
+      "operation": "verify_queue_prefill",
+      "details": {
+        "verified": true,
+        "attributes": {
+          "ApproximateNumberOfMessages": "2",
+          "ApproximateNumberOfMessagesNotVisible": "0",
+          "ApproximateNumberOfMessagesDelayed": "0"
+        }
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:09Z",
+      "service": "lambda",
+      "operation": "update_event_source_mapping",
+      "details": {
+        "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+        "Enabled": true
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:21Z",
+      "service": "dynamodb",
+      "operation": "reconciliation_results",
+      "details": {
+        "processedCount": 2,
+        "allProcessed": true
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:25Z",
+      "service": "cloudwatch_logs",
+      "operation": "batch_proof_check",
+      "details": {
+        "status": "VERIFIED_2_RECORD_BATCH",
+        "batchVerified": true,
+        "lambdaRequestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+        "logStreamName": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+        "matchedOrders": [
+          "12c1bb70-25eb-43b2-936f-ee62714236b5",
+          "e40094f0-f303-4eca-be0a-0fb57b1836c1"
+        ],
+        "sqsMessageIds": [
+          "6e052d51-b729-43fa-aa71-ecf74384582f",
+          "fa670c23-cfcc-4b62-808a-3bca29c7711e"
+        ],
+        "hasReport": true
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:26Z",
+      "service": "lambda",
+      "operation": "restore_esm_initiated",
+      "details": {
+        "attempt": 1
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:31Z",
+      "service": "lambda",
+      "operation": "restore_timeout_initiated",
+      "details": {
+        "attempt": 1
+      },
+      "status": "OK"
+    },
+    {
+      "timestampUtc": "2026-10-24T16:00:35Z",
+      "service": "restoration",
+      "operation": "restore_summary",
+      "details": {
+        "esmRestored": true,
+        "timeoutRestored": true,
+        "codeHashUnchanged": true,
+        "legacyEsmDisabled": true,
+        "ordersQueueCounts": {
+          "visible": 2,
+          "notVisible": 0,
+          "delayed": 0
+        },
+        "ordersDlqCounts": {
+          "visible": 2,
+          "notVisible": 0,
+          "delayed": 0
+        }
+      },
+      "status": "OK"
+    }
+  ]
+}
