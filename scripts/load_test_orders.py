@@ -146,8 +146,15 @@ def validate_load_test_config(
     return clean_endpoint, host
 
 
+class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Prevent automatic redirect traversal so the caller observes initial HTTP 3xx responses."""
+
+    def redirect_request(self, req: Any, fp: Any, code: int, msg: Any, headers: Any, newurl: str) -> Optional[Any]:
+        return None
+
+
 def default_http_post(url: str, payload: Dict[str, Any], timeout_seconds: float) -> Tuple[int, str]:
-    """Send HTTP POST JSON request using Python standard library urllib."""
+    """Send HTTP POST JSON request using Python standard library urllib without following redirects."""
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url=url,
@@ -155,8 +162,9 @@ def default_http_post(url: str, payload: Dict[str, Any], timeout_seconds: float)
         headers={"Content-Type": "application/json", "Accept": "application/json"},
         method="POST",
     )
+    opener = urllib.request.build_opener(NoRedirectHandler)
     try:
-        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+        with opener.open(req, timeout=timeout_seconds) as resp:
             status_code = int(getattr(resp, "status", resp.getcode()))
             body_text = resp.read().decode("utf-8", errors="replace")
             return status_code, body_text
@@ -166,6 +174,8 @@ def default_http_post(url: str, payload: Dict[str, Any], timeout_seconds: float)
             body_text = http_err.read().decode("utf-8", errors="replace")
         except Exception:
             pass
+        finally:
+            http_err.close()
         return int(http_err.code), body_text
 
 
@@ -359,6 +369,7 @@ def run_controlled_load_test(
     http_post_fn: Optional[Callable[[str, Dict[str, Any], float], Tuple[int, str]]] = None,
     dynamodb_table: Any = None,
     run_id: Optional[str] = None,
+    stop_on_failure: bool = False,
     clock_fn: Callable[[], float] = time.perf_counter,
     sleep_fn: Callable[[float], None] = time.sleep,
 ) -> Dict[str, Any]:
@@ -390,6 +401,7 @@ def run_controlled_load_test(
             "configuration": {
                 "endpointHost": endpoint_host,
                 "requestCount": request_count,
+                "plannedRequestCount": request_count,
                 "rateLimitPerSec": rate_limit,
                 "timeoutSeconds": timeout_seconds,
                 "customerPrefix": customer_prefix.strip(),
@@ -398,6 +410,7 @@ def run_controlled_load_test(
                 "tableName": table_name.strip(),
                 "reconcileTimeoutSeconds": reconcile_timeout,
                 "reconcileMaxPolls": reconcile_max_polls,
+                "stopOnFailure": stop_on_failure,
             },
             "summary": {
                 "requestsAttempted": request_count,
@@ -533,6 +546,9 @@ def run_controlled_load_test(
             }
         )
 
+        if stop_on_failure and error_category:
+            break
+
         # Honor the requested finite positive rate without capping the pacing sleep
         if idx < request_count and min_interval > 0:
             sleep_fn(min_interval)
@@ -579,6 +595,7 @@ def run_controlled_load_test(
         "configuration": {
             "endpointHost": endpoint_host,
             "requestCount": request_count,
+            "plannedRequestCount": request_count,
             "rateLimitPerSec": rate_limit,
             "timeoutSeconds": timeout_seconds,
             "customerPrefix": customer_prefix.strip(),
@@ -587,9 +604,10 @@ def run_controlled_load_test(
             "tableName": table_name.strip(),
             "reconcileTimeoutSeconds": reconcile_timeout,
             "reconcileMaxPolls": reconcile_max_polls,
+            "stopOnFailure": stop_on_failure,
         },
         "summary": {
-            "requestsAttempted": request_count,
+            "requestsAttempted": len(requests_log),
             "http202AcceptedCount": http_202,
             "http400Count": http_400,
             "http429Count": http_429,
@@ -712,6 +730,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--run-id", help="Optional unique run identifier.")
     parser.add_argument(
+        "--stop-on-failure",
+        action="store_true",
+        default=False,
+        help="Break immediately upon first non-202, malformed response, or error.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         default=False,
@@ -752,6 +776,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             execute=bool(args.execute),
             confirm_target=args.confirm_target,
             run_id=args.run_id,
+            stop_on_failure=bool(args.stop_on_failure),
         )
         if args.output_dir:
             write_load_test_outputs(result, args.output_dir)

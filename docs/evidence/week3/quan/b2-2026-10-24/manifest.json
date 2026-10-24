@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "2026-10-24-006",
+  "phase": "B2-end-to-end-live-verification",
+  "baseMainCommit": "391ffc1b83ecb066ab34e85031df3d4321d1ed04",
+  "targetAccount": "<ACCOUNT_ID>",
+  "region": "us-east-1",
+  "targetApiEndpoint": "https://<API_ID>.execute-api.us-east-1.amazonaws.com/orders",
+  "redactionPolicy": "Public repository evidence redacts 12-digit AWS account IDs as <ACCOUNT_ID>, API Gateway host ID as <API_ID>, and omits credentials/tokens/local paths while preserving exact measured statistics, latencies, HTTP statuses, order IDs, and DynamoDB reconciliation states.",
+  "scripts": {
+    "loadScript": {
+      "path": "scripts/load_test_orders.py",
+      "sha256": "7d8e78c56267c195d52feb0c440ddc9fb53c75d7d9f25fc9f47e8e5c6ea4e337",
+      "modifiedInJob005": true,
+      "changeNote": "Added NoRedirectHandler and HTTP error stream cleanup to guarantee single-attempt fail-fast without following 3xx redirects."
+    },
+    "metricsScript": {
+      "path": "scripts/collect_cloudwatch_metrics.py",
+      "sha256": "3c99dc58d8bcef4d67f3a727c3638c2838818d2971e516158757b000dbd9ea08",
+      "modifiedInJob005": false
+    }
+  },
+  "executionTimestampsUtc": {
+    "preflightControlPlaneCheck": "2026-10-24T12:28:50Z",
+    "preCheckQueues": "2026-10-24T12:29:35Z",
+    "esmEnableRequest": "2026-10-24T12:29:36Z",
+    "esmEnabledVerified": "2026-10-24T12:29:52Z",
+    "loadExecutionStart": "2026-10-24T12:29:52Z",
+    "loadExecutionComplete": "2026-10-24T12:30:11Z",
+    "reconciliationComplete": "2026-10-24T12:30:11Z",
+    "esmRestoreRequest": "2026-10-24T12:30:11Z",
+    "esmRestoreVerified": "2026-10-24T12:30:17Z",
+    "postCheckQueuesAndEsms": "2026-10-24T12:30:18Z",
+    "cloudWatchObservationWindow": {
+      "startUtc": "2026-10-24T12:26:36Z",
+      "endUtc": "2026-10-24T12:33:18Z",
+      "isClosedWindow": true,
+      "endUtcIsInPastAtCollection": true
+    },
+    "cloudWatchCollectionTimestamps": {
+      "finalCaptureStartedAtUtc": "2026-10-24T12:39:57Z",
+      "finalCaptureCompletedAtUtc": "2026-10-24T12:40:09Z",
+      "collectedAt": "2026-10-24T12:39:57Z",
+      "runId": "metrics-20261024T123957Z-59926310",
+      "historicalInitialCaptureNote": "Preserved in private raw-b2/metrics/; initial capture had windowEnd=12:33:18Z with future buffer (+120s) relative to 12:31:18Z; superseded by closed-window final capture."
+    }
+  },
+  "productionInvariantsAndOperations": {
+    "ordersQueue": {
+      "preCheckCounts": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "postCheckCounts": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "currentCounts": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "invariantHeld": true
+    },
+    "ordersDlq": {
+      "preCheckCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "postCheckCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "currentCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "dlqReceiveCalls": 0,
+      "dlqDeleteCalls": 0,
+      "dlqDeleteBatchCalls": 0,
+      "dlqPurgeCalls": 0,
+      "historicalMessagesPreservedUntouched": true,
+      "integrityProof": "Zero DLQ mutating operations executed (only get_queue_attributes called twice); historical message identity preserved untouched."
+    },
+    "benchmarkQueues": {
+      "ordersBenchmarkStandard": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "ordersBenchmarkFifo": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "retainedUntouched": true
+    },
+    "eventSourceMappings": {
+      "orderConsumerEsmUuid": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+      "orderConsumerFunctionName": "order-consumer",
+      "orderConsumerEventSourceQueue": "orders-queue",
+      "orderConsumerEsmInitialState": "Disabled",
+      "orderConsumerEsmTestState": "Enabled",
+      "orderConsumerEsmFinalState": "Disabled",
+      "orderConsumerEsmRestored": true,
+      "legacyEsmUuid": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+      "legacyEsmFunctionName": "order-processor",
+      "legacyEsmState": "Disabled",
+      "legacyEsmUntouched": true
+    },
+    "deployedCodeHashes": {
+      "producerExpectedAndActual": "AVeX+UvbRSOL/m7KEdY+vPO2B6dhwv/lozuHAvUoLMk=",
+      "consumerExpectedAndActual": "cAglL/yZX4JdPU+NM3pAYTTK5C4hG11FopmcTbYZLpA=",
+      "codeModified": false
+    },
+    "dynamoDbTable": {
+      "tableName": "Orders",
+      "status": "ACTIVE",
+      "billingMode": "PAY_PER_REQUEST"
+    }
+  },
+  "measuredResultsSummary": {
+    "runId": "b2-run-20261024T122952Z-01",
+    "requestsAttempted": 10,
+    "http202AcceptedCount": 10,
+    "httpErrorCount": 0,
+    "retryCount": 0,
+    "apiLatencyMs": {
+      "minMs": 811.383,
+      "medianMs": 824.446,
+      "meanMs": 931.091,
+      "p95Ms": 1798.399,
+      "maxMs": 1798.399
+    },
+    "totalSendElapsedSeconds": 13.8146,
+    "dynamoDbReconciliation": {
+      "tableName": "Orders",
+      "orderIdsRequested": 10,
+      "processedCount": 10,
+      "pendingOrOtherStatusCount": 0,
+      "notFoundCount": 0,
+      "unverifiedCount": 0,
+      "pollsExecuted": 1,
+      "durationSeconds": 3.5846,
+      "verificationStatus": "ALL_PROCESSED"
+    }
+  },
+  "files": {
+    "load/load-test-summary.json": {
+      "relativePath": "load/load-test-summary.json",
+      "rawBytes": 7172,
+      "publishedBytes": 7170,
+      "rawSha256": "987268232ffebe85472c758b6fc9282424c4005f3e09e56f2b0fa3a556ff5499",
+      "publishedSha256": "f02b4d278d9a46048ac304e519e725f2bb409a2ca973f2f799a55b23c0d7460f",
+      "byteIdenticalToRaw": false,
+      "redactionApplied": "API Gateway host redacted to <API_ID>"
+    },
+    "load/load-test-results.csv": {
+      "relativePath": "load/load-test-results.csv",
+      "rawBytes": 1545,
+      "publishedBytes": 1545,
+      "rawSha256": "3c1c039ccb48eb39142df798cd186338a9653094076349ac3577fa0d7c8e3013",
+      "publishedSha256": "3c1c039ccb48eb39142df798cd186338a9653094076349ac3577fa0d7c8e3013",
+      "byteIdenticalToRaw": true,
+      "redactionApplied": "None (clean in raw)"
+    },
+    "metrics/cloudwatch-metrics-summary.json": {
+      "relativePath": "metrics/cloudwatch-metrics-summary.json",
+      "rawBytes": 18119,
+      "publishedBytes": 18119,
+      "rawSha256": "0b7d4b22de9d1193abe4329c4cdbffcb9a0978276bbf77e28fda2f34391e3c2a",
+      "publishedSha256": "0b7d4b22de9d1193abe4329c4cdbffcb9a0978276bbf77e28fda2f34391e3c2a",
+      "byteIdenticalToRaw": true,
+      "redactionApplied": "None (clean in raw)"
+    },
+    "metrics/cloudwatch-metrics-results.csv": {
+      "relativePath": "metrics/cloudwatch-metrics-results.csv",
+      "rawBytes": 4889,
+      "publishedBytes": 4889,
+      "rawSha256": "2a5a27d8a0a034f3e93c54d383f9bbba91e6253c75c849f6bf852c4d7ea3bcbc",
+      "publishedSha256": "2a5a27d8a0a034f3e93c54d383f9bbba91e6253c75c849f6bf852c4d7ea3bcbc",
+      "byteIdenticalToRaw": true,
+      "redactionApplied": "None (clean in raw)"
+    }
+  }
+}
