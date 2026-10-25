@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "b2-run-20261024T122952Z-01",
+  "captureStage": "After B2 and before B3 AWS execution",
+  "policy": "Genuine browser screenshots; no generated or reconstructed images. Only native crops exclude account and personal fields. savedAtUtc is file save time, not a claim of exact underlying test execution time.",
+  "files": [
+    {
+      "file": "W3-B2-Consumer-Disabled.jpg",
+      "sourceKind": "AWS_CONSOLE_CROP",
+      "subject": "order-consumer trigger state Disabled; Activate trigger No; batch size 1; window None",
+      "source": "Lambda configuration/triggers",
+      "note": "Account ARN lines and personal header excluded by native screenshot crop.",
+      "sha256": "44003d02a8a9ac2d8b5c62db82157ed6c7fad75c05a39eed139ceb716351a6fc",
+      "bytes": 6544,
+      "savedAtUtc": "2026-10-24T14:17:54.8711043Z"
+    },
+    {
+      "file": "W3-B2-CloudWatch-Consumer.jpg",
+      "sourceKind": "AWS_CONSOLE_CROP",
+      "subject": "order-consumer Invocations sum 10",
+      "source": "Lambda Monitor embedded CloudWatch invocation widget",
+      "note": "UI lookback was 3 hours before B3. Exact B2 closed-window data is in metrics JSON/CSV.",
+      "sha256": "1f821b26438976a3386f3a16810308d7b41c19970ebbd215b772a902d280aba2",
+      "bytes": 6880,
+      "savedAtUtc": "2026-10-24T14:08:38.7620591Z"
+    },
+    {
+      "file": "W3-B2-API-Recorded-Results.jpg",
+      "sourceKind": "GITHUB_RECORDED_SDK_RESULT_VIEW",
+      "subject": "10 attempted HTTP requests; 10 accepted; zero errors",
+      "source": "GitHub load/load-test-summary.json at 1589f9baacb2b30856def7506b0c05b12ffb890e lines 21-51",
+      "note": "Genuine browser view of recorded B2 SDK/script evidence; does not represent new API requests.",
+      "sha256": "815ac01f5dd35b2c79f5f5e021e42d94183fb62e4e82b7a7348a8bdc5f9823aa",
+      "bytes": 73240,
+      "savedAtUtc": "2026-10-24T14:34:37.8364033Z"
+    },
+    {
+      "file": "W3-B2-DynamoDB-Recorded-GetItem.jpg",
+      "sourceKind": "GITHUB_RECORDED_SDK_RESULT_VIEW",
+      "subject": "ALL_PROCESSED; ten returned order IDs; 3.5846-second GetItem reconciliation",
+      "source": "GitHub load/load-test-summary.json at 1589f9baacb2b30856def7506b0c05b12ffb890e lines 42-66",
+      "note": "Recorded SDK GetItem results, distinct from a Console item screenshot.",
+      "sha256": "6e5b6b6c97108458f62b9f147e5192b4079806642b75d9368f48331d4d7213b9",
+      "bytes": 71429,
+      "savedAtUtc": "2026-10-24T14:35:38.8526004Z"
+    },
+    {
+      "file": "W3-B2-DynamoDB-Console-Order.jpg",
+      "sourceKind": "AWS_CONSOLE_CROP",
+      "subject": "Existing B2 order 1145a7cf-4861-4d3c-b90b-8c2cfe66d07d status PROCESSED",
+      "source": "DynamoDB Orders item detail",
+      "note": "Autopreview disabled before table selection; exact partition-key Query returned one own test item. Item detail opened for reading; Cancel used; Save and Save and close never used.",
+      "sha256": "6da3ac17b6450817521b38f7f90fe9a843bde5a8efae2a2ff4fdc822e38fef7c",
+      "bytes": 61402,
+      "savedAtUtc": "2026-10-24T15:46:32.8894650Z"
+    }
+  ]
+}

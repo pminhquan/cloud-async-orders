@@ -405,5 +405,245 @@ class TestLoadTestOrders(unittest.TestCase):
         self.assertEqual(rec["perOrder"]["ORD-SLOW-3"]["attempts"], 0)
 
 
+
+    def test_stop_on_failure_fail_fast_and_reconciliation_behavior(self):
+        endpoint = "https://example-api.execute-api.us-east-1.amazonaws.com/orders"
+        confirm_target = "example-api.execute-api.us-east-1.amazonaws.com"
+
+        # 1. First-request failure: stops after exactly 1 POST, zero post-failure sleep
+        sleep_calls = []
+        calls_count = [0]
+
+        def post_fail_first(url: str, payload: Dict[str, Any], timeout: float) -> Tuple[int, str]:
+            calls_count[0] += 1
+            return 500, json.dumps({"message": "Internal error"})
+
+        res_first_fail = load_tool.run_controlled_load_test(
+            endpoint=endpoint,
+            request_count=10,
+            rate_limit=2.0,
+            execute=True,
+            confirm_target=confirm_target,
+            stop_on_failure=True,
+            http_post_fn=post_fail_first,
+            sleep_fn=sleep_calls.append,
+            reconcile=False,
+        )
+        self.assertEqual(calls_count[0], 1)
+        self.assertEqual(len(res_first_fail["requests"]), 1)
+        self.assertEqual(res_first_fail["summary"]["requestsAttempted"], 1)
+        self.assertEqual(res_first_fail["configuration"]["plannedRequestCount"], 10)
+        self.assertTrue(res_first_fail["configuration"]["stopOnFailure"])
+        self.assertEqual(res_first_fail["summary"]["http5xxCount"], 1)
+        self.assertEqual(sleep_calls, [])
+
+        # 2. Success-then-failure: stops after exactly 2 POSTs, sleeps between 1 & 2, NO post-failure sleep, reconciles first ID
+        sleep_calls.clear()
+        calls_count[0] = 0
+        rec_table = FakeEventualDynamoDBTable({"ORD-SUCCESS-1": (1, "PROCESSED")})
+
+        def post_success_then_fail(url: str, payload: Dict[str, Any], timeout: float) -> Tuple[int, str]:
+            calls_count[0] += 1
+            if calls_count[0] == 1:
+                return 202, json.dumps({"order": {"orderId": "ORD-SUCCESS-1", "status": "PENDING"}})
+            return 400, json.dumps({"error": "Bad Request"})
+
+        res_succ_fail = load_tool.run_controlled_load_test(
+            endpoint=endpoint,
+            request_count=10,
+            rate_limit=2.0,
+            execute=True,
+            confirm_target=confirm_target,
+            stop_on_failure=True,
+            http_post_fn=post_success_then_fail,
+            dynamodb_table=rec_table,
+            sleep_fn=sleep_calls.append,
+            reconcile=True,
+        )
+        self.assertEqual(calls_count[0], 2)
+        self.assertEqual(len(res_succ_fail["requests"]), 2)
+        self.assertEqual(res_succ_fail["summary"]["requestsAttempted"], 2)
+        self.assertEqual(res_succ_fail["summary"]["http202AcceptedCount"], 1)
+        self.assertEqual(res_succ_fail["summary"]["http400Count"], 1)
+        self.assertEqual(sleep_calls, [0.5])
+        self.assertEqual(res_succ_fail["reconciliation"]["orderIdsRequested"], 1)
+        self.assertEqual(res_succ_fail["reconciliation"]["processedCount"], 1)
+        self.assertEqual(res_succ_fail["requests"][0]["reconciledState"], "PROCESSED")
+        self.assertEqual(res_succ_fail["requests"][1]["reconciledState"], "NOT_CHECKED")
+
+        # 3. Test HTTP 429, malformed 202, missing orderId 202, socket timeout, network error fail-fast
+        def make_raise_fn(exc_obj):
+            def _fn(u, p, t):
+                raise exc_obj
+            return _fn
+
+        error_cases = [
+            ("http429", lambda u, p, t: (429, json.dumps({"message": "Too Many Requests"})), "HTTP_429_RATE_LIMITED", "http429Count"),
+            ("malformed202", lambda u, p, t: (202, "NOT_JSON"), "MALFORMED_202_JSON", "malformed202ResponseCount"),
+            ("missing_oid", lambda u, p, t: (202, json.dumps({"status": "PENDING"})), "MISSING_ORDER_ID_IN_202", "missingOrderIdOn202Count"),
+            ("socket_timeout", make_raise_fn(socket.timeout("Socket timed out")), "REQUEST_TIMEOUT", "timeoutCount"),
+            ("network_err", make_raise_fn(load_tool.urllib.error.URLError("Connection refused")), "NETWORK_ERROR", "otherErrorCount"),
+        ]
+        for name, fn, expected_cat, summary_key in error_cases:
+            with self.subTest(case=name):
+                c = [0]
+                def wrapped_fn(u, p, t, _orig=fn):
+                    c[0] += 1
+                    return _orig(u, p, t)
+
+                r = load_tool.run_controlled_load_test(
+                    endpoint=endpoint,
+                    request_count=5,
+                    rate_limit=2.0,
+                    execute=True,
+                    confirm_target=confirm_target,
+                    stop_on_failure=True,
+                    http_post_fn=wrapped_fn,
+                    reconcile=False,
+                )
+                self.assertEqual(c[0], 1)
+                self.assertEqual(r["summary"]["requestsAttempted"], 1)
+                self.assertEqual(r["summary"][summary_key], 1)
+                self.assertEqual(r["requests"][0]["errorCategory"], expected_cat)
+
+        # 4. All-success 10 requests: completes all 10 without early exit
+        success_calls = [0]
+        def post_all_succ(u, p, t):
+            success_calls[0] += 1
+            return 202, json.dumps({"order": {"orderId": f"ORD-SUCC-{success_calls[0]}", "status": "PENDING"}})
+
+        r_all = load_tool.run_controlled_load_test(
+            endpoint=endpoint,
+            request_count=10,
+            rate_limit=2.0,
+            execute=True,
+            confirm_target=confirm_target,
+            stop_on_failure=True,
+            http_post_fn=post_all_succ,
+            reconcile=False,
+        )
+        self.assertEqual(success_calls[0], 10)
+        self.assertEqual(r_all["summary"]["requestsAttempted"], 10)
+        self.assertEqual(r_all["summary"]["http202AcceptedCount"], 10)
+
+        # 5. CLI plumbing for --stop-on-failure
+        parser = load_tool.build_arg_parser()
+        args = parser.parse_args(["--endpoint", endpoint, "--stop-on-failure"])
+        self.assertTrue(args.stop_on_failure)
+
+        # 6. Default dry-run plan includes stopOnFailure and plannedRequestCount
+        dry_res = load_tool.run_controlled_load_test(
+            endpoint=endpoint,
+            request_count=10,
+            stop_on_failure=True,
+            execute=False,
+        )
+        self.assertTrue(dry_res["configuration"]["stopOnFailure"])
+        self.assertEqual(dry_res["configuration"]["plannedRequestCount"], 10)
+
+
+
+    def test_default_http_post_no_redirect_transport_regression(self):
+        """Prove default_http_post does not follow HTTP redirects (301, 302, 303, 307, 308) and stop_on_failure halts."""
+        import http.server
+        import threading
+
+        server_calls = []
+        target_code = [302]
+
+        class LocalRedirectHandler(http.server.BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+
+            def log_message(self, format, *args):
+                pass  # Suppress server stderr logging
+
+            def do_POST(self):
+                content_length = int(self.headers.get("Content-Length", 0))
+                if content_length > 0:
+                    self.rfile.read(content_length)
+                server_calls.append(("POST", self.path))
+                if self.path == "/orders":
+                    body_bytes = b'{"message": "Redirecting"}'
+                    self.send_response(target_code[0])
+                    self.send_header("Location", f"http://{self.headers['Host']}/redirected-target")
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Content-Length", str(len(body_bytes)))
+                    self.send_header("Connection", "close")
+                    self.end_headers()
+                    self.wfile.write(body_bytes)
+                else:
+                    self.send_response(200)
+                    self.send_header("Content-Length", "0")
+                    self.send_header("Connection", "close")
+                    self.end_headers()
+
+            def do_GET(self):
+                server_calls.append(("GET", self.path))
+                self.send_response(200)
+                self.send_header("Content-Length", "0")
+                self.send_header("Connection", "close")
+                self.end_headers()
+
+        server = http.server.HTTPServer(("127.0.0.1", 0), LocalRedirectHandler)
+        port = server.server_port
+        t = threading.Thread(target=server.serve_forever, daemon=True)
+        t.start()
+
+        try:
+            # 1. Parameterized transport test for 301, 302, 303, 307, 308 using genuine default_http_post
+            for code in (301, 302, 303, 307, 308):
+                with self.subTest(redirect_code=code):
+                    server_calls.clear()
+                    target_code[0] = code
+                    status_code, body = load_tool.default_http_post(
+                        f"http://127.0.0.1:{port}/orders",
+                        {"customerId": "CUS-REDIRECT-001", "productId": "P001", "quantity": 1},
+                        timeout_seconds=5.0,
+                    )
+                    # Verify initial 3xx status observed directly
+                    self.assertEqual(status_code, code)
+                    # Exactly one request made, NO followed GET or POST to /redirected-target
+                    self.assertEqual(server_calls, [("POST", "/orders")])
+
+            # 2. Integration with run_controlled_load_test: exactly one POST, initial 302 recorded, no redirected GET/POST, no 2nd order under stop-on-failure
+            server_calls.clear()
+            target_code[0] = 302
+            clean_ep, host = load_tool.validate_load_test_config(
+                endpoint="https://example-api.execute-api.us-east-1.amazonaws.com/orders",
+                request_count=5,
+                rate_limit=2.0,
+                timeout_seconds=5.0,
+                customer_prefix="CUS-W3",
+                table_name="Orders",
+                reconcile_timeout=10.0,
+                reconcile_max_polls=2,
+                execute=True,
+                confirm_target="example-api.execute-api.us-east-1.amazonaws.com",
+            )
+            # Use default_http_post pointing to our local redirect server to prove end-to-end transport wiring
+            def local_post_wrapper(url: str, payload: Dict[str, Any], timeout: float) -> Tuple[int, str]:
+                return load_tool.default_http_post(f"http://127.0.0.1:{port}/orders", payload, timeout)
+
+            res = load_tool.run_controlled_load_test(
+                endpoint="https://example-api.execute-api.us-east-1.amazonaws.com/orders",
+                request_count=5,
+                rate_limit=2.0,
+                execute=True,
+                confirm_target="example-api.execute-api.us-east-1.amazonaws.com",
+                stop_on_failure=True,
+                http_post_fn=local_post_wrapper,
+                reconcile=False,
+            )
+            self.assertEqual(len(server_calls), 1)
+            self.assertEqual(server_calls, [("POST", "/orders")])
+            self.assertEqual(res["summary"]["requestsAttempted"], 1)
+            self.assertEqual(res["summary"]["otherErrorCount"], 1)
+            self.assertEqual(res["requests"][0]["httpStatus"], 302)
+            self.assertEqual(res["requests"][0]["errorCategory"], "HTTP_302_UNEXPECTED")
+        finally:
+            server.shutdown()
+            server.server_close()
+
+
 if __name__ == "__main__":
     unittest.main()

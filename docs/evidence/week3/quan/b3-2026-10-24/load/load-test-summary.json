@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0",
+  "sourceType": "CONTROLLED_API_LOAD_TEST",
+  "runId": "b3-run-20261024T160006Z-63133f25",
+  "timestampUtc": "2026-10-24T16:00:06Z",
+  "executeMode": true,
+  "configuration": {
+    "endpointHost": "<API_ID>.execute-api.us-east-1.amazonaws.com",
+    "requestCount": 2,
+    "plannedRequestCount": 2,
+    "rateLimitPerSec": 2.0,
+    "timeoutSeconds": 5.0,
+    "customerPrefix": "CUS-B3-20261024",
+    "productId": "P001",
+    "reconcileEnabled": false,
+    "tableName": "Orders",
+    "reconcileTimeoutSeconds": 20.0,
+    "reconcileMaxPolls": 5,
+    "stopOnFailure": true
+  },
+  "summary": {
+    "requestsAttempted": 2,
+    "http202AcceptedCount": 2,
+    "http400Count": 0,
+    "http429Count": 0,
+    "http5xxCount": 0,
+    "timeoutCount": 0,
+    "otherErrorCount": 0,
+    "orderIdsCollectedCount": 2,
+    "missingOrderIdOn202Count": 0,
+    "malformed202ResponseCount": 0,
+    "apiLatencyMs": {
+      "count": 2,
+      "minMs": 918.781,
+      "maxMs": 1794.42,
+      "meanMs": 1356.601,
+      "medianMs": 1356.601,
+      "p95Ms": 1794.42
+    },
+    "totalSendElapsedSeconds": 3.2137
+  },
+  "reconciliation": {
+    "verificationStatus": "RECONCILIATION_DISABLED",
+    "tableName": "Orders",
+    "orderIdsRequested": 2,
+    "processedCount": 0,
+    "pendingOrOtherStatusCount": 0,
+    "notFoundCount": 0,
+    "unverifiedCount": 2,
+    "pollsExecuted": 0,
+    "reconciliationDurationSeconds": 0.0,
+    "perOrder": {},
+    "errorCode": null
+  },
+  "requests": [
+    {
+      "runId": "b3-run-20261024T160006Z-63133f25",
+      "requestId": "b3-run-20261024T160006Z-63133f25-req-0001",
+      "timestampUtc": "2026-10-24T16:00:06Z",
+      "httpStatus": 202,
+      "responseTimeMs": 1794.42,
+      "orderId": "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+      "errorCategory": "",
+      "reconciledState": "NOT_CHECKED"
+    },
+    {
+      "runId": "b3-run-20261024T160006Z-63133f25",
+      "requestId": "b3-run-20261024T160006Z-63133f25-req-0002",
+      "timestampUtc": "2026-10-24T16:00:08Z",
+      "httpStatus": 202,
+      "responseTimeMs": 918.781,
+      "orderId": "12c1bb70-25eb-43b2-936f-ee62714236b5",
+      "errorCategory": "",
+      "reconciledState": "NOT_CHECKED"
+    }
+  ],
+  "limitations": [
+    "HTTP 202 only proves Producer accepted the request and sent the message to SQS; Consumer completion is verified separately via DynamoDB GetItem status=PROCESSED.",
+    "Rate is bounded (<= 10 req/s) to respect the AWS Learner Lab account concurrency limit (<= 10).",
+    "Reconciliation uses read-only DynamoDB GetItem by orderId and never scans or mutates the table.",
+    "Reconciliation timeout bounds when new GetItem/backoff steps are issued and caps per-call socket connect/read timeouts with single-attempt SDK execution (no hidden retries), rather than forcibly killing an in-flight OS socket call."
+  ]
+}

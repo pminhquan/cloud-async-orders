@@ -1,0 +1,214 @@
+{
+  "schemaVersion": "1.0",
+  "sourceType": "CONTROLLED_API_LOAD_TEST",
+  "runId": "b2-run-20261024T122952Z-01",
+  "timestampUtc": "2026-10-24T12:29:52Z",
+  "executeMode": true,
+  "configuration": {
+    "endpointHost": "<API_ID>.execute-api.us-east-1.amazonaws.com",
+    "requestCount": 10,
+    "plannedRequestCount": 10,
+    "rateLimitPerSec": 2.0,
+    "timeoutSeconds": 5.0,
+    "customerPrefix": "CUS-B2-20261024",
+    "productId": "P001",
+    "reconcileEnabled": true,
+    "tableName": "Orders",
+    "reconcileTimeoutSeconds": 100.0,
+    "reconcileMaxPolls": 20,
+    "stopOnFailure": true
+  },
+  "summary": {
+    "requestsAttempted": 10,
+    "http202AcceptedCount": 10,
+    "http400Count": 0,
+    "http429Count": 0,
+    "http5xxCount": 0,
+    "timeoutCount": 0,
+    "otherErrorCount": 0,
+    "orderIdsCollectedCount": 10,
+    "missingOrderIdOn202Count": 0,
+    "malformed202ResponseCount": 0,
+    "apiLatencyMs": {
+      "count": 10,
+      "minMs": 811.383,
+      "maxMs": 1798.399,
+      "meanMs": 931.091,
+      "medianMs": 824.446,
+      "p95Ms": 1798.399
+    },
+    "totalSendElapsedSeconds": 13.8146
+  },
+  "reconciliation": {
+    "verificationStatus": "ALL_PROCESSED",
+    "tableName": "Orders",
+    "orderIdsRequested": 10,
+    "processedCount": 10,
+    "pendingOrOtherStatusCount": 0,
+    "notFoundCount": 0,
+    "unverifiedCount": 0,
+    "pollsExecuted": 1,
+    "reconciliationDurationSeconds": 3.5846,
+    "perOrder": {
+      "1145a7cf-4861-4d3c-b90b-8c2cfe66d07d": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "7ed68eee-a1ce-420a-838e-dd30953a3b3a": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "e535628a-a8c3-4835-9882-168ab503d74b": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "ac07c12f-57f3-4626-b786-e3bccb884d64": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "39a92e8e-b5ed-4682-993d-1826cc8edb93": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "37ed02b3-e11b-4a18-b486-8a3e89dd75ac": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "9ad60b10-0f3d-49d8-bc87-a0c7bdb37ab1": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "e97d3abc-642b-49e3-a4ab-f2fd2c0d3e58": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "af15a57c-fc8e-45b2-a6db-d427cf83289e": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      },
+      "72e97619-b787-4c68-989a-0a6cf8f9a58a": {
+        "state": "PROCESSED",
+        "dbStatus": "PROCESSED",
+        "attempts": 1
+      }
+    },
+    "errorCode": null
+  },
+  "requests": [
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0001",
+      "timestampUtc": "2026-10-24T12:29:52Z",
+      "httpStatus": 202,
+      "responseTimeMs": 1798.399,
+      "orderId": "1145a7cf-4861-4d3c-b90b-8c2cfe66d07d",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0002",
+      "timestampUtc": "2026-10-24T12:29:55Z",
+      "httpStatus": 202,
+      "responseTimeMs": 881.383,
+      "orderId": "7ed68eee-a1ce-420a-838e-dd30953a3b3a",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0003",
+      "timestampUtc": "2026-10-24T12:29:56Z",
+      "httpStatus": 202,
+      "responseTimeMs": 812.994,
+      "orderId": "e535628a-a8c3-4835-9882-168ab503d74b",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0004",
+      "timestampUtc": "2026-10-24T12:29:57Z",
+      "httpStatus": 202,
+      "responseTimeMs": 839.179,
+      "orderId": "ac07c12f-57f3-4626-b786-e3bccb884d64",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0005",
+      "timestampUtc": "2026-10-24T12:29:59Z",
+      "httpStatus": 202,
+      "responseTimeMs": 826.017,
+      "orderId": "39a92e8e-b5ed-4682-993d-1826cc8edb93",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0006",
+      "timestampUtc": "2026-10-24T12:30:00Z",
+      "httpStatus": 202,
+      "responseTimeMs": 811.383,
+      "orderId": "37ed02b3-e11b-4a18-b486-8a3e89dd75ac",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0007",
+      "timestampUtc": "2026-10-24T12:30:01Z",
+      "httpStatus": 202,
+      "responseTimeMs": 822.874,
+      "orderId": "9ad60b10-0f3d-49d8-bc87-a0c7bdb37ab1",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0008",
+      "timestampUtc": "2026-10-24T12:30:03Z",
+      "httpStatus": 202,
+      "responseTimeMs": 877.987,
+      "orderId": "e97d3abc-642b-49e3-a4ab-f2fd2c0d3e58",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0009",
+      "timestampUtc": "2026-10-24T12:30:04Z",
+      "httpStatus": 202,
+      "responseTimeMs": 819.921,
+      "orderId": "af15a57c-fc8e-45b2-a6db-d427cf83289e",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    },
+    {
+      "runId": "b2-run-20261024T122952Z-01",
+      "requestId": "b2-run-20261024T122952Z-01-req-0010",
+      "timestampUtc": "2026-10-24T12:30:05Z",
+      "httpStatus": 202,
+      "responseTimeMs": 820.774,
+      "orderId": "72e97619-b787-4c68-989a-0a6cf8f9a58a",
+      "errorCategory": "",
+      "reconciledState": "PROCESSED"
+    }
+  ],
+  "limitations": [
+    "HTTP 202 only proves Producer accepted the request and sent the message to SQS; Consumer completion is verified separately via DynamoDB GetItem status=PROCESSED.",
+    "Rate is bounded (<= 10 req/s) to respect the AWS Learner Lab account concurrency limit (<= 10).",
+    "Reconciliation uses read-only DynamoDB GetItem by orderId and never scans or mutates the table.",
+    "Reconciliation timeout bounds when new GetItem/backoff steps are issued and caps per-call socket connect/read timeouts with single-attempt SDK execution (no hidden retries), rather than forcibly killing an in-flight OS socket call."
+  ]
+}

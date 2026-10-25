@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "2026-10-24-007",
+  "phase": "B3-batch-processing-verification",
+  "baseMainCommit": "391ffc1b83ecb066ab34e85031df3d4321d1ed04",
+  "targetAccount": "<ACCOUNT_ID>",
+  "region": "us-east-1",
+  "targetApiEndpoint": "https://<API_ID>.execute-api.us-east-1.amazonaws.com/orders",
+  "redactionPolicy": "Public repository evidence redacts 12-digit AWS account IDs as <ACCOUNT_ID>, API Gateway host ID as <API_ID>, and omits credentials/tokens/local paths while preserving exact measured statistics, latencies, HTTP statuses, order IDs, and DynamoDB reconciliation states.",
+  "configuration": {
+    "runId": "b3-run-20261024T160006Z-63133f25",
+    "requestedOrders": 2,
+    "rateLimitPerSec": 2.0,
+    "temporaryConsumerTimeout": 8,
+    "temporaryBatchSize": 2,
+    "temporaryBatchingWindowSeconds": 5,
+    "restoredConsumerTimeout": 3,
+    "restoredBatchSize": 1,
+    "restoredBatchingWindowSeconds": 0,
+    "consumerEsmUuid": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+    "legacyEsmUuid": "7812ff9b-4000-47e1-9e27-6805670c7cc6"
+  },
+  "executionTimestampsUtc": {
+    "startedAtUtc": "2026-10-24T15:59:50Z",
+    "preflightVerifiedAtUtc": "2026-10-24T16:00:02Z",
+    "timeoutUpdateRequestedAtUtc": "2026-10-24T16:00:02Z",
+    "esmBatchUpdateRequestedAtUtc": "2026-10-24T16:00:05Z",
+    "ordersPrefillSentAtUtc": "2026-10-24T16:00:06Z",
+    "ordersPrefillCompletedAtUtc": "2026-10-24T16:00:09Z",
+    "esmEnableRequestedAtUtc": "2026-10-24T16:00:09Z",
+    "dynamoDbReconciledAtUtc": "2026-10-24T16:00:21Z",
+    "batchProofVerifiedAtUtc": "2026-10-24T16:00:25Z",
+    "esmRestoreRequestedAtUtc": "2026-10-24T16:00:26Z",
+    "esmRestoreConfirmedAtUtc": "2026-10-24T16:00:31Z",
+    "timeoutRestoreRequestedAtUtc": "2026-10-24T16:00:31Z",
+    "timeoutRestoreConfirmedAtUtc": "2026-10-24T16:00:35Z",
+    "completedAtUtc": "2026-10-24T16:00:35Z",
+    "finalStateFollowupCheckAtUtc": "2026-10-24T16:05:41Z"
+  },
+  "results": {
+    "http202AcceptedCount": 2,
+    "requestsAttempted": 2,
+    "orderIds": [
+      "e40094f0-f303-4eca-be0a-0fb57b1836c1",
+      "12c1bb70-25eb-43b2-936f-ee62714236b5"
+    ],
+    "dynamoDbStatus": {
+      "e40094f0-f303-4eca-be0a-0fb57b1836c1": "PROCESSED",
+      "12c1bb70-25eb-43b2-936f-ee62714236b5": "PROCESSED"
+    },
+    "batchProof": {
+      "verified": true,
+      "lambdaRequestId": "669f8c38-d85a-55dd-9a5a-ef6e0015632a",
+      "logStreamName": "2026/10/24/[$LATEST]81bcb1adbd6d4fadbf89bcddc1372c8d",
+      "sqsMessageIds": [
+        "6e052d51-b729-43fa-aa71-ecf74384582f",
+        "fa670c23-cfcc-4b62-808a-3bca29c7711e"
+      ],
+      "durationMs": 2784.26,
+      "billedDurationMs": 3139
+    }
+  },
+  "restorationVerified": {
+    "esmRestored": true,
+    "timeoutRestored": true,
+    "codeHashUnchanged": true,
+    "legacyEsmDisabled": true,
+    "consumerTimeout": 3,
+    "consumerEsmState": "Disabled",
+    "consumerEsmBatchSize": 1,
+    "consumerEsmWindow": 0,
+    "consumerCodeSha256": "cAglL/yZX4JdPU+NM3pAYTTK5C4hG11FopmcTbYZLpA=",
+    "immediateObservationAt160035Z": {
+      "ordersQueueCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "ordersDlqCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      }
+    },
+    "followupObservationAt160541Z": {
+      "ordersQueueCounts": {
+        "visible": 0,
+        "notVisible": 0,
+        "delayed": 0
+      },
+      "ordersDlqCounts": {
+        "visible": 2,
+        "notVisible": 0,
+        "delayed": 0
+      }
+    },
+    "queueCountNote": "Original immediate count 2 at 16:00:35Z is preserved raw as observed; follow-up check at 16:05:41Z confirmed 0/0/0. Eventual consistency lag is an inference; both actual raw observations are reported."
+  },
+  "files": [
+    {
+      "path": "b3-execution-log.json",
+      "bytes": 8584,
+      "sha256": "da79d3db119e968acbcc481e938e22651f0a48aef76840e7429e5e501c62c707"
+    },
+    {
+      "path": "batch-proof.json",
+      "bytes": 2211,
+      "sha256": "5e13a1dad322e13ff1061d7e44342189ba226d94e83f805d293ad56927da00c2"
+    },
+    {
+      "path": "final-state-check.json",
+      "bytes": 1882,
+      "sha256": "40b7ec55e7781ea8808adfff45b51c8592af900f7c3c6345cc61c9ab877c3384"
+    },
+    {
+      "path": "load/load-test-results.csv",
+      "bytes": 412,
+      "sha256": "5f09ba3679db150c6cf30b61be61809d6f256da8760a3d824b61f619d819ff96"
+    },
+    {
+      "path": "load/load-test-summary.json",
+      "bytes": 2917,
+      "sha256": "b72bd9f380c1fab5163e5750291aaa5c366982eb59ce9992e0c3f83d670e5a45"
+    },
+    {
+      "path": "screenshots/screenshots-provenance.json",
+      "bytes": 1093,
+      "sha256": "61ac7f44313a5c66b7ab12d317dc37840bb08cea6eb1d083a7a1fc909e1ae5fc"
+    },
+    {
+      "path": "screenshots/W3-B3-CloudWatch-Two-Record-Batch.jpg",
+      "bytes": 66434,
+      "sha256": "6c70e23875d1dade3f7147db675f3fb5daa70f091676a38eec7c05389ae4be81"
+    }
+  ]
+}
