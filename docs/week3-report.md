@@ -166,3 +166,57 @@ Kịch bản Phase B2 được người dùng phê duyệt chạy đúng **01 l�
 | **W3-02** | SQS Standard vs FIFO Benchmark | **HOÀN THÀNH** | Đã tích hợp qua [PR #13](https://github.com/pminhquan/cloud-async-orders/pull/13); Tham chiếu chéo báo cáo phân tích B1 tại [`docs/week3-quan-b1-results.md`](week3-quan-b1-results.md) và minh chứng độc lập tại [`docs/evidence/week3/quan/b1-2026-10-24/`](evidence/week3/quan/b1-2026-10-24/) (3 kịch bản x 20 messages, so sánh throughput/latency/ordering). |
 | **W3-03** | Controlled Load Test & Batch Processing (B2 + B3) | **HOÀN THÀNH** | **Phase B2:** 10/10 orders HTTP 202, 10/10 DynamoDB PROCESSED trong 3.58s ([`docs/evidence/week3/quan/b2-2026-10-24/load/`](evidence/week3/quan/b2-2026-10-24/load/)).<br>**Phase B3:** 2/2 orders HTTP 202, 2/2 PROCESSED; chứng minh batch 2 bản ghi trong cùng Lambda RequestId `669f8c38-d85a-55dd-9a5a-ef6e0015632a` ([`docs/evidence/week3/quan/b3-2026-10-24/batch-proof.json`](evidence/week3/quan/b3-2026-10-24/batch-proof.json)). |
 | **W3-04** | Metrics Collector, Safe Restoration & CI Status | **HOÀN THÀNH** | Tệp kiểm tra trạng thái cuối [`docs/evidence/week3/quan/b3-2026-10-24/final-state-check.json`](evidence/week3/quan/b3-2026-10-24/final-state-check.json) xác nhận: Consumer timeout = 3s, ESM Disabled, `orders-queue` = 0/0/0, `orders-dlq` = 2/0/0.<br>**Trạng thái CI:** Trực tiếp đối soát kết quả kiểm thử hồi quy tại [PR #14 Checks](https://github.com/pminhquan/cloud-async-orders/pull/14/checks); 56 unit test offline PASS (`tests/`). |
+
+---
+
+## 7. Kế hoạch Tuần 4 (C10)
+
+Tuần 4 là giai đoạn hoàn thiện đề tài, tập trung vào kiểm thử tổng thể, tối ưu hiệu năng và chi phí AWS, dọn dẹp tài nguyên thử nghiệm, hoàn thiện báo cáo cuối kỳ và chuẩn bị demo.
+
+### 7.1. Kiểm thử tổng thể
+
+- Kiểm tra luồng API Gateway → Producer → SQS → Consumer → DynamoDB.
+- Kiểm thử request hợp lệ và không hợp lệ.
+- Kiểm tra idempotency, retry/DLQ và SQS batch.
+- Đối soát orderId và trạng thái PROCESSED.
+- Kiểm tra CloudWatch Alarm và SNS Email Alert.
+
+### 7.2. Đánh giá và tối ưu chi phí AWS
+
+- Đánh giá cấu hình và thời gian thực thi Lambda.
+- Kiểm tra SQS request, batch size và message retention.
+- Rà soát DynamoDB capacity và dữ liệu thử nghiệm.
+- Đánh giá CloudWatch Logs, Metrics và Alarm.
+- Đề xuất tối ưu chi phí phù hợp với AWS Learner Lab.
+
+### 7.3. Dọn dẹp tài nguyên
+
+- Kiểm kê SQS, DynamoDB, Lambda, CloudWatch và SNS.
+- Lưu minh chứng và cấu hình cần thiết trước khi dọn dẹp.
+- Chỉ xóa tài nguyên thử nghiệm không còn sử dụng sau khi demo hoàn tất và được chủ môi trường đồng ý.
+- Kiểm tra lại trạng thái tài nguyên sau dọn dẹp.
+
+### 7.4. Báo cáo và demo
+
+- Tổng hợp kết quả bốn tuần thực hiện.
+- Hoàn thiện báo cáo cuối kỳ và tài liệu GitHub.
+- Chuẩn bị kịch bản demo API, SQS, DynamoDB, CloudWatch và SNS.
+- Phân chia nhiệm vụ thuyết trình giữa Khôi và Quân.
+- Chuẩn bị phương án dự phòng khi AWS Learner Lab gặp sự cố.
+
+### 7.5. Phân công và tiêu chí nghiệm thu
+
+| Công việc | Phụ trách |
+|---|---|
+| API Gateway, Producer và SNS | Khôi |
+| Consumer, SQS/DLQ và DynamoDB | Quân |
+| Kiểm thử E2E | Khôi, Quân |
+| Đánh giá hiệu năng và chi phí | Quân, Khôi |
+| Dọn dẹp tài nguyên AWS | Khôi, Quân |
+| Báo cáo cuối kỳ và demo | Khôi, Quân |
+
+Kết quả nghiệm thu dự kiến gồm: bảng kiểm thử tổng thể, đánh giá hiệu năng/chi phí, danh sách tài nguyên được rà soát, báo cáo cuối kỳ, kịch bản demo và minh chứng GitHub.
+
+**Kế hoạch Tuần 4 chi tiết:** [docs/week4-plan.md](week4-plan.md)
+
+**Trạng thái:** Kế hoạch dự kiến; kết quả thực hiện sẽ được cập nhật kèm minh chứng trong Tuần 4.
