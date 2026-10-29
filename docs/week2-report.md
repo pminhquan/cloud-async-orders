@@ -289,45 +289,38 @@ Nhánh `main` hiện có **29 ảnh AWS Tuần 2**, trong đó Quân đóng góp
 
 ---
 
-## 8. Nhật ký công việc và phân bổ thời gian Tuần 2
+## 8. Nhật ký công việc Tuần 2
 
-Các bảng dưới đây **phân bổ giờ tham khảo theo khối lượng công việc đã được mô tả trong source, PR và bằng chứng AWS**, giúp nhóm rà soát và hoàn chỉnh hồ sơ. **Đây là thời lượng đề xuất, không phải số giờ thực tế đã được xác minh.** Nhóm cần xác nhận hoặc sửa lại trước khi sử dụng như nhật ký thời gian thực tế. Theo báo cáo của nhóm, mỗi thành viên đã đáp ứng mức tối thiểu 8 giờ trong tuần.
+Các bảng dưới đây tổng hợp hoạt động có source, PR và bằng chứng AWS để đối chiếu với [worklog Tuần 2](worklog/week2.md). Nhật ký thời lượng được quản lý riêng theo yêu cầu học phần.
 
 ### 8.1. Phạm Minh Quân
 
-| STT | Hoạt động | Kết quả/minh chứng | Giờ phân bổ đề xuất |
-|---:|---|---|---:|
-| 1 | Nâng cấp Consumer, tích hợp DynamoDB và conditional write | [PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5), Consumer source | 2,0 |
-| 2 | Xây dựng và rà soát unit tests Consumer | [tests/test_consumer.py](../tests/test_consumer.py) | 1,0 |
-| 3 | Triển khai Consumer, cấu hình trigger SQS và thông số batch/concurrency | [Ảnh trigger](evidence/week2/W2-Consumer-SQS-Trigger-Enabled.png) | 1,0 |
-| 4 | Kiểm thử Full E2E và đối soát API/DynamoDB bằng `orderId` | [API](evidence/week2/W2-API-Gateway-POST-202.png), [DynamoDB](evidence/week2/W2-E2E-DynamoDB-PROCESSED.png) | 1,5 |
-| 5 | Kiểm thử idempotency, replay và `ORDER_CONFLICT` | [Replay](evidence/week2/W2-Consumer-Idempotency-Retry.png), [conflict](evidence/week2/W2-Consumer-Order-Conflict-PASS.png) | 1,0 |
-| 6 | Kiểm tra Invalid JSON, retry, redrive và DLQ | [CloudWatch](evidence/week2/W2-Consumer-InvalidJSON-CloudWatch.png), [DLQ](evidence/week2/W2-DLQ-Invalid-Message-Verified.png) | 1,5 |
-| 7 | Thử direct batch valid/mixed và replay | [Valid](evidence/week2/W2-Consumer-Batch-Valid-PASS.png), [mixed](evidence/week2/W2-Consumer-Batch-Mixed-Failure.png) | 1,0 |
-| 8 | Thực hiện small load, chụp 19 ảnh và tổ chức evidence | [Ảnh load](evidence/week2/W2-API-Small-Load-Test.png), [bộ ảnh](evidence/week2/) | 2,0 |
-| | **Tổng giờ đề xuất** | | **11,0 giờ** |
+| STT | Hoạt động | Kết quả/minh chứng |
+|---:|---|---|
+| 1 | Nâng cấp Consumer, tích hợp DynamoDB và conditional write | [PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5), Consumer source |
+| 2 | Xây dựng và rà soát unit tests Consumer | [tests/test_consumer.py](../tests/test_consumer.py) |
+| 3 | Triển khai Consumer, cấu hình trigger SQS và thông số batch/concurrency | [Ảnh trigger](evidence/week2/W2-Consumer-SQS-Trigger-Enabled.png) |
+| 4 | Kiểm thử Full E2E và đối soát API/DynamoDB bằng `orderId` | [API](evidence/week2/W2-API-Gateway-POST-202.png), [DynamoDB](evidence/week2/W2-E2E-DynamoDB-PROCESSED.png) |
+| 5 | Kiểm thử idempotency, replay và `ORDER_CONFLICT` | [Replay](evidence/week2/W2-Consumer-Idempotency-Retry.png), [conflict](evidence/week2/W2-Consumer-Order-Conflict-PASS.png) |
+| 6 | Kiểm tra Invalid JSON, retry, redrive và DLQ | [CloudWatch](evidence/week2/W2-Consumer-InvalidJSON-CloudWatch.png), [DLQ](evidence/week2/W2-DLQ-Invalid-Message-Verified.png) |
+| 7 | Thử direct batch valid/mixed và replay | [Valid](evidence/week2/W2-Consumer-Batch-Valid-PASS.png), [mixed](evidence/week2/W2-Consumer-Batch-Mixed-Failure.png) |
+| 8 | Thực hiện small load, chụp 19 ảnh và tổ chức evidence | [Ảnh load](evidence/week2/W2-API-Small-Load-Test.png), [bộ ảnh](evidence/week2/) |
 
 ### 8.2. Nguyễn Đoàn Minh Khôi
 
-| STT | Hoạt động | Kết quả/minh chứng | Giờ phân bổ đề xuất |
-|---:|---|---|---:|
-| 1 | Thống nhất contract, hoàn thiện Producer và cấu hình gửi SQS | [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [source](../src/producer/lambda_function.py) | 2,0 |
-| 2 | Xây dựng/rà soát validation, xử lý lỗi và các trường hợp input sai | [Producer tests](../tests/test_producer.py) | 1,5 |
-| 3 | Kiểm thử trực tiếp Lambda với valid, missing field và malformed JSON | [10 ảnh Khôi](../screenshots/week2/khoi/) | 1,5 |
-| 4 | Kiểm tra invalid request không làm tăng số message SQS | [SQS trước](../screenshots/week2/khoi/08-sqs-before-invalid-request.png), [sau](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) | 1,0 |
-| 5 | Phối hợp kiểm tra SQS backlog, queue và luồng Producer/Consumer | [Integration Contract](integration-contract.md) | 1,0 |
-| 6 | Chụp, phân loại, đặt tên và đưa 10 ảnh minh chứng lên GitHub | [Commit `648b165`](https://github.com/pminhquan/cloud-async-orders/commit/648b165) | 1,5 |
-| 7 | Tổng hợp báo cáo, đồng bộ tài liệu/ảnh nhóm và hoàn thiện PR #8 | [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8), [commit `5a89fbe`](https://github.com/pminhquan/cloud-async-orders/commit/5a89fbe) | 1,5 |
-| | **Tổng giờ đề xuất** | | **10,0 giờ** |
+| STT | Hoạt động | Kết quả/minh chứng |
+|---:|---|---|
+| 1 | Thống nhất contract, hoàn thiện Producer và cấu hình gửi SQS | [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [source](../src/producer/lambda_function.py) |
+| 2 | Xây dựng/rà soát validation, xử lý lỗi và các trường hợp input sai | [Producer tests](../tests/test_producer.py) |
+| 3 | Kiểm thử trực tiếp Lambda với valid, missing field và malformed JSON | [10 ảnh Khôi](../screenshots/week2/khoi/) |
+| 4 | Kiểm tra invalid request không làm tăng số message SQS | [SQS trước](../screenshots/week2/khoi/08-sqs-before-invalid-request.png), [sau](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) |
+| 5 | Phối hợp kiểm tra SQS backlog, queue và luồng Producer/Consumer | [Integration Contract](integration-contract.md) |
+| 6 | Chụp, phân loại, đặt tên và đưa 10 ảnh minh chứng lên GitHub | [Commit `648b165`](https://github.com/pminhquan/cloud-async-orders/commit/648b165) |
+| 7 | Tổng hợp báo cáo, đồng bộ tài liệu/ảnh nhóm và hoàn thiện PR #8 | [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8), [commit `5a89fbe`](https://github.com/pminhquan/cloud-async-orders/commit/5a89fbe) |
 
 ### 8.3. Tổng hợp và đối soát
 
-| Thành viên | Giờ phân bổ đề xuất | Ngưỡng yêu cầu | Trạng thái xác nhận |
-|---|---:|---:|---|
-| Phạm Minh Quân | 11,0 giờ | ≥ 8 giờ/tuần | Nhóm cần xác nhận thời lượng thực tế |
-| Nguyễn Đoàn Minh Khôi | 10,0 giờ | ≥ 8 giờ/tuần | Nhóm cần xác nhận thời lượng thực tế |
-
-Nhóm báo cáo rằng hai thành viên đã đạt yêu cầu tối thiểu. Việc phân giờ ở trên chỉ nhằm thể hiện phân bố công việc hợp lý theo nhiệm vụ đã hoàn thành; không dùng ngày commit, thời gian chạy Lambda, ảnh AWS hay thời gian AI tạo nội dung để thay thế dữ liệu giờ làm thực tế.
+Kết quả kỹ thuật được đối chiếu qua source, PR và minh chứng AWS. Nhật ký thời lượng tuân theo [yêu cầu học phần](requirements.md).
 
 ---
 
