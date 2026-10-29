@@ -1,4 +1,6 @@
-# Khai báo sử dụng AI — Tuần 1 và Tuần 2
+# Khai báo sử dụng AI — Bốn tuần
+
+> Các mục 1–5 là khai báo lịch sử Tuần 1–2 theo thông tin nhóm cung cấp. Phần Tuần 3–4 được bổ sung riêng bên dưới, không sửa thành tích hoặc lịch sử model của từng thành viên.
 
 **Đề tài:** Hàng đợi xử lý đơn hàng bất đồng bộ với SQS, DLQ và Lambda\
 **Môn học:** CLC0332779_05UTExMC – Điện toán đám mây\
@@ -78,3 +80,13 @@ Các dòng sau **diễn giải chủ đề trao đổi tương ứng với phầ
 - [PR #5 Consumer](https://github.com/pminhquan/cloud-async-orders/pull/5), [PR #7 Producer](https://github.com/pminhquan/cloud-async-orders/pull/7), [PR #8 tổng hợp](https://github.com/pminhquan/cloud-async-orders/pull/8), [PR #9 báo cáo](https://github.com/pminhquan/cloud-async-orders/pull/9).
 
 **Kết luận khai báo:** Phần sử dụng AI của hai thành viên đã được nhóm tổng hợp theo thông tin cung cấp và phân công kỹ thuật. Nhóm trực tiếp chịu trách nhiệm về mã nguồn, triển khai, số liệu và minh chứng AWS trong báo cáo.
+
+## 6. Phạm vi AI trong Tuần 3–4
+
+Tuần 3 có AI hỗ trợ công cụ benchmark/load/metrics, monitoring IaC, unit tests, CI, rà soát và tài liệu. Kết quả đo được đối chiếu với JSON/CSV và ảnh thực tế, không suy từ gợi ý của công cụ.
+
+Ngày 29/10/2026, Codex hỗ trợ đối chiếu source và thao tác qua phiên Console/CloudShell của Lab Quân do người dùng đăng nhập. Phạm vi gồm cập nhật deployment Producer từ source main sẵn có, bật mapping đúng nguồn, chạy E2E/validation/replay/conflict có giới hạn và quan sát một phép thử retry. Những thao tác này không được trình bày là sinh viên tự thực hiện thủ công. Antigravity Desktop hỗ trợ rà soát offline, kiểm thử và công cụ trình bày tài liệu; không có thay đổi source/test/script/IaC của ứng dụng trong Tuần 4.
+
+AI hỗ trợ tổng hợp inventory, phân tích B1/B2/B3, tra nguồn giá AWS và soạn báo cáo/kịch bản. Các bản che định danh từng được tạo trong quá trình rà soát; ảnh lưu trong repository đã được khôi phục nguyên bản theo yêu cầu học phần, giữ thông tin sinh viên và MSSV. Không tạo lại giao diện Console hoặc tự dựng kết quả. Bản quan sát AWS, kiểm thử mô phỏng dịch vụ và minh chứng lịch sử được phân biệt trong [báo cáo Tuần 4](week4-report.md) và [nguồn minh chứng](evidence/week4/README.md).
+
+Hai thành viên chịu trách nhiệm rà soát tài liệu, xác nhận khai báo công cụ đúng thực tế và giải thích mã nguồn, phương pháp cùng kết quả khi trình bày học phần.

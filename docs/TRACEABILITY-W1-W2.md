@@ -1,10 +1,10 @@
-# Ma trận yêu cầu – phân công – kết quả – minh chứng (Tuần 1 và 2)
+# Ma trận yêu cầu – phân công – kết quả – minh chứng (Bốn tuần)
 
 **Đề tài:** Hàng đợi xử lý đơn hàng bất đồng bộ với SQS, DLQ và Lambda  
 **Nhóm:** Phạm Minh Quân (24110311), Nguyễn Đoàn Minh Khôi (24110259)  
 **AWS Region:** `us-east-1` · **Vai trò AWS:** `LabRole`
 
-> **Cách đọc:** `PASS` chỉ đúng trong phạm vi test ghi ở cột “Đối soát”. Tuần 1 là PoC độc lập, không phải Full E2E. Lab Quân và Lab Khôi là hai môi trường khác nhau. Thời điểm đối chiếu GitHub: 17/10/2026.
+> **Cách đọc:** `PASS` chỉ đúng trong phạm vi test ghi ở cột “Đối soát”. Các bảng Tuần 1–2 là kết quả lịch sử; Tuần 1 là PoC độc lập, không phải Full E2E. Hai Lab là hai môi trường khác nhau. Trạng thái PR được đối chiếu lại bằng public GitHub API ngày 29/10/2026; kết quả Tuần 3–4 nằm ở mục 6–7.
 
 ## 1. Tuần 1 — nghiên cứu và PoC độc lập
 
@@ -38,14 +38,14 @@
 | W2-10 | Batch valid, mixed, replay | Quân | PASS **direct Lambda invocation**; chưa chứng minh tự gom SQS batch>1 | [Valid](evidence/week2/W2-Consumer-Batch-Valid-PASS.png), [mixed](evidence/week2/W2-Consumer-Batch-Mixed-Failure.png) |
 | W2-11 | Small load 10 requests | Quân | PASS 10/10 trên Lab Quân; không phải stress test | [API](evidence/week2/W2-API-Small-Load-Test.png), [10 items](evidence/week2/W2-Small-Load-DynamoDB-PROCESSED.png) |
 | W2-12 | Minh chứng và báo cáo | Cả nhóm | Bộ ảnh Quân 19, Khôi 10; tài liệu tổng hợp | [Index Tuần 2](evidence/week2/README.md), [Báo cáo](week2-report.md) |
-| W2-13 | Worklog tối thiểu 8 giờ/người | Mỗi người | **Nhóm báo cáo đã đạt; số giờ/ngày chi tiết chưa được đối soát** | [Tuần 1](worklog/week1.md), [Tuần 2](worklog/week2.md) |
+| W2-13 | Nhật ký theo yêu cầu tối thiểu 8 giờ/người | Mỗi người | Quản lý riêng trong nhật ký học phần | [Tuần 1](worklog/week1.md), [Tuần 2](worklog/week2.md) |
 
 ### 3. Trạng thái source và Pull Request
 
 - Consumer: [PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5) — **Merged** vào `main`, commit `914de9b`.
 - Producer: [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7) — **Merged** vào `main`, commit `015d420`.
-- 19 ảnh AWS Quân bắt nguồn từ [PR #6](https://github.com/pminhquan/cloud-async-orders/pull/6); PR #6 vẫn **Open** tại thời điểm rà soát 17/10/2026.
-- Tài liệu báo cáo và 10 ảnh Khôi ở [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8), hiện chưa merge.
+- 19 ảnh AWS Quân bắt nguồn từ [PR #6](https://github.com/pminhquan/cloud-async-orders/pull/6); PR #6 hiện **Closed, không merge**. Bộ ảnh đã có trong phần tổng hợp, không dùng trạng thái PR này để phủ nhận tệp đã tích hợp.
+- Tài liệu và 10 ảnh Khôi ở [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8), đã merge; [PR #9](https://github.com/pminhquan/cloud-async-orders/pull/9) cũng đã merge.
 - Không dùng mã hash của PR #8 để thay thế commit gốc của PR #5/#7.
 
 ### 4. Các mục không được nhận là PASS Tuần 2
@@ -55,10 +55,34 @@
 - Stress test tải lớn và thống kê throughput/latency: chưa thực hiện.
 - Triển khai IaC end-to-end: chưa xác minh.
 - Full E2E trên **Lab Khôi**: không đủ bằng chứng đối soát một orderId qua API và DynamoDB, không bắt buộc phải lặp lại Lab Quân trừ khi giảng viên yêu cầu.
-- Chạy lại toàn bộ test bằng Python ở máy Khôi tại thời điểm push: chưa thực hiện (máy báo không nhận Python).
 
-### 5. Giải trình giờ làm và AI
+### 5. Nhật ký học phần và khai báo công cụ
 
-Nhóm **tự báo cáo đáp ứng** ngưỡng tối thiểu 8 giờ/người/tuần. Đây là xác nhận chung từ nhóm, không phải phép tính từ worklog chi tiết vì chưa có số liệu thời lượng theo ngày. Khi được giảng viên yêu cầu kiểm toán thời gian, từng thành viên cung cấp nhật ký thực tế.
+Nhật ký thời lượng được quản lý riêng theo [yêu cầu dự án](requirements.md). [Khai báo AI](ai-declaration.md) ghi công cụ, phạm vi hỗ trợ và trách nhiệm xác nhận của từng thành viên.
 
-[Chi tiết việc dùng AI](ai-declaration.md). Công cụ/model của từng thành viên phải do người đó xác nhận; không mặc định hai người dùng cùng model.
+## 6. Tuần 3 — dữ liệu thực nghiệm ngày 24/10/2026
+
+| Yêu cầu | Kết quả và giới hạn | Minh chứng |
+|---|---|---|
+| Monitoring IaC, collector và CI | Template/gate offline PASS; không tự suy thành triển khai cả hai Lab | [Template](../iac/week3-monitoring.yaml), [báo cáo](week3-report.md) |
+| Standard/FIFO B1 | Ba kịch bản × 20 message gửi/nhận đủ; client tuần tự, không stress test | [B1](week3-quan-b1-results.md) |
+| Load B2 | 10/10 HTTP 202 và PROCESSED; 3,5846s là đợt đối soát sau gửi | [JSON B2](evidence/week3/quan/b2-2026-10-24/load/load-test-summary.json) |
+| Batch thật B3 | Hai record cùng Lambda RequestId | [Batch proof](evidence/week3/quan/b3-2026-10-24/batch-proof.json) |
+| SNS/Alarm Khôi | Email và manual Alarm State, chưa chứng minh DLQ metric tự kích hoạt | [Phạm vi Khôi](week3-khoi-evidence.md) |
+| PR #11–#15 | Đã merge; main ở 8b14e02 khi đối chiếu 29/10 | [CI đúng main](https://github.com/pminhquan/cloud-async-orders/actions/runs/40163636601) |
+
+## 7. Tuần 4 — nghiệm thu ngày 29/10/2026
+
+| Mã | Kết quả và phạm vi | Minh chứng |
+|---|---|---|
+| W4-01 | Inventory thật Lab Quân; giữ phân biệt hai môi trường | [Inventory](week4-report.md) |
+| W4-02 | Producer đúng main, ESM Enabled, API 202 và đúng orderId PROCESSED | [Deployment/E2E](week4-report.md) |
+| W4-03 | 13/13 HTTP đúng kỳ vọng; replay/conflict giữ item; 5 lần nhận/lỗi và biến đổi queue/DLQ tương ứng | [Ma trận và giới hạn DLQ](week4-report.md) |
+| W4-04 | Log/metrics mới, không throttling trong cửa sổ; không có project alarm/SNS trên Lab Quân | [Monitoring](week4-report.md) |
+| W4-05 | Phân tích B1/B2/B3 bằng dữ liệu có sẵn, không suy năng lực production | [Hiệu năng](final-report.md) |
+| W4-06 | Mô hình chi phí và nguồn chính thức; không bịa hóa đơn | [Chi phí](week4-cost-analysis.md) |
+| W4-07 | KEEP/REVIEW, kiểm tra trạng thái cuối, không purge/delete | [Tài nguyên](week4-report.md) |
+| W4-08 | Hồi quy offline đạt; phân biệt source tham chiếu và head CI của từng PR | [Kiểm thử](evidence/week4/offline-validation.md), [hồ sơ](SUBMISSION.md) |
+| W4-09 | Báo cáo tổng kết, đánh giá kỹ thuật và kịch bản 9:20 | [Báo cáo](final-report.md), [demo](demo-script.md) |
+
+Các dòng Tuần 4 dùng bản ghi quan sát có chọn lọc, không phải raw export đính kèm. [Nguồn minh chứng](evidence/week4/README.md) phân biệt giới hạn redrive, monitoring thủ công và môi trường thực nghiệm.

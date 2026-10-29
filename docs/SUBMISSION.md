@@ -1,83 +1,35 @@
-# Hướng dẫn chốt repository để nộp
+# Hướng dẫn hồ sơ học phần
 
-## 1. Không push các file không cần thiết
+## 1. Mã nguồn và tài liệu chính
 
-Không push:
+Repository: [pminhquan/cloud-async-orders](https://github.com/pminhquan/cloud-async-orders).
 
-```text
-.git/
-backup/
-AWS credentials
-file tạm cá nhân
-ảnh ngoài project
-```
+| Thành phần | Tài liệu/đường dẫn |
+|---|---|
+| Báo cáo tổng kết bốn tuần | [final-report.md](final-report.md) |
+| Nghiệm thu Tuần 4 | [week4-report.md](week4-report.md) |
+| Đánh giá chi phí | [week4-cost-analysis.md](week4-cost-analysis.md) |
+| Kịch bản thuyết trình | [demo-script.md](demo-script.md) |
+| Đối chiếu yêu cầu và phân công | [Traceability](TRACEABILITY-W1-W2.md), [phân công](task-assignment.md) |
+| Kiến trúc và hợp đồng | [Kiến trúc](architecture/README.md), [integration contract](integration-contract.md) |
+| Khai báo công cụ hỗ trợ | [ai-declaration.md](ai-declaration.md) |
 
-## 2. Kiểm tra source
+## 2. Kiểm thử và minh chứng
 
-```bash
-python -m pytest -q
-```
+Hồi quy đạt **56 tests và 114 subtests**; unittest đạt **56 tests**. Compileall, cfn-lint và bảy kiểm tra CLI thành công. [Phương pháp và kết quả offline](evidence/week4/offline-validation.md) tách biệt kiểm thử mô phỏng với [nghiệm thu AWS](week4-report.md).
 
-Kết quả hiện tại của bộ source này:
+Nghiệm thu ngày 29/10 trên Lab Quân có HTTP 202 và item `PROCESSED` cùng orderId, 12 request invalid trả 400, replay/conflict giữ nguyên dữ liệu, năm lần lỗi sentinel và tương quan redrive. Benchmark/load/batch cùng bằng chứng Alarm/SNS của Khôi được ghi đúng ngày 24/10 và phạm vi thủ công.
 
-```text
-33 passed, 81 subtests passed
-```
+[Minh chứng Tuần 1](evidence/week1/README.md), [Tuần 2](evidence/week2/README.md), [Tuần 3](evidence/week3/README.md), [Tuần 4](evidence/week4/README.md).
 
-## 3. Kiểm tra tài liệu
+## 3. Nguồn tham chiếu và thay đổi
 
-Bắt buộc đọc:
+CI của mã nguồn `8b14e02ae64cc1a12e11d66c3f552824f67ab4b7` hoàn tất thành công tại [Actions run 40163636601](https://github.com/pminhquan/cloud-async-orders/actions/runs/40163636601). Đây là CI của nguồn tham chiếu; kết quả PR được đối chiếu riêng theo đúng head commit trên [GitHub Actions](https://github.com/pminhquan/cloud-async-orders/actions).
 
-```text
-docs/week1-report.md
-docs/week2-report.md
-docs/worklog/week1.md
-docs/worklog/week2.md
-docs/ai-declaration.md
-```
+Nội dung Tuần 4 tập trung tài liệu và dẫn chiếu minh chứng, giữ nguyên source/tests/scripts/IaC/CI. [Ảnh AWS lịch sử của Khôi](week3-khoi-evidence.md) giữ bản chụp gốc và thông tin sinh viên để đối chiếu học phần. Các thay đổi được quản lý tại [Pull Requests](https://github.com/pminhquan/cloud-async-orders/pulls) theo [quy ước Git](../CONTRIBUTING.md).
 
-Nhóm báo cáo đáp ứng thời gian tối thiểu; giờ/ngày chi tiết chưa có dữ liệu kiểm toán. Không tự tạo mốc thời gian giả.
+## 4. Cấu trúc hồ sơ
 
-## 4. Kiểm tra evidence
+Source ở `src/`, unit tests ở `tests/`, công cụ kiểm thử/thu metrics ở `scripts/`, template monitoring ở `iac/`, báo cáo và minh chứng ở `docs/`. Hồ sơ dùng cùng nguồn dữ liệu và dẫn chiếu theo tuần, không kèm credential hoặc cấu hình phục hồi riêng.
 
-Local hiện có:
-
-```text
-screenshots/week1/
-screenshots/week2/khoi/
-```
-
-Bộ 19 ảnh phía Quân được script đồng bộ trực tiếp từ branch PR #6 sang branch PR #8; xác nhận tồn tại bằng `Test-Path` và Git diff.
-
-## 5. Push Git
-
-Trong repository local đang liên kết GitHub:
-
-```powershell
-git switch docs/week1-week2-final-v2
-git fetch origin
-git status
-```
-
-Copy nội dung package đã chỉnh vào repository, sau đó:
-
-```powershell
-git status
-git diff
-python -m pytest -q
-git add README.md docs screenshots src tests scripts iac .gitignore
-git commit -m "docs: organize detailed week1 and week2 submission"
-git push origin docs/week1-week2-final-v2
-```
-
-Nếu nhóm không cho push trực tiếp `main`, tạo branch mới và Pull Request.
-
-## 6. Nộp
-
-Chỉ coi là sẵn sàng nộp khi:
-
-- source/tests PASS;
-- báo cáo Tuần 1/Tuần 2 rõ ràng;
-- khai báo AI đúng thực tế;
-- evidence truy cập được;
-- GitHub Public và link không lỗi.
+Video và nhật ký học phần do sinh viên quản lý riêng theo [yêu cầu dự án](requirements.md). Kịch bản mô tả cách trình bày, không xác nhận đã có bản ghi video.

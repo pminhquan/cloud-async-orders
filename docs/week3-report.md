@@ -1,5 +1,8 @@
 # Kết quả triển khai offline Tuần 3
 
+> Tài liệu giữ kết quả và kế hoạch lịch sử Tuần 3. Kết quả thực thi ngày 29/10/2026 nằm trong [báo cáo Tuần 4](week4-report.md); Producer drift và ESM Disabled mô tả bên dưới là trạng thái trước khi xử lý Tuần 4.
+
+
 Dự án `cloud-async-orders`. Bản triển khai được chuẩn bị từ `main` tại `d93826c74b8b4a0228eab2e4af785a12cf826c22`, trên nhánh `feat/week3-observability-benchmark`.
 
 ## Thành phần trong repository

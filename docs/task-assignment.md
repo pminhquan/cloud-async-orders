@@ -113,3 +113,13 @@ Mỗi thành viên vẫn phải có:
 
 - Tuần 1: [worklog/week1.md](worklog/week1.md)
 - Tuần 2: [worklog/week2.md](worklog/week2.md)
+
+## 7. Tuần 4 — nghiệm thu và tổng kết
+
+| Phạm vi thành viên | Trách nhiệm học phần và demo |
+|---|---|
+| Quân | Giải thích SQS/DLQ, Consumer/DynamoDB, replay/conflict/retry, benchmark và trạng thái tài nguyên |
+| Khôi | Giải thích API/Producer/validation, SNS và giới hạn phép thử Alarm/email, phối hợp báo cáo/demo |
+| Cả nhóm | Rà soát báo cáo cuối kỳ, provenance, chi phí và video cuối; chủ Lab duyệt mọi xóa tài nguyên |
+
+Phân công thể hiện trách nhiệm giải thích và kiểm chứng kết quả của từng thành viên. [Kết quả nghiệm thu](week4-report.md), [khai báo công cụ hỗ trợ](ai-declaration.md) và [lời dẫn demo](demo-script.md) cung cấp nội dung đối chiếu.

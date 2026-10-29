@@ -1,4 +1,6 @@
-# Danh mục AWS theo Tuần 1 và Tuần 2
+# Danh mục AWS qua bốn tuần
+
+> Các mục 1–5 giữ inventory lịch sử Tuần 1–2. Inventory mới ngày 29/10/2026 thuộc Lab Quân, được đối chiếu riêng tại [báo cáo Tuần 4](week4-report.md); không mặc định tài nguyên Lab Khôi có trên Lab Quân.
 
 ## 1. Quy ước chung
 
@@ -82,3 +84,11 @@ Cấu hình test Tuần 2 được dùng ở các giai đoạn khác nhau; khi �
 
 - Tuần 1: [evidence/week1/README.md](evidence/week1/README.md)
 - Tuần 2: [evidence/week2/README.md](evidence/week2/README.md)
+
+## 6. Đối chiếu Tuần 3–4
+
+- [Minh chứng Tuần 3](evidence/week3/README.md): benchmark, E2E/load, batch thật; SNS/Alarm thủ công thuộc Lab Khôi.
+- Ngày 29/10 trên Lab Quân: Producer cập nhật đúng main; ESM đúng nguồn đã Enabled; timeout 3s/memory 128 MB giữ nguyên; Orders ACTIVE/PAY_PER_REQUEST.
+- Kiểm tra cuối: orders-queue 0/0/0; orders-dlq tăng từ 2 lên 3 sau một sentinel thử mới, phù hợp với redrive trong phạm vi bằng chứng tương quan; hai queue benchmark rỗng được giữ để xem xét sau demo.
+- Không có project alarm/topic trên Lab Quân. Log groups được giữ nguyên, chưa đặt retention. Không tạo/xóa IAM, purge hoặc destructive cleanup.
+- Trạng thái nguồn và rollback, ma trận kiểm thử, metrics và KEEP/REVIEW nằm trong [báo cáo Tuần 4](week4-report.md).

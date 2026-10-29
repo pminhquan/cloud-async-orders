@@ -32,7 +32,16 @@
 - [Thiết kế Controlled Load Test & Reconciliation](week3-load-testing.md)
 - [AWS Manual Runbook](week3-aws-manual-runbook.md)
 - [Evidence Tuần 3](evidence/week3/README.md)
-- [Bàn giao Kỹ thuật Tuần 3](WEEK3_AGENT_HANDOFF.md)
+
+## Tuần 4 và báo cáo cuối kỳ
+
+- [Kế hoạch Tuần 4](week4-plan.md)
+- [Kết quả thực thi và nghiệm thu Tuần 4](week4-report.md)
+- [Báo cáo cuối kỳ bốn tuần](final-report.md)
+- [Phân tích chi phí](week4-cost-analysis.md)
+- [Kịch bản demo 9 phút 20 giây](demo-script.md)
+- [Chỉ mục minh chứng Tuần 4](evidence/week4/README.md)
+- [Ma trận nghiệm thu Tuần 4](week4-execution.md)
 
 ## Nghiên cứu
 
@@ -43,12 +52,11 @@
 
 - [Khai báo sử dụng AI](ai-declaration.md)
 
-## Trước khi nộp
+## Nguồn và cách tổ chức hồ sơ
 
-- Nhóm báo cáo đạt tối thiểu 8 giờ/người/tuần; không tự dựng số giờ/ngày khi chưa có dữ liệu đối soát.
-- Đã tổng hợp thông tin AI của Quân (ChatGPT / GPT-6.0 theo thông tin nhóm cung cấp); xem [ai-declaration.md](ai-declaration.md).
-- Kiểm tra link GitHub/PR sau lần push cuối.
-- Bộ 19 ảnh Lab Quân đã đồng bộ từ PR #6 vào PR #8 bằng script cập nhật.
+- [Hướng dẫn hồ sơ học phần](SUBMISSION.md): mã nguồn, báo cáo, minh chứng và tham chiếu kiểm thử.
+- [Quy ước đóng góp và Git](../CONTRIBUTING.md): tên nhánh, commit và Pull Request.
+- [Khai báo sử dụng AI](ai-declaration.md): công cụ, phạm vi hỗ trợ và trách nhiệm của nhóm.
 
 ## Ma trận đối chiếu
 
