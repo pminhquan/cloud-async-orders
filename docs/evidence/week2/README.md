@@ -1,6 +1,6 @@
 # Minh chứng AWS Tuần 2 — chỉ mục có liên kết trực tiếp
 
-Được đối chiếu với các tệp hiện có trong nhánh `docs/week2-progress` (PR #6), các ảnh nằm **trực tiếp** tại thư mục này sau khi script đồng bộ. Phạm vi kiểm thử tại hai Lab được phân biệt rõ; không suy đoán AWS Lab Khôi đạt E2E từ Lab Quân.
+Bộ ảnh gốc của Quân bắt nguồn từ PR #6 (đã Closed, không merge) và được đưa vào `main` qua PR #8; ảnh nằm **trực tiếp** tại thư mục này. Phạm vi kiểm thử tại hai Lab được phân biệt rõ; không suy đoán AWS Lab Khôi đạt E2E từ Lab Quân.
 
 ## A. Bộ 19 ảnh Phạm Minh Quân (Lab tích hợp chính)
 
@@ -32,22 +32,22 @@
 
 | STT | Ảnh | Ý nghĩa |
 |---:|---|---|
-| 01 | [Valid → 202](../../../screenshots/week2/khoi/01-producer-valid-202.png) | Producer direct test hợp lệ |
-| 02 | [Thiếu customerId](../../../screenshots/week2/khoi/02-producer-missing-customerid-400.png) | 400 |
-| 03 | [Thiếu productId](../../../screenshots/week2/khoi/03-producer-missing-productid-400.png) | 400 |
-| 04 | [Invalid quantity A](../../../screenshots/week2/khoi/04-producer-invalid-quantity-400-a.png) | 400 |
-| 05 | [Invalid quantity B](../../../screenshots/week2/khoi/05-producer-invalid-quantity-400-b.png) | 400 |
-| 06 | [Invalid quantity C](../../../screenshots/week2/khoi/06-producer-invalid-quantity-400-c.png) | 400 |
-| 07 | [Malformed JSON](../../../screenshots/week2/khoi/07-producer-invalid-json-400.png) | 400 |
-| 08 | [SQS trước invalid](../../../screenshots/week2/khoi/08-sqs-before-invalid-request.png) | 8 available, 0 in flight |
-| 09 | [Invalid request 400](../../../screenshots/week2/khoi/09-producer-invalid-request-400.png) | request không hợp lệ |
-| 10 | [SQS sau invalid](../../../screenshots/week2/khoi/10-sqs-after-invalid-request.png) | vẫn 8 available, 0 in flight |
+| 01 | [Valid → 202](khoi/01-producer-valid-202.png) | Producer direct test hợp lệ |
+| 02 | [Thiếu customerId](khoi/02-producer-missing-customerid-400.png) | 400 |
+| 03 | [Thiếu productId](khoi/03-producer-missing-productid-400.png) | 400 |
+| 04 | [Invalid quantity A](khoi/04-producer-invalid-quantity-400-a.png) | 400 |
+| 05 | [Invalid quantity B](khoi/05-producer-invalid-quantity-400-b.png) | 400 |
+| 06 | [Invalid quantity C](khoi/06-producer-invalid-quantity-400-c.png) | 400 |
+| 07 | [Malformed JSON](khoi/07-producer-invalid-json-400.png) | 400 |
+| 08 | [SQS trước invalid](khoi/08-sqs-before-invalid-request.png) | 8 available, 0 in flight |
+| 09 | [Invalid request 400](khoi/09-producer-invalid-request-400.png) | request không hợp lệ |
+| 10 | [SQS sau invalid](khoi/10-sqs-after-invalid-request.png) | vẫn 8 available, 0 in flight |
 
 **Lưu ý:** số liệu hàng đợi trước/sau là snapshot, không thay thế unit test mock xác nhận không gọi `send_message`. Các ảnh Khôi là Lambda Test, không phải API Gateway E2E cùng orderId.
 
 ## C. Nguồn và liên kết
 
 - [Báo cáo Tuần 2](../../week2-report.md)
-- [Ma trận đối chiếu yêu cầu](../../TRACEABILITY-W1-W2.md)
+- [Ma trận đối chiếu yêu cầu](../../traceability.md)
 - [PR #6 — nguồn gốc 19 ảnh](https://github.com/pminhquan/cloud-async-orders/pull/6)
 - [PR #8 — nhánh báo cáo](https://github.com/pminhquan/cloud-async-orders/pull/8)

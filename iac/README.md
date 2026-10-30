@@ -26,6 +26,8 @@ Chi tiết kiến trúc giám sát và quy trình triển khai/kiểm chứng tr
 - [docs/week3-monitoring.md](../docs/week3-monitoring.md)
 - [docs/week3-aws-manual-runbook.md](../docs/week3-aws-manual-runbook.md)
 
+Ngày 30/10/2026, template này đã triển khai trên Lab Quân qua stack `cloud-async-orders-week4-monitoring`: chỉ một alarm DLQ, tắt alarm Consumer/backlog, tham chiếu SNS topic đã confirmed email. Metric → ALARM → SNS → Email đã xác minh; [kết quả và minh chứng Tuần 4](../docs/week4-report.md#71-kết-quả-sau-cập-nhật-đã-được-phê-duyệt).
+
 ## Giai đoạn sau
 
 Nếu thời gian cho phép có thể dùng CloudFormation/SAM để mô tả:

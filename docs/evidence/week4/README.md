@@ -1,13 +1,21 @@
-# Minh chứng Tuần 4 — 29/10/2026
+# Minh chứng Tuần 4 — 29–30/10/2026
 
 ## 1. Nguồn dữ liệu
 
 - [Báo cáo nghiệm thu AWS](../../week4-report.md): inventory, đối chiếu deployment, ma trận E2E/validation/replay/conflict, log retry và metrics của Lab Quân ngày 29/10.
 - [Kiểm thử offline](offline-validation.md): phương pháp, lệnh và đầu ra hồi quy mô phỏng dịch vụ.
-- [Báo cáo cuối kỳ](../../final-report.md): tổng hợp kết quả và giới hạn kỹ thuật.
 - [Ma trận nghiệm thu](../../week4-execution.md): dẫn chiếu tiêu chí và kết quả.
 
-Số liệu AWS Tuần 4 là bản ghi quan sát có chọn lọc trong báo cáo, không phải raw export đính kèm. Phạm vi chứng cứ được giữ rõ: HTTP 202 được đối chiếu với item PROCESSED; redrive được suy luận từ cấu hình, năm log cùng messageId và biến đổi số lượng, không đọc body DLQ.
+Kết quả ngày 29/10 là bản ghi quan sát có chọn lọc. Ngày 30/10 bổ sung bản xuất AWS và ảnh gốc bên dưới. Redrive vẫn được đối chiếu bằng cấu hình, năm log cùng messageId và biến đổi số lượng; chưa đọc body DLQ.
+
+### Bổ sung ngày 30/10/2026 — Lab Quân
+
+- [JSON kiểm kê AWS](quan/aws-current-state-2026-10-30.json): cấu hình Lambda/source, SQS/ESM, Orders/API, log lịch sử và CloudWatch datapoints; chỉ đọc, không tạo đơn hoặc nhận message DLQ. Account ID trong bản text được thay bằng placeholder.
+- [Ảnh cấu hình AWS](quan/W4-AWS-Configuration.jpg) và [ảnh retry/Orders](quan/W4-Retry-DynamoDB.jpg): ảnh CloudShell gốc, giữ toàn khung, Account ID và email đầy đủ; không crop, che hoặc chỉnh sửa.
+- [JSON monitoring](quan/monitoring-2026-10-30.json): mapping Enabled, SNS subscription confirmed, stack chỉ có một alarm, datapoints và Alarm History/action.
+- [Ảnh CloudWatch Console](quan/W4-Metric-Alarm.jpg) và [email cảnh báo](quan/W4-SNS-Email.png): chứng minh alarm tự chuyển trạng thái theo metric và email khớp. Ảnh email do sinh viên cung cấp, lưu nguyên byte với SHA-256 trong JSON monitoring.
+
+Kiểm kê trước cập nhật lúc `14:14–14:18 UTC` ngày 30/10; log/metrics nghiệm thu thuộc `06:54:30–07:04:00 UTC` ngày 29/10. Sau phê duyệt, ESM Enabled; alarm tự kích hoạt và SNS gửi thành công lúc `14:35:15 UTC`, email đã đối chiếu. [Kết quả đầy đủ](../../week4-report.md#7-rà-soát-bổ-sung-ngày-30102026). Không gửi POST mới hoặc chạy lại benchmark/load.
 
 ## 2. Minh chứng lịch sử ngày 24/10/2026
 

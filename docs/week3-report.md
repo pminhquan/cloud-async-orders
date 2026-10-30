@@ -15,7 +15,7 @@ Dự án `cloud-async-orders`. Bản triển khai được chuẩn bị từ `ma
 | W3-04 | Metrics/report | `scripts/collect_cloudwatch_metrics.py`, `scripts/generate_week3_report.py` | UTC, raw datapoints và summary, xử lý dữ liệu thiếu, Markdown từ JSON, giữ nhãn synthetic/dry-run của dữ liệu đầu vào. |
 | W3-05 | Regression | `tests/test_producer.py`, `tests/test_consumer.py`, ba tệp test Tuần 3 | Bảo toàn 33 test methods gốc; bổ sung tests cho công cụ và các nhánh lỗi. |
 | W3-06 | CI definition | `.github/workflows/python-tests.yml` | PR/push vào main, Python, pytest/unittest/compile, kiểm tra template và CLI; `contents: read`, không cấu hình deploy. |
-| W3-07 | Tài liệu | `docs/week3-*.md`, `docs/WEEK3_AGENT_HANDOFF.md`, `docs/evidence/week3/README.md` | Kế hoạch, hướng dẫn công cụ, schema output, runbook thao tác và danh mục loại evidence. |
+| W3-07 | Tài liệu | `docs/week3-*.md`, `docs/evidence/week3/README.md` | Kế hoạch, hướng dẫn công cụ, schema output, runbook thao tác và danh mục loại evidence. |
 
 ## Ranh giới kỹ thuật
 
@@ -172,54 +172,6 @@ Kịch bản Phase B2 được người dùng phê duyệt chạy đúng **01 l�
 
 ---
 
-## 7. Kế hoạch Tuần 4 (C10)
+## 7. Chuyển tiếp Tuần 4
 
-Tuần 4 là giai đoạn hoàn thiện đề tài, tập trung vào kiểm thử tổng thể, tối ưu hiệu năng và chi phí AWS, dọn dẹp tài nguyên thử nghiệm, hoàn thiện báo cáo cuối kỳ và chuẩn bị demo.
-
-### 7.1. Kiểm thử tổng thể
-
-- Kiểm tra luồng API Gateway → Producer → SQS → Consumer → DynamoDB.
-- Kiểm thử request hợp lệ và không hợp lệ.
-- Kiểm tra idempotency, retry/DLQ và SQS batch.
-- Đối soát orderId và trạng thái PROCESSED.
-- Kiểm tra CloudWatch Alarm và SNS Email Alert.
-
-### 7.2. Đánh giá và tối ưu chi phí AWS
-
-- Đánh giá cấu hình và thời gian thực thi Lambda.
-- Kiểm tra SQS request, batch size và message retention.
-- Rà soát DynamoDB capacity và dữ liệu thử nghiệm.
-- Đánh giá CloudWatch Logs, Metrics và Alarm.
-- Đề xuất tối ưu chi phí phù hợp với AWS Learner Lab.
-
-### 7.3. Dọn dẹp tài nguyên
-
-- Kiểm kê SQS, DynamoDB, Lambda, CloudWatch và SNS.
-- Lưu minh chứng và cấu hình cần thiết trước khi dọn dẹp.
-- Chỉ xóa tài nguyên thử nghiệm không còn sử dụng sau khi demo hoàn tất và được chủ môi trường đồng ý.
-- Kiểm tra lại trạng thái tài nguyên sau dọn dẹp.
-
-### 7.4. Báo cáo và demo
-
-- Tổng hợp kết quả bốn tuần thực hiện.
-- Hoàn thiện báo cáo cuối kỳ và tài liệu GitHub.
-- Chuẩn bị kịch bản demo API, SQS, DynamoDB, CloudWatch và SNS.
-- Phân chia nhiệm vụ thuyết trình giữa Khôi và Quân.
-- Chuẩn bị phương án dự phòng khi AWS Learner Lab gặp sự cố.
-
-### 7.5. Phân công và tiêu chí nghiệm thu
-
-| Công việc | Phụ trách |
-|---|---|
-| API Gateway, Producer và SNS | Khôi |
-| Consumer, SQS/DLQ và DynamoDB | Quân |
-| Kiểm thử E2E | Khôi, Quân |
-| Đánh giá hiệu năng và chi phí | Quân, Khôi |
-| Dọn dẹp tài nguyên AWS | Khôi, Quân |
-| Báo cáo cuối kỳ và demo | Khôi, Quân |
-
-Kết quả nghiệm thu dự kiến gồm: bảng kiểm thử tổng thể, đánh giá hiệu năng/chi phí, danh sách tài nguyên được rà soát, báo cáo cuối kỳ, kịch bản demo và minh chứng GitHub.
-
-**Kế hoạch Tuần 4 chi tiết:** [docs/week4-plan.md](week4-plan.md)
-
-**Trạng thái:** Kế hoạch dự kiến; kết quả thực hiện sẽ được cập nhật kèm minh chứng trong Tuần 4.
+Kế hoạch và kết quả nghiệm thu Tuần 4 được trình bày tại [week4-plan.md](week4-plan.md) và [week4-report.md](week4-report.md).

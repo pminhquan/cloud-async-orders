@@ -6,11 +6,11 @@ Repository: [pminhquan/cloud-async-orders](https://github.com/pminhquan/cloud-as
 
 | Thành phần | Tài liệu/đường dẫn |
 |---|---|
-| Báo cáo tổng kết bốn tuần | [final-report.md](final-report.md) |
+| Báo cáo theo tuần | [Tuần 1](week1-report.md), [Tuần 2](week2-report.md), [Tuần 3](week3-report.md), [Tuần 4](week4-report.md) |
 | Nghiệm thu Tuần 4 | [week4-report.md](week4-report.md) |
 | Đánh giá chi phí | [week4-cost-analysis.md](week4-cost-analysis.md) |
 | Kịch bản thuyết trình | [demo-script.md](demo-script.md) |
-| Đối chiếu yêu cầu và phân công | [Traceability](TRACEABILITY-W1-W2.md), [phân công](task-assignment.md) |
+| Đối chiếu yêu cầu và phân công | [Traceability](traceability.md), [phân công](task-assignment.md) |
 | Kiến trúc và hợp đồng | [Kiến trúc](architecture/README.md), [integration contract](integration-contract.md) |
 | Khai báo công cụ hỗ trợ | [ai-declaration.md](ai-declaration.md) |
 
@@ -19,6 +19,8 @@ Repository: [pminhquan/cloud-async-orders](https://github.com/pminhquan/cloud-as
 Hồi quy đạt **56 tests và 114 subtests**; unittest đạt **56 tests**. Compileall, cfn-lint và bảy kiểm tra CLI thành công. [Phương pháp và kết quả offline](evidence/week4/offline-validation.md) tách biệt kiểm thử mô phỏng với [nghiệm thu AWS](week4-report.md).
 
 Nghiệm thu ngày 29/10 trên Lab Quân có HTTP 202 và item `PROCESSED` cùng orderId, 12 request invalid trả 400, replay/conflict giữ nguyên dữ liệu, năm lần lỗi sentinel và tương quan redrive. Benchmark/load/batch cùng bằng chứng Alarm/SNS của Khôi được ghi đúng ngày 24/10 và phạm vi thủ công.
+
+Ngày 30/10 bổ sung JSON/ảnh cấu hình, bật đúng mapping Consumer và triển khai một alarm DLQ sau khi SNS subscription confirmed. Metric thực tế tự kích hoạt ALARM; Alarm History, SNS action và email khớp lúc `14:35:15 UTC`. [Minh chứng mới](evidence/week4/README.md).
 
 [Minh chứng Tuần 1](evidence/week1/README.md), [Tuần 2](evidence/week2/README.md), [Tuần 3](evidence/week3/README.md), [Tuần 4](evidence/week4/README.md).
 

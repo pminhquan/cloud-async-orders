@@ -64,7 +64,7 @@
 
 Các ca Full E2E, retry/DLQ, conflict, batch/replay và small load được kiểm tra trên Lab Quân. Các ca validation ở Lab Khôi là **gọi Lambda trực tiếp**, không phải bằng chứng riêng rằng mọi request invalid đã được thử qua API Gateway ở Lab Khôi. Cấu hình SQS event source mapping trên Lab Quân sử dụng **batch size = 1**, **concurrency = 5**, giới hạn concurrency này không vượt quá mức tối đa 10 của đề tài. Vì vậy, bài batch gồm nhiều record là **direct invocation**, không chứng minh SQS tự gom nhiều record vào một lần gọi Lambda. Small load 10 request là bài kiểm thử tải nhỏ, không phải stress test hoặc benchmark hiệu năng lớn.
 
-**Ma trận đối chiếu yêu cầu – nhiệm vụ – bằng chứng:** [docs/TRACEABILITY-W1-W2.md](TRACEABILITY-W1-W2.md).
+**Ma trận đối chiếu yêu cầu – nhiệm vụ – bằng chứng:** [docs/traceability.md](traceability.md).
 
 ---
 
@@ -145,14 +145,14 @@ Khôi đảm nhận cập nhật Producer từ PoC Tuần 1 sang phiên bản g�
 
 | Ca kiểm thử | Kết quả ghi nhận | Minh chứng |
 |---|---|---|
-| Payload hợp lệ | `202`, có `ORDER_SENT_TO_SQS` | [Ảnh 01](../screenshots/week2/khoi/01-producer-valid-202.png) |
-| Thiếu `customerId` | `400` | [Ảnh 02](../screenshots/week2/khoi/02-producer-missing-customerid-400.png) |
-| Thiếu `productId` | `400` | [Ảnh 03](../screenshots/week2/khoi/03-producer-missing-productid-400.png) |
-| `quantity` không hợp lệ | `400` | [Ảnh 04](../screenshots/week2/khoi/04-producer-invalid-quantity-400-a.png), [05](../screenshots/week2/khoi/05-producer-invalid-quantity-400-b.png), [06](../screenshots/week2/khoi/06-producer-invalid-quantity-400-c.png) |
-| JSON sai cú pháp | `400` | [Ảnh 07](../screenshots/week2/khoi/07-producer-invalid-json-400.png) |
-| SQS trước invalid test | 8 available, 0 in flight | [Ảnh 08](../screenshots/week2/khoi/08-sqs-before-invalid-request.png) |
-| Invalid request được từ chối | `400` | [Ảnh 09](../screenshots/week2/khoi/09-producer-invalid-request-400.png) |
-| SQS sau invalid test | 8 available, 0 in flight | [Ảnh 10](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) |
+| Payload hợp lệ | `202`, có `ORDER_SENT_TO_SQS` | [Ảnh 01](evidence/week2/khoi/01-producer-valid-202.png) |
+| Thiếu `customerId` | `400` | [Ảnh 02](evidence/week2/khoi/02-producer-missing-customerid-400.png) |
+| Thiếu `productId` | `400` | [Ảnh 03](evidence/week2/khoi/03-producer-missing-productid-400.png) |
+| `quantity` không hợp lệ | `400` | [Ảnh 04](evidence/week2/khoi/04-producer-invalid-quantity-400-a.png), [05](evidence/week2/khoi/05-producer-invalid-quantity-400-b.png), [06](evidence/week2/khoi/06-producer-invalid-quantity-400-c.png) |
+| JSON sai cú pháp | `400` | [Ảnh 07](evidence/week2/khoi/07-producer-invalid-json-400.png) |
+| SQS trước invalid test | 8 available, 0 in flight | [Ảnh 08](evidence/week2/khoi/08-sqs-before-invalid-request.png) |
+| Invalid request được từ chối | `400` | [Ảnh 09](evidence/week2/khoi/09-producer-invalid-request-400.png) |
+| SQS sau invalid test | 8 available, 0 in flight | [Ảnh 10](evidence/week2/khoi/10-sqs-after-invalid-request.png) |
 
 Số message hiển thị trên SQS không tăng qua phép thử invalid. Đây là quan sát snapshot, được củng cố bởi logic kiểm tra input trước `send_message()` trong source và các unit tests Producer.
 
@@ -161,7 +161,7 @@ Số message hiển thị trên SQS không tăng qua phép thử invalid. Đây 
 - [Producer Lambda](../src/producer/lambda_function.py).
 - [Unit tests Producer](../tests/test_producer.py).
 - [PR #7 — Producer tích hợp SQS/validation (Merged)](https://github.com/pminhquan/cloud-async-orders/pull/7).
-- [Thư mục 10 ảnh minh chứng Khôi](../screenshots/week2/khoi/).
+- [Thư mục 10 ảnh minh chứng Khôi](evidence/week2/khoi/).
 
 ---
 
@@ -236,7 +236,7 @@ Minh chứng: [10 API requests](evidence/week2/W2-API-Small-Load-Test.png), [10 
 | [PR #5](https://github.com/pminhquan/cloud-async-orders/pull/5) | Consumer, DynamoDB, idempotency | **Merged** | `914de9b` |
 | [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7) | Producer gửi SQS, input validation | **Merged** | `015d420` (squash) |
 | [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8) | Báo cáo Tuần 1–2, ma trận đối chiếu và 29 ảnh AWS Tuần 2 | **Merged** | `a55fbbe` |
-| [PR #6](https://github.com/pminhquan/cloud-async-orders/pull/6) | Nhánh tài liệu và ảnh Tuần 2 gốc của Quân | **Open tại mốc đối chiếu 17/10/2026** | Chưa merge riêng; **19 ảnh đã được đồng bộ vào `main` qua PR #8** |
+| [PR #6](https://github.com/pminhquan/cloud-async-orders/pull/6) | Nhánh tài liệu và ảnh Tuần 2 gốc của Quân | **Closed, không merge** | 19 ảnh đã được đồng bộ vào `main` qua PR #8 |
 
 ### 6.3. Các commit tài liệu Tuần 1–2
 
@@ -254,9 +254,7 @@ Các file kỹ thuật và báo cáo quan trọng:
 
 - [Producer](../src/producer/lambda_function.py) và [Consumer](../src/consumer/lambda_function.py).
 - [Integration Contract](integration-contract.md).
-- [Báo cáo Tuần 2](week2-report.md).
-- [Báo cáo tổng hợp Tuần 1–2](bao-cao-tuan1-tuan2.md).
-- [Ma trận đối chiếu yêu cầu](TRACEABILITY-W1-W2.md).
+- [Ma trận đối chiếu yêu cầu](traceability.md).
 
 ---
 
@@ -279,13 +277,13 @@ Các file kỹ thuật và báo cáo quan trọng:
 
 ### 7.2. Minh chứng của Nguyễn Đoàn Minh Khôi (10 ảnh)
 
-**Thư mục đã có trên `main`:** [screenshots/week2/khoi/](../screenshots/week2/khoi/).
+**Thư mục đã có trên `main`:** [docs/evidence/week2/khoi/](evidence/week2/khoi/).
 
 10 ảnh bao gồm: Lambda hợp lệ trả `202`; thiếu `customerId`/`productId` trả `400`; các trường hợp `quantity` sai quy cách; malformed JSON; ảnh số lượng message SQS trước, trong và sau khi thử invalid request. Các đường dẫn từng ảnh đã được liệt kê ở **Mục 4.2**.
 
 ### 7.3. Tổng hợp minh chứng
 
-Nhánh `main` hiện có **29 ảnh AWS Tuần 2**, trong đó Quân đóng góp 19 ảnh và Khôi đóng góp 10 ảnh. Các ảnh được liên kết trong [chỉ mục minh chứng Tuần 2](evidence/week2/README.md) và [ma trận đối chiếu](TRACEABILITY-W1-W2.md). Không cần merge lại PR #6 chỉ để lấy bộ ảnh này.
+Nhánh `main` hiện có **29 ảnh AWS Tuần 2**, trong đó Quân đóng góp 19 ảnh và Khôi đóng góp 10 ảnh. Các ảnh được liên kết trong [chỉ mục minh chứng Tuần 2](evidence/week2/README.md) và [ma trận đối chiếu](traceability.md). Không cần merge lại PR #6 chỉ để lấy bộ ảnh này.
 
 ---
 
@@ -312,8 +310,8 @@ Các bảng dưới đây tổng hợp hoạt động có source, PR và bằng 
 |---:|---|---|
 | 1 | Thống nhất contract, hoàn thiện Producer và cấu hình gửi SQS | [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [source](../src/producer/lambda_function.py) |
 | 2 | Xây dựng/rà soát validation, xử lý lỗi và các trường hợp input sai | [Producer tests](../tests/test_producer.py) |
-| 3 | Kiểm thử trực tiếp Lambda với valid, missing field và malformed JSON | [10 ảnh Khôi](../screenshots/week2/khoi/) |
-| 4 | Kiểm tra invalid request không làm tăng số message SQS | [SQS trước](../screenshots/week2/khoi/08-sqs-before-invalid-request.png), [sau](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) |
+| 3 | Kiểm thử trực tiếp Lambda với valid, missing field và malformed JSON | [10 ảnh Khôi](evidence/week2/khoi/) |
+| 4 | Kiểm tra invalid request không làm tăng số message SQS | [SQS trước](evidence/week2/khoi/08-sqs-before-invalid-request.png), [sau](evidence/week2/khoi/10-sqs-after-invalid-request.png) |
 | 5 | Phối hợp kiểm tra SQS backlog, queue và luồng Producer/Consumer | [Integration Contract](integration-contract.md) |
 | 6 | Chụp, phân loại, đặt tên và đưa 10 ảnh minh chứng lên GitHub | [Commit `648b165`](https://github.com/pminhquan/cloud-async-orders/commit/648b165) |
 | 7 | Tổng hợp báo cáo, đồng bộ tài liệu/ảnh nhóm và hoàn thiện PR #8 | [PR #8](https://github.com/pminhquan/cloud-async-orders/pull/8), [commit `5a89fbe`](https://github.com/pminhquan/cloud-async-orders/commit/5a89fbe) |
@@ -326,48 +324,9 @@ Kết quả kỹ thuật được đối chiếu qua source, PR và minh chứng
 
 ## 9. Khai báo sử dụng AI
 
-Trong Tuần 2, AI được sử dụng để hỗ trợ tham khảo kiến thức về AWS Serverless, giải thích thiết kế Producer/Consumer, gợi ý validation, mô tả idempotency, hỗ trợ phân tích log, đề xuất test event và tổ chức tài liệu. **Việc cấu hình AWS, chạy các phép kiểm thử, chụp ảnh, đối soát DynamoDB/SQS và thao tác GitHub được nhóm thực hiện và kiểm tra dựa trên minh chứng thực tế.**
+Tuần 2 dùng AI để tham khảo kiến thức AWS Serverless, thiết kế Producer/Consumer, validation, idempotency, phân tích log, test event và tổ chức tài liệu. Nhóm trực tiếp cấu hình AWS, chạy kiểm thử, đối soát dữ liệu, chụp minh chứng và thao tác GitHub.
 
-### 9.1. Công cụ và phạm vi sử dụng
-
-Theo [bản khai báo AI trong repository](ai-declaration.md), Khôi ghi nhận sử dụng **ChatGPT / GPT-5.6 Sol**. Theo thông tin nhóm mới cung cấp, phần Quân được tổng hợp với **ChatGPT / GPT-6.0**. Mục khai báo của Quân đã cập nhật theo phạm vi công việc Consumer/DynamoDB/Retry/DLQ; đây là xác nhận **đã tổng hợp thông tin**, không phải đối soát độc lập lịch sử prompt nguyên văn.
-
-Các nội dung AI tham khảo gồm:
-
-- Giải thích SQS Event Source Mapping, redrive policy và Dead-Letter Queue.
-- Hỗ trợ phân tích message schema giữa Producer và Consumer.
-- Gợi ý xây dựng validation `202/400` và xử lý JSON không hợp lệ.
-- Gợi ý Python/Lambda Test Event, unit test và các tình huống lỗi.
-- Hỗ trợ lý giải DynamoDB conditional write, idempotency và `ORDER_CONFLICT`.
-- Hỗ trợ đọc và phân tích CloudWatch Logs, retry/DLQ, batch và replay.
-- Sắp xếp README, báo cáo, liên kết GitHub và bộ ảnh minh chứng.
-
-### 9.2. Công việc nhóm trực tiếp triển khai
-
-- Tạo và cấu hình tài nguyên trong AWS Learner Lab `us-east-1`, sử dụng `LabRole`.
-- Triển khai Producer Lambda, Consumer Lambda, API Gateway, SQS/DLQ, DynamoDB và SNS theo giai đoạn.
-- Thực hiện các bài test trực tiếp trên AWS và kiểm tra kết quả trả về.
-- Đối chiếu cùng `orderId` giữa API response và DynamoDB; kiểm tra retry/DLQ.
-- Chụp ảnh AWS, quản lý source/tests, review commit và merge các Pull Request.
-
-### 9.3. Thông tin theo thành viên
-
-| Thành viên | Thông tin AI đã có | Phạm vi ghi nhận | Ghi chú |
-|---|---|---|---|
-| Nguyễn Đoàn Minh Khôi | ChatGPT; model ghi trong hồ sơ: GPT-5.6 Sol | Producer/SQS, validation, troubleshooting, minh chứng, báo cáo | Đã tổng hợp theo khai báo trong GitHub |
-| Phạm Minh Quân | ChatGPT / GPT-6.0 (theo thông tin nhóm cung cấp) | Consumer Lambda, DynamoDB conditional write, idempotency, `ORDER_CONFLICT`, SQS trigger, retry/DLQ, E2E, batch/replay, unit tests, tải nhỏ và tài liệu | **Đã tổng hợp theo thông tin nhóm cung cấp** |
-
-### 9.4. Prompt và kết quả AI hỗ trợ phần Quân
-
-Các chủ đề yêu cầu AI đã tổng hợp tương ứng với phần việc của Quân (diễn giải nội dung, **không phải bản chép prompt nguyên văn**):
-
-- Gợi ý Consumer Python đọc SQS `Records`, validate JSON/schema và xử lý lỗi `INVALID_JSON`.
-- Tham khảo conditional `PutItem`, `ConsistentRead=True`, idempotency và `ORDER_CONFLICT` để không ghi đè item cũ.
-- Giải thích Event Source Mapping, redrive `maxReceiveCount=5`, retry/DLQ và CloudWatch Logs.
-- Gợi ý Test Event và kịch bản direct batch valid/mixed/replay, full-batch failure semantics.
-- Hỗ trợ thiết kế unit tests, E2E đối soát `orderId`, small load 10 request và cách trình bày 19 ảnh AWS.
-
-AI cung cấp giải thích kỹ thuật, ví dụ code/JSON và phương án test để **tham khảo**. Quân/nhóm trực tiếp kiểm tra mã nguồn, cấu hình và kết quả trên AWS Learner Lab. Xem [khai báo AI chi tiết](ai-declaration.md) và [minh chứng của Quân](evidence/week2/README.md).
+Công cụ, phạm vi hỗ trợ và trách nhiệm kiểm chứng được khai báo tập trung tại [ai-declaration.md](ai-declaration.md).
 
 ---
 
@@ -377,7 +336,7 @@ Sau Tuần 2, dự án đã chuyển từ các PoC tương đối độc lập c
 
 Những mục tiêu cốt lõi đã có minh chứng gồm: request hợp lệ trả `202`, request sai trả `400`, Consumer lưu item `PROCESSED`, Full E2E đối soát cùng `orderId`, retry/DLQ với invalid JSON, direct batch/replay và small load 10/10 request. **Full E2E, retry/DLQ và load test đã được xác minh trên Lab Quân**; phần Khôi có bộ ảnh validation/SQS riêng.
 
-Về GitHub, **PR #5** (Consumer), **PR #7** (Producer) và **PR #8** (báo cáo, liên kết, 29 ảnh minh chứng) đều đã được merge vào `main`. PR #6 vẫn là nhánh tài liệu gốc đang mở tại mốc đối chiếu, nhưng 19 ảnh của Quân đã được đưa vào `main` thông qua PR #8 nên không cần merge riêng chỉ vì các ảnh này.
+Về GitHub, **PR #5** (Consumer), **PR #7** (Producer) và **PR #8** (báo cáo, liên kết, 29 ảnh minh chứng) đều đã được merge vào `main`. PR #6 đã **Closed, không merge**; 19 ảnh của Quân đã được đưa vào `main` qua PR #8.
 
 Các nội dung còn thuộc các giai đoạn tiếp theo gồm cảnh báo CloudWatch Alarm kết nối SNS, benchmark thực tế so sánh SQS Standard/FIFO, thử tải lớn và đánh giá thông lượng/độ trễ. Bài báo cáo Tuần 2 chỉ kết luận các chức năng đã có mã nguồn và minh chứng kiểm thử phù hợp, không nhận các mục tiêu tương lai là đã hoàn thành.
 

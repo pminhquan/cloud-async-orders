@@ -18,7 +18,7 @@ Giữ nguyên hợp đồng tích hợp (`docs/integration-contract.md`) và to�
 | **W3-04** | Metrics Collector & Performance Report | Chuẩn hóa thu thập CloudWatch metrics (UTC, giữ `null` khi `NO_DATA`) và công cụ `scripts/generate_week3_report.py` tổng hợp JSON sang Markdown có phân tách nguồn dữ liệu; CSV dùng để đối chiếu. | Quân |
 | **W3-05** | Test Automation & Regression | Mở rộng bộ test offline (`tests/test_monitoring_and_metrics.py`, `tests/test_benchmark_sqs.py`, `tests/test_load_test_orders.py`), bảo toàn 33 test methods cũ. | Quân |
 | **W3-06** | GitHub Actions CI | Workflow `.github/workflows/python-tests.yml` tự động chạy `cfn-lint iac/week3-monitoring.yaml`, compileall, pytest, unittest và kiểm tra CLI dry-run với quyền tối thiểu (`contents: read`), không dùng AWS secrets. | Quân |
-| **W3-07** | Full Week 3 Documentation & Runbook | Bộ tài liệu kế hoạch, báo cáo tiến độ, nghiên cứu Standard vs FIFO, hướng dẫn monitoring/benchmark/load-test, evidence index, AWS manual runbook và agent handoff. | Quân (kỹ thuật/runbook/report); Khôi (phối hợp review, evidence SNS) |
+| **W3-07** | Full Week 3 Documentation & Runbook | Bộ tài liệu kế hoạch, báo cáo tiến độ, nghiên cứu Standard vs FIFO, hướng dẫn monitoring/benchmark/load-test, evidence index và AWS manual runbook. | Quân (kỹ thuật/runbook/report); Khôi (phối hợp review, evidence SNS) |
 
 ---
 

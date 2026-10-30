@@ -19,7 +19,7 @@
 | --- | --- |
 | Producer → SQS | Producer source / Lambda test |
 | Input validation | PR #7 / tests |
-| Test valid/invalid | `screenshots/week2/khoi/` |
+| Test valid/invalid | `docs/evidence/week2/khoi/` |
 | Invalid không enqueue | SQS before/after |
 | Kiểm tra queue backlog/DLQ | ảnh kiểm tra message |
 | Chuẩn hóa evidence/repository | screenshot README/docs |

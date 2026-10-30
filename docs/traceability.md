@@ -27,9 +27,9 @@
 | Mã | Hạng mục | Phụ trách | Kết quả/đối soát | Minh chứng trực tiếp |
 |---|---|---|---|---|
 | W2-01 | Hợp đồng schema phẳng | Cả nhóm | Đã thống nhất | [Integration contract](integration-contract.md) |
-| W2-02 | Producer gửi SQS | Khôi | PASS trên direct Lambda test; code đã merge | [Producer](../src/producer/lambda_function.py), [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [202](../screenshots/week2/khoi/01-producer-valid-202.png) |
-| W2-03 | Validation đầu vào | Khôi | PASS trên direct Lambda test (`400` khi sai) | [Thiếu customerId](../screenshots/week2/khoi/02-producer-missing-customerid-400.png), [thiếu productId](../screenshots/week2/khoi/03-producer-missing-productid-400.png), [invalid JSON](../screenshots/week2/khoi/07-producer-invalid-json-400.png) |
-| W2-04 | Invalid không enqueue | Khôi | PASS qua ảnh snapshot 8→8; đây là quan sát nhất thời | [Trước](../screenshots/week2/khoi/08-sqs-before-invalid-request.png), [400](../screenshots/week2/khoi/09-producer-invalid-request-400.png), [sau](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) |
+| W2-02 | Producer gửi SQS | Khôi | PASS trên direct Lambda test; code đã merge | [Producer](../src/producer/lambda_function.py), [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [202](evidence/week2/khoi/01-producer-valid-202.png) |
+| W2-03 | Validation đầu vào | Khôi | PASS trên direct Lambda test (`400` khi sai) | [Thiếu customerId](evidence/week2/khoi/02-producer-missing-customerid-400.png), [thiếu productId](evidence/week2/khoi/03-producer-missing-productid-400.png), [invalid JSON](evidence/week2/khoi/07-producer-invalid-json-400.png) |
+| W2-04 | Invalid không enqueue | Khôi | PASS qua ảnh snapshot 8→8; đây là quan sát nhất thời | [Trước](evidence/week2/khoi/08-sqs-before-invalid-request.png), [400](evidence/week2/khoi/09-producer-invalid-request-400.png), [sau](evidence/week2/khoi/10-sqs-after-invalid-request.png) |
 | W2-05 | Consumer ghi DynamoDB | Quân | PASS trên Lab Quân | [Consumer](../src/consumer/lambda_function.py), [DynamoDB](evidence/week2/W2-DynamoDB-Consumer-PROCESSED.png) |
 | W2-06 | Idempotency | Quân | PASS qua replay cùng payload | [Replay](evidence/week2/W2-Consumer-Idempotency-Retry.png) |
 | W2-07 | Conflict không overwrite | Quân | PASS | [ORDER_CONFLICT](evidence/week2/W2-Consumer-Order-Conflict-PASS.png), [item giữ nguyên](evidence/week2/W2-Consumer-Conflict-NoOverwrite.png) |
@@ -71,18 +71,18 @@ Nhật ký thời lượng được quản lý riêng theo [yêu cầu dự án]
 | SNS/Alarm Khôi | Email và manual Alarm State, chưa chứng minh DLQ metric tự kích hoạt | [Phạm vi Khôi](week3-khoi-evidence.md) |
 | PR #11–#15 | Đã merge; main ở 8b14e02 khi đối chiếu 29/10 | [CI đúng main](https://github.com/pminhquan/cloud-async-orders/actions/runs/40163636601) |
 
-## 7. Tuần 4 — nghiệm thu ngày 29/10/2026
+## 7. Tuần 4 — nghiệm thu ngày 29–30/10/2026
 
 | Mã | Kết quả và phạm vi | Minh chứng |
 |---|---|---|
 | W4-01 | Inventory thật Lab Quân; giữ phân biệt hai môi trường | [Inventory](week4-report.md) |
 | W4-02 | Producer đúng main, ESM Enabled, API 202 và đúng orderId PROCESSED | [Deployment/E2E](week4-report.md) |
 | W4-03 | 13/13 HTTP đúng kỳ vọng; replay/conflict giữ item; 5 lần nhận/lỗi và biến đổi queue/DLQ tương ứng | [Ma trận và giới hạn DLQ](week4-report.md) |
-| W4-04 | Log/metrics mới, không throttling trong cửa sổ; không có project alarm/SNS trên Lab Quân | [Monitoring](week4-report.md) |
-| W4-05 | Phân tích B1/B2/B3 bằng dữ liệu có sẵn, không suy năng lực production | [Hiệu năng](final-report.md) |
+| W4-04 | Lab Quân ngày 30/10: metric DLQ → ALARM → SNS → email khớp; subscription confirmed trước khi tạo alarm | [Monitoring](week4-report.md#71-kết-quả-sau-cập-nhật-đã-được-phê-duyệt) |
+| W4-05 | Phân tích B1/B2/B3 bằng dữ liệu có sẵn, không suy năng lực production | [Hiệu năng](week4-report.md#51-hiệu-năng-từ-minh-chứng-hiện-có) |
 | W4-06 | Mô hình chi phí và nguồn chính thức; không bịa hóa đơn | [Chi phí](week4-cost-analysis.md) |
 | W4-07 | KEEP/REVIEW, kiểm tra trạng thái cuối, không purge/delete | [Tài nguyên](week4-report.md) |
 | W4-08 | Hồi quy offline đạt; phân biệt source tham chiếu và head CI của từng PR | [Kiểm thử](evidence/week4/offline-validation.md), [hồ sơ](SUBMISSION.md) |
-| W4-09 | Báo cáo tổng kết, đánh giá kỹ thuật và kịch bản 9:20 | [Báo cáo](final-report.md), [demo](demo-script.md) |
+| W4-09 | Báo cáo từng tuần, đánh giá kỹ thuật và kịch bản 9:20 | [Nghiệm thu Tuần 4](week4-report.md), [demo](demo-script.md) |
 
-Các dòng Tuần 4 dùng bản ghi quan sát có chọn lọc, không phải raw export đính kèm. [Nguồn minh chứng](evidence/week4/README.md) phân biệt giới hạn redrive, monitoring thủ công và môi trường thực nghiệm.
+Kết quả ngày 29/10 được bổ sung JSON AWS và ảnh gốc ngày 30/10. [Nguồn minh chứng](evidence/week4/README.md) phân biệt giới hạn redrive, monitoring thủ công/metric-driven và từng Lab.

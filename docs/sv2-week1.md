@@ -20,7 +20,7 @@ Producer chỉ tạo order `PENDING` và trả `202`; **chưa gửi SQS thật**
 ## Evidence
 
 ```text
-screenshots/week1/sv2/
+docs/evidence/week1/sv2/
 ```
 
 - `01-dynamodb-orders.png`

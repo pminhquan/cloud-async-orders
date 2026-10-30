@@ -14,7 +14,6 @@ Thư mục:
 
 ```text
 docs/evidence/week1/sv1/
-screenshots/week1/sv1/
 ```
 
 Các nhóm ảnh:
@@ -38,7 +37,6 @@ Thư mục:
 
 ```text
 docs/evidence/week1/sv2/
-screenshots/week1/sv2/
 ```
 
 6 ảnh chính:
