@@ -1,4 +1,4 @@
-# Kiến trúc hệ thống — phân tách rõ Tuần 1 và Tuần 2
+# Kiến trúc hệ thống
 
 ## 1. Kiến trúc đích
 
@@ -87,11 +87,15 @@ flowchart TD
 
 ---
 
-## 5. Phạm vi chưa coi là hoàn tất trong Tuần 2
+## 5. Phạm vi chưa hoàn tất tính đến Tuần 2
 
 - CloudWatch Alarm → SNS alert hoàn chỉnh.
 - Benchmark Standard vs FIFO chính thức.
 - IaC production-like.
 - Stress/load test lớn.
 
-Các phần này thuộc các tuần sau theo kế hoạch dự án.
+Các phần này được triển khai một phần ở Tuần 3 và nghiệm thu ở Tuần 4.
+
+## 6. Trạng thái đến Tuần 4
+
+Pipeline `API Gateway → Producer → SQS → Consumer → DynamoDB` được nghiệm thu trên Lab Quân ngày 29/10/2026. Template monitoring đã lint nhưng chưa triển khai trên Lab Quân; chuỗi Alarm → SNS → email chỉ có minh chứng thủ công trên Lab Khôi ngày 24/10/2026. Chi tiết và giới hạn: [báo cáo Tuần 4](../week4-report.md).

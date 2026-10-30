@@ -96,16 +96,9 @@ Nhánh evidence:
 week1-full-evidence
 ```
 
-## 9. AI hỗ trợ
+## 9. Khai báo sử dụng AI
 
-ChatGPT được sử dụng để:
-- giải thích dịch vụ/kiến trúc;
-- gợi ý Lambda PoC;
-- gợi ý JSON test và PowerShell;
-- hỗ trợ troubleshooting;
-- hỗ trợ tổ chức tài liệu.
-
-Nhóm trực tiếp triển khai, kiểm thử và chụp evidence trên AWS Learner Lab.
+Phần hỗ trợ AI của hai thành viên được khai báo tập trung tại [ai-declaration.md](ai-declaration.md). Nhóm trực tiếp triển khai, kiểm thử và chụp minh chứng trên AWS Learner Lab.
 
 ## 10. Kết luận
 

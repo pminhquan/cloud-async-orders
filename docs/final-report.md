@@ -140,7 +140,7 @@ Mẫu hiệu năng còn nhỏ; batch failure chưa tách record; API chưa có a
 
 ## 13. Tài liệu tham khảo và phụ lục
 
-- [Hợp đồng tích hợp](integration-contract.md), [traceability bốn tuần](TRACEABILITY-W1-W2.md), [phân công](task-assignment.md), [khai báo AI](ai-declaration.md).
+- [Hợp đồng tích hợp](integration-contract.md), [traceability bốn tuần](traceability.md), [phân công](task-assignment.md), [khai báo AI](ai-declaration.md).
 - [Chỉ mục minh chứng Tuần 1](evidence/week1/README.md), [Tuần 2](evidence/week2/README.md), [Tuần 3](evidence/week3/README.md), [Tuần 4](evidence/week4/README.md).
 - AWS: [Lambda với SQS](https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html), [SQS DLQ](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html), [DynamoDB conditional writes](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html).
 - Nguồn giá từng dịch vụ và ngày truy cập nằm trong [phân tích chi phí](week4-cost-analysis.md).

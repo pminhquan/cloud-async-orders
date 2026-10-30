@@ -12,6 +12,6 @@ Ngày nghiệm thu: **29/10/2026**. Môi trường thực nghiệm mới là Lab
 | W4-06 | Đánh giá chi phí | Sáu yếu tố dịch vụ và nguồn giá chính thức; [phân tích chi phí](week4-cost-analysis.md) |
 | W4-07 | Quản lý tài nguyên và minh chứng | Giữ tài nguyên đối soát, không purge/delete; [trạng thái cuối](week4-report.md) |
 | W4-08 | Hồi quy và tính nhất quán source | 56 tests/114 subtests, unittest 56, compile/lint và bảy CLI checks; [kết quả offline](evidence/week4/offline-validation.md) |
-| W4-09 | Tổng hợp học thuật | [Báo cáo cuối kỳ](final-report.md), [traceability](TRACEABILITY-W1-W2.md), [kịch bản demo](demo-script.md) và [khai báo AI](ai-declaration.md) |
+| W4-09 | Tổng hợp học thuật | [Báo cáo cuối kỳ](final-report.md), [traceability](traceability.md), [kịch bản demo](demo-script.md) và [khai báo AI](ai-declaration.md) |
 
 Kết quả chỉ áp dụng phạm vi thử nghiệm đã mô tả. Bằng chứng DLQ là tương quan cấu hình/log/số lượng; monitoring Khôi là phép thử phân phối cảnh báo thủ công. Không suy thành kiểm chứng body DLQ, cảnh báo metric-driven mới hoặc năng lực production.

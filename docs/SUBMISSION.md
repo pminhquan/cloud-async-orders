@@ -10,7 +10,7 @@ Repository: [pminhquan/cloud-async-orders](https://github.com/pminhquan/cloud-as
 | Nghiệm thu Tuần 4 | [week4-report.md](week4-report.md) |
 | Đánh giá chi phí | [week4-cost-analysis.md](week4-cost-analysis.md) |
 | Kịch bản thuyết trình | [demo-script.md](demo-script.md) |
-| Đối chiếu yêu cầu và phân công | [Traceability](TRACEABILITY-W1-W2.md), [phân công](task-assignment.md) |
+| Đối chiếu yêu cầu và phân công | [Traceability](traceability.md), [phân công](task-assignment.md) |
 | Kiến trúc và hợp đồng | [Kiến trúc](architecture/README.md), [integration contract](integration-contract.md) |
 | Khai báo công cụ hỗ trợ | [ai-declaration.md](ai-declaration.md) |
 

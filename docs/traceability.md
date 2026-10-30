@@ -27,9 +27,9 @@
 | Mã | Hạng mục | Phụ trách | Kết quả/đối soát | Minh chứng trực tiếp |
 |---|---|---|---|---|
 | W2-01 | Hợp đồng schema phẳng | Cả nhóm | Đã thống nhất | [Integration contract](integration-contract.md) |
-| W2-02 | Producer gửi SQS | Khôi | PASS trên direct Lambda test; code đã merge | [Producer](../src/producer/lambda_function.py), [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [202](../screenshots/week2/khoi/01-producer-valid-202.png) |
-| W2-03 | Validation đầu vào | Khôi | PASS trên direct Lambda test (`400` khi sai) | [Thiếu customerId](../screenshots/week2/khoi/02-producer-missing-customerid-400.png), [thiếu productId](../screenshots/week2/khoi/03-producer-missing-productid-400.png), [invalid JSON](../screenshots/week2/khoi/07-producer-invalid-json-400.png) |
-| W2-04 | Invalid không enqueue | Khôi | PASS qua ảnh snapshot 8→8; đây là quan sát nhất thời | [Trước](../screenshots/week2/khoi/08-sqs-before-invalid-request.png), [400](../screenshots/week2/khoi/09-producer-invalid-request-400.png), [sau](../screenshots/week2/khoi/10-sqs-after-invalid-request.png) |
+| W2-02 | Producer gửi SQS | Khôi | PASS trên direct Lambda test; code đã merge | [Producer](../src/producer/lambda_function.py), [PR #7](https://github.com/pminhquan/cloud-async-orders/pull/7), [202](evidence/week2/khoi/01-producer-valid-202.png) |
+| W2-03 | Validation đầu vào | Khôi | PASS trên direct Lambda test (`400` khi sai) | [Thiếu customerId](evidence/week2/khoi/02-producer-missing-customerid-400.png), [thiếu productId](evidence/week2/khoi/03-producer-missing-productid-400.png), [invalid JSON](evidence/week2/khoi/07-producer-invalid-json-400.png) |
+| W2-04 | Invalid không enqueue | Khôi | PASS qua ảnh snapshot 8→8; đây là quan sát nhất thời | [Trước](evidence/week2/khoi/08-sqs-before-invalid-request.png), [400](evidence/week2/khoi/09-producer-invalid-request-400.png), [sau](evidence/week2/khoi/10-sqs-after-invalid-request.png) |
 | W2-05 | Consumer ghi DynamoDB | Quân | PASS trên Lab Quân | [Consumer](../src/consumer/lambda_function.py), [DynamoDB](evidence/week2/W2-DynamoDB-Consumer-PROCESSED.png) |
 | W2-06 | Idempotency | Quân | PASS qua replay cùng payload | [Replay](evidence/week2/W2-Consumer-Idempotency-Retry.png) |
 | W2-07 | Conflict không overwrite | Quân | PASS | [ORDER_CONFLICT](evidence/week2/W2-Consumer-Order-Conflict-PASS.png), [item giữ nguyên](evidence/week2/W2-Consumer-Conflict-NoOverwrite.png) |

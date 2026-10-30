@@ -1,25 +1,42 @@
-# Hướng dẫn evidence Tuần 3
+# Minh chứng Tuần 3
 
-Bảng này mô tả loại bằng chứng và dữ liệu cần quan sát cho từng kịch bản. Tên ảnh là quy ước lưu trữ; kết quả báo cáo lấy từ evidence thực tế tương ứng.
+Dữ liệu thực nghiệm ngày 24/10/2026, `us-east-1`. B1/B2/B3 thuộc Lab Quân; SNS/Alarm thuộc Lab Khôi. Kết quả và giới hạn chi tiết: [báo cáo Tuần 3](../../week3-report.md).
 
-| Kịch bản | Tên ảnh gợi ý | Dữ liệu cần quan sát |
-| --- | --- | --- |
-| SNS subscription | `W3-SNS-Topic-Subscription-Confirmed.png` | Topic, protocol, subscription confirmation; che email/ARN/account. |
-| DLQ alarm configuration | `W3-CW-DLQ-Alarm-Config.png` | AWS/SQS, ApproximateNumberOfMessagesVisible, QueueName, threshold, evaluation periods, missing-data, SNS action. |
-| Alarm transition | `W3-CW-DLQ-Alarm-Triggered-ALARM.png` | Alarm history, datapoint, trạng thái kỹ thuật và UTC timestamps của cùng lần thử. |
-| SNS email | `W3-SNS-Email-Notification-Received.png` | Nội dung mail khớp alarm và thời điểm; che thông tin người nhận. |
-| Dedicated benchmark queues | `W3-Bench-Queues-Isolated.png` | Tên và loại Standard/FIFO, tách khỏi queue chính. |
-| Standard API benchmark | `W3-Bench-Standard-CLI-Summary.png` | runId, cấu hình count/rate/batch/timeout, attempted/accepted/failed, unique/duplicate/completeness, latency và throughput. |
-| FIFO single group | `W3-Bench-FIFO-SingleGroup-CLI-Summary.png` | runId, groupCount=1, ordering theo group, dedup, cùng bộ thống kê. |
-| FIFO multi group | `W3-Bench-FIFO-MultiGroup-CLI-Summary.png` | runId, groupCount, ordering từng group và số đo so sánh, không định trước throughput tốt hơn. |
-| API load | `W3-Load-API-Summary.png` | runId, requestId, HTTP status, responseTimeMs, orderId, loại lỗi. |
-| DynamoDB reconciliation | `W3-Load-DynamoDB-Reconciliation.png` | Cùng runId/orderId, GetItem result/status, số query và thời gian quan sát; tách khỏi HTTP 202. |
-| CloudWatch metrics | `W3-Metrics-Collector-CloudWatch-Summary.png` | UTC window, namespace/dimension/statistic, raw datapoints và giá trị tổng hợp. |
-| Local tests | `W3-Local-Tests.txt` | Commit SHA, Python/dependency versions, command, pass/fail/skip và exit code thực tế. |
-| GitHub Actions | `W3-CI.png` | Workflow run URL, head SHA, job và conclusion thực tế. |
+## 1. Phạm Minh Quân (Lab Quân)
 
-Quân phụ trách chính monitoring, benchmark, load/reconciliation và kỹ thuật; Khôi phối hợp SNS/email, Producer/API và review theo [phân công](../../task-assignment.md). Người cung cấp evidence xác định người thao tác và thời gian của chính lần thực hiện đó.
+### B1 — Benchmark SQS Standard/FIFO
 
-Giữ JSON/CSV cùng runId để đối chiếu với ảnh; phân biệt CloudWatch, SQS API, API load, DynamoDB và unit test/mock. Không lấy ảnh Tuần 1–2 thay cho một lần đo Tuần 3. Che account ID, ARN cá nhân, queue URL, endpoint riêng, email; không lưu credentials, token, cookie hoặc receipt handle. Ví dụ synthetic phải được ghi rõ SYNTHETIC SAMPLE.
+- [Manifest](quan/b1-2026-10-24/manifest.json)
+- [Standard — summary](quan/b1-2026-10-24/standard/benchmark-summary.json) · [CSV](quan/b1-2026-10-24/standard/benchmark-results.csv)
+- [FIFO 1 group — summary](quan/b1-2026-10-24/fifo-single/benchmark-summary.json) · [CSV](quan/b1-2026-10-24/fifo-single/benchmark-results.csv)
+- [FIFO 5 group — summary](quan/b1-2026-10-24/fifo-multi/benchmark-summary.json) · [CSV](quan/b1-2026-10-24/fifo-multi/benchmark-results.csv)
+- Phân tích: [week3-quan-b1-results.md](../../week3-quan-b1-results.md)
 
-Quy trình thao tác xem [runbook](../../week3-aws-manual-runbook.md). Các thao tác ghi chỉ được thực hiện trong đúng phạm vi được owner cho phép; không purge queue hoặc sửa/xóa DynamoDB data.
+### B2 — Load test và đối soát DynamoDB
+
+- [Load summary](quan/b2-2026-10-24/load/load-test-summary.json) · [CSV](quan/b2-2026-10-24/load/load-test-results.csv)
+- [CloudWatch metrics](quan/b2-2026-10-24/metrics/cloudwatch-metrics-summary.json) · [CSV](quan/b2-2026-10-24/metrics/cloudwatch-metrics-results.csv)
+- Ảnh Console: [API results](quan/b2-2026-10-24/screenshots/W3-B2-API-Recorded-Results.jpg) · [CloudWatch Consumer](quan/b2-2026-10-24/screenshots/W3-B2-CloudWatch-Consumer.jpg) · [Consumer Disabled](quan/b2-2026-10-24/screenshots/W3-B2-Consumer-Disabled.jpg) · [DynamoDB order](quan/b2-2026-10-24/screenshots/W3-B2-DynamoDB-Console-Order.jpg) · [DynamoDB GetItem](quan/b2-2026-10-24/screenshots/W3-B2-DynamoDB-Recorded-GetItem.jpg)
+- [Provenance ảnh](quan/b2-2026-10-24/screenshots/screenshots-provenance.json)
+
+### B3 — Batch thật
+
+- [Batch proof](quan/b3-2026-10-24/batch-proof.json)
+- [Execution log](quan/b3-2026-10-24/b3-execution-log.json)
+- [Trạng thái cuối](quan/b3-2026-10-24/final-state-check.json)
+- [Load summary](quan/b3-2026-10-24/load/load-test-summary.json)
+- [Ảnh CloudWatch hai record](quan/b3-2026-10-24/screenshots/W3-B3-CloudWatch-Two-Record-Batch.jpg)
+- [Provenance ảnh](quan/b3-2026-10-24/screenshots/screenshots-provenance.json)
+
+## 2. Nguyễn Đoàn Minh Khôi (Lab Khôi)
+
+- [Tổng hợp phạm vi SNS/Alarm](../../week3-khoi-evidence.md)
+- Ảnh: [Alarm history](khoi/W3-CW-DLQ-Alarm-History.png) · [SNS subscription](khoi/W3-SNS-Topic-Subscription-Confirmed.png) · [SNS publish](khoi/W3-SNS-Topic-Publish-Success.png) · [Email thường](khoi/W3-SNS-Email-Received.png) · [Email cảnh báo](khoi/W3-SNS-Alarm-Email-Received.png) · [API 202](khoi/W3-Khoi-API-POST-202.png) · [API 400](khoi/W3-Khoi-API-Invalid-400.png) · [DynamoDB PROCESSED](khoi/W3-Khoi-DynamoDB-Order-Processed.png)
+
+## 3. Quy tắc đọc minh chứng
+
+- Giữ JSON/CSV cùng `runId` để đối chiếu với ảnh; không dùng ảnh Tuần 1–2 thay cho phép đo Tuần 3.
+- Phân biệt SQS API benchmark (B1), API load (B2), batch thật (B3) và unit test offline.
+- Alarm → SNS → email là phép thử trạng thái thủ công, không chứng minh DLQ metric tự kích hoạt.
+- Không suy diễn số liệu khi datapoint thiếu; giá trị `NO_DATA` không đổi thành `0`.
+- Ảnh đã che/crop thông tin không cần thiết; không lưu credential, token, receipt handle.
