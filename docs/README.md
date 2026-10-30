@@ -36,7 +36,7 @@
 - [AWS Manual Runbook](week3-aws-manual-runbook.md)
 - [Minh chứng](evidence/week3/README.md)
 
-## Tuần 4 và báo cáo cuối kỳ
+## Tuần 4
 
 - [Kế hoạch](week4-plan.md)
 - [Báo cáo nghiệm thu](week4-report.md)
@@ -44,7 +44,6 @@
 - [Phân tích chi phí](week4-cost-analysis.md)
 - [Kiểm thử offline](evidence/week4/offline-validation.md)
 - [Minh chứng Tuần 4](evidence/week4/README.md)
-- [Báo cáo cuối kỳ](final-report.md)
 - [Kịch bản demo](demo-script.md)
 - [Hồ sơ nộp](SUBMISSION.md)
 

@@ -24,6 +24,7 @@ Model của Quân do thành viên tự xác nhận; nhóm không đối chiếu 
 - Hỗ trợ công cụ benchmark/load/metrics, template monitoring, unit tests, CI, rà soát và trình bày tài liệu.
 - Ngày 29/10/2026, Codex hỗ trợ đối chiếu source và thao tác qua phiên Console/CloudShell của Lab Quân do sinh viên đăng nhập: cập nhật deployment Producer từ source `main`, bật Event Source Mapping đúng nguồn, chạy E2E/validation/replay/conflict có giới hạn và quan sát một phép thử retry. Các thao tác này không được trình bày là sinh viên tự thực hiện thủ công.
 - Antigravity Desktop hỗ trợ rà soát offline, kiểm thử và công cụ trình bày tài liệu; không thay đổi source, test, script hay IaC của ứng dụng.
+- Ngày 30/10/2026, Codex hỗ trợ kiểm kê AWS qua CloudShell, thu log/metrics và ảnh gốc, chạy kiểm thử và cập nhật tài liệu. Sau phê duyệt của chủ Lab, hỗ trợ bật mapping Consumer và triển khai SNS cùng một alarm DLQ từ template hiện có.
 - AI hỗ trợ tổng hợp inventory, phân tích kết quả B1/B2/B3, tra nguồn giá AWS và soạn báo cáo/kịch bản. Không có giao diện Console hoặc kết quả đo nào được tạo lại.
 
 ## 4. Trách nhiệm của nhóm

@@ -82,7 +82,7 @@ cloud-async-orders/
 │   ├── week3-monitoring.md, week3-benchmark.md, week3-load-testing.md
 │   ├── week3-aws-manual-runbook.md, week3-khoi-evidence.md, week3-quan-b1-results.md
 │   ├── week4-plan.md, week4-report.md, week4-execution.md, week4-cost-analysis.md
-│   ├── final-report.md, demo-script.md, SUBMISSION.md, ai-declaration.md
+│   ├── demo-script.md, SUBMISSION.md, ai-declaration.md
 │   └── README.md
 ├── screenshots/ (bản sao lịch sử ảnh Tuần 1 và README chỉ mục)
 ├── CONTRIBUTING.md
@@ -104,7 +104,7 @@ python -m compileall -q src scripts tests
 cfn-lint iac/week3-monitoring.yaml
 ```
 
-Kết quả hồi quy ngày 29/10/2026: **56 tests PASS, 114 subtests PASS**, unittest **56 tests OK**, compileall và cfn-lint thành công. Chi tiết: [kiểm thử offline Tuần 4](docs/evidence/week4/offline-validation.md).
+Kết quả hồi quy ngày 30/10/2026 trên `.venv` Python 3.13.16: **56 tests PASS, 114 subtests PASS**, unittest **56 tests OK**, compileall và cfn-lint thành công. Chi tiết: [kiểm thử offline Tuần 4](docs/evidence/week4/offline-validation.md).
 
 Kiểm tra CLI an toàn (không gọi AWS):
 
@@ -121,11 +121,10 @@ python scripts/load_test_orders.py --endpoint https://example-api.execute-api.us
 | 1 | Nghiên cứu dịch vụ, dựng PoC độc lập SQS/DLQ/Consumer và API/Producer/DynamoDB/SNS; chưa Full E2E. |
 | 2 | Tích hợp Producer → SQS → Consumer → DynamoDB; validation, idempotency, `ORDER_CONFLICT`, retry/DLQ; direct batch và load nhỏ 10 request. |
 | 3 | Benchmark SQS Standard/FIFO 3 × 20 message; load 10/10 `202` + `PROCESSED`; batch thật 2 record cùng invocation; collector, alarm IaC và CI. |
-| 4 | Đối chiếu deployment, sửa Producer drift, bật ESM; nghiệm thu 13/13 HTTP đúng kỳ vọng, replay/conflict, retry 5 lần → DLQ; báo cáo, chi phí và demo. |
+| 4 | Nghiệm thu 13/13 HTTP đúng kỳ vọng, replay/conflict, 5 lần nhận/lỗi và tương quan DLQ; xác minh cấu hình, ESM Enabled, cảnh báo DLQ metric → Alarm → SNS → Email; đánh giá hiệu năng/chi phí và kịch bản demo. |
 
 ## 7. Tài liệu và minh chứng
 
-- Báo cáo cuối kỳ: [final-report.md](docs/final-report.md)
 - Nghiệm thu Tuần 4: [week4-report.md](docs/week4-report.md) · [ma trận](docs/week4-execution.md) · [chi phí](docs/week4-cost-analysis.md)
 - Kịch bản demo: [demo-script.md](docs/demo-script.md)
 - Hồ sơ nộp: [SUBMISSION.md](docs/SUBMISSION.md)
@@ -139,5 +138,5 @@ python scripts/load_test_orders.py --endpoint https://example-api.execute-api.us
 - Không commit AWS Access Key, Secret Key, Session Token, password hoặc thông tin đăng nhập Learner Lab.
 - Ảnh minh chứng giữ MSSV/thông tin sinh viên theo yêu cầu học phần; che email, Account ID và ARN khi không cần thiết.
 - API hiện chưa có authorization; phù hợp phạm vi thực hành, không phải cấu hình production.
-- Hai AWS Learner Lab là hai môi trường độc lập. Alarm/SNS có minh chứng thủ công trên Lab Khôi; Lab Quân không có alarm của dự án tại thời điểm nghiệm thu.
+- Hai AWS Learner Lab độc lập: minh chứng Alarm/SNS thủ công trên Lab Khôi thuộc 24/10; chuỗi DLQ metric → Alarm → SNS → Email trên Lab Quân được xác minh ngày 30/10.
 - Video demo chưa được ghi nhận trong repository; [demo-script.md](docs/demo-script.md) là storyboard và checklist quay.

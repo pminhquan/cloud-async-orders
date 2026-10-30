@@ -1,0 +1,1469 @@
+{
+  "sourceType": "AWS_READ_ONLY_EXPORT",
+  "collectionStartedAtUtc": "2026-10-30T14:14:19.773001+00:00",
+  "region": "us-east-1",
+  "awsWritesPerformed": false,
+  "calls": [
+    {
+      "service": "sts",
+      "operation": "get_caller_identity",
+      "timestampUtc": "2026-10-30T14:14:19.773019+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "lambda",
+      "operation": "get_function",
+      "timestampUtc": "2026-10-30T14:14:20.278734+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "lambda",
+      "operation": "get_function_concurrency",
+      "timestampUtc": "2026-10-30T14:14:20.553284+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "lambda",
+      "operation": "get_function",
+      "timestampUtc": "2026-10-30T14:14:20.695405+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "lambda",
+      "operation": "get_function_concurrency",
+      "timestampUtc": "2026-10-30T14:14:20.831904+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "sqs",
+      "operation": "get_queue_url",
+      "timestampUtc": "2026-10-30T14:14:21.011359+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "sqs",
+      "operation": "get_queue_attributes",
+      "timestampUtc": "2026-10-30T14:14:21.065196+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "sqs",
+      "operation": "get_queue_url",
+      "timestampUtc": "2026-10-30T14:14:21.108028+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "sqs",
+      "operation": "get_queue_attributes",
+      "timestampUtc": "2026-10-30T14:14:21.150197+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "lambda",
+      "operation": "list_event_source_mappings",
+      "timestampUtc": "2026-10-30T14:14:21.193473+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "dynamodb",
+      "operation": "describe_table",
+      "timestampUtc": "2026-10-30T14:14:21.283982+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "dynamodb",
+      "operation": "get_item",
+      "timestampUtc": "2026-10-30T14:14:21.351849+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "apigatewayv2",
+      "operation": "get_apis",
+      "timestampUtc": "2026-10-30T14:14:21.391206+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "apigatewayv2",
+      "operation": "get_routes",
+      "timestampUtc": "2026-10-30T14:14:21.527122+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "apigatewayv2",
+      "operation": "get_integrations",
+      "timestampUtc": "2026-10-30T14:14:21.632662+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "apigatewayv2",
+      "operation": "get_stages",
+      "timestampUtc": "2026-10-30T14:14:21.726495+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "apigatewayv2",
+      "operation": "get_deployments",
+      "timestampUtc": "2026-10-30T14:14:21.835520+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "describe_alarms",
+      "timestampUtc": "2026-10-30T14:14:21.947555+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "sns",
+      "operation": "list_topics",
+      "timestampUtc": "2026-10-30T14:14:22.033514+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:22.080404+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:22.425249+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:22.691465+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:23.044236+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:23.428259+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:23.720407+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:24.026490+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:24.385391+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:24.681582+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:24.997041+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:25.310931+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:25.621618+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:25.900428+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:26.175854+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:26.515430+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:26.965857+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "cloudwatch",
+      "operation": "get_metric_statistics",
+      "timestampUtc": "2026-10-30T14:14:27.263037+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "logs",
+      "operation": "describe_log_groups",
+      "timestampUtc": "2026-10-30T14:14:27.293879+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "logs",
+      "operation": "filter_log_events",
+      "timestampUtc": "2026-10-30T14:14:27.361473+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "logs",
+      "operation": "filter_log_events",
+      "timestampUtc": "2026-10-30T14:14:27.806541+00:00",
+      "status": "OK"
+    },
+    {
+      "service": "logs",
+      "operation": "filter_log_events",
+      "timestampUtc": "2026-10-30T14:14:28.156686+00:00",
+      "status": "OK"
+    }
+  ],
+  "identity": {
+    "accountId": "<ACCOUNT_ID>",
+    "role": "voclabs",
+    "accountVerifiedAgainstConsole": true
+  },
+  "lambda": {
+    "order-producer": {
+      "FunctionName": "order-producer",
+      "Runtime": "python3.13",
+      "Handler": "lambda_function.lambda_handler",
+      "MemorySize": 128,
+      "Timeout": 3,
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "LastModified": "2026-10-29T06:53:55.000+0000",
+      "CodeSha256": "mrUhf27ltD+maxXowCTR42HgkY8mE8TwPQZ8EuxPXHY=",
+      "Role": "arn:aws:iam::<ACCOUNT_ID>:role/LabRole",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Version": "$LATEST",
+      "environmentVariableNames": [
+        "QUEUE_URL"
+      ],
+      "nonSensitiveTargets": {
+        "QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/<ACCOUNT_ID>/orders-queue"
+      },
+      "concurrency": {},
+      "sourceComparison": {
+        "normalizedLfSha256": "54d8014411164db8c43e7adee60867a1e6167be7ccbc00f103bffb7cba64bc1b",
+        "astWithoutDocstringsSha256": "1934c3d6bb581638b3ff31faf7237f049f8747ee52593ba72f1c3161141fcfd4",
+        "matchesRepositoryLf": true,
+        "matchesRepositoryAst": true
+      }
+    },
+    "order-consumer": {
+      "FunctionName": "order-consumer",
+      "Runtime": "python3.13",
+      "Handler": "lambda_function.lambda_handler",
+      "MemorySize": 128,
+      "Timeout": 3,
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "LastModified": "2026-10-24T16:00:31.000+0000",
+      "CodeSha256": "cAglL/yZX4JdPU+NM3pAYTTK5C4hG11FopmcTbYZLpA=",
+      "Role": "arn:aws:iam::<ACCOUNT_ID>:role/LabRole",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Version": "$LATEST",
+      "environmentVariableNames": [
+        "TABLE_NAME"
+      ],
+      "nonSensitiveTargets": {
+        "TABLE_NAME": "Orders"
+      },
+      "concurrency": {},
+      "sourceComparison": {
+        "normalizedLfSha256": "ce0064872be11c05dbf497f91f307383eeab21e8845071ba96bbf05a3414b308",
+        "astWithoutDocstringsSha256": "0c0175a80dddab32dc32138e7ec59431f1e407086880d942e95c7a4da56c8673",
+        "matchesRepositoryLf": false,
+        "matchesRepositoryAst": true
+      }
+    }
+  },
+  "queues": {
+    "orders-queue": {
+      "Attributes": {
+        "QueueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+        "ApproximateNumberOfMessages": "0",
+        "ApproximateNumberOfMessagesNotVisible": "0",
+        "ApproximateNumberOfMessagesDelayed": "0",
+        "CreatedTimestamp": "1791693313",
+        "LastModifiedTimestamp": "1792060948",
+        "VisibilityTimeout": "60",
+        "MaximumMessageSize": "1048576",
+        "MessageRetentionPeriod": "345600",
+        "DelaySeconds": "0",
+        "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<ACCOUNT_ID>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue\"}]}",
+        "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq\",\"maxReceiveCount\":5}",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "SqsManagedSseEnabled": "true"
+      }
+    },
+    "orders-dlq": {
+      "Attributes": {
+        "QueueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq",
+        "ApproximateNumberOfMessages": "1",
+        "ApproximateNumberOfMessagesNotVisible": "0",
+        "ApproximateNumberOfMessagesDelayed": "0",
+        "CreatedTimestamp": "1791692962",
+        "LastModifiedTimestamp": "1791692962",
+        "VisibilityTimeout": "30",
+        "MaximumMessageSize": "1048576",
+        "MessageRetentionPeriod": "1209600",
+        "DelaySeconds": "0",
+        "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<ACCOUNT_ID>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq\"}]}",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "SqsManagedSseEnabled": "true"
+      }
+    }
+  },
+  "eventSourceMappings": {
+    "EventSourceMappings": [
+      {
+        "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+        "BatchSize": 1,
+        "MaximumBatchingWindowInSeconds": 0,
+        "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+        "MetricsConfig": {
+          "Metrics": []
+        },
+        "ScalingConfig": {
+          "MaximumConcurrency": 5
+        },
+        "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+        "LastModified": "2026-10-29 16:46:47.274000+00:00",
+        "State": "Disabled",
+        "StateTransitionReason": "USER_INITIATED",
+        "FunctionResponseTypes": [],
+        "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:ab1f7f06-157c-429b-bfcf-5cb15689f47f"
+      }
+    ]
+  },
+  "dynamodb": {
+    "TableName": "Orders",
+    "TableStatus": "ACTIVE",
+    "KeySchema": [
+      {
+        "AttributeName": "orderId",
+        "KeyType": "HASH"
+      }
+    ],
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "orderId",
+        "AttributeType": "S"
+      }
+    ],
+    "BillingModeSummary": {
+      "BillingMode": "PAY_PER_REQUEST",
+      "LastUpdateToPayPerRequestDateTime": "2026-10-15 10:48:18.759000+00:00"
+    },
+    "TableArn": "arn:aws:dynamodb:us-east-1:<ACCOUNT_ID>:table/Orders",
+    "TableSizeBytes": 4170,
+    "ItemCount": 29
+  },
+  "existingAcceptanceOrder": {
+    "Item": {
+      "quantity": {
+        "N": "2"
+      },
+      "createdAt": {
+        "S": "2026-10-29T06:55:02.018031+00:00"
+      },
+      "productId": {
+        "S": "P-W4-ACCEPTANCE"
+      },
+      "orderId": {
+        "S": "e941e651-2be5-4a1e-9575-9bc47657967d"
+      },
+      "customerId": {
+        "S": "W4-20261029T065500Z"
+      },
+      "status": {
+        "S": "PROCESSED"
+      }
+    }
+  },
+  "apiGateway": [
+    {
+      "ApiId": "4mhnxg45fi",
+      "Name": "order-api",
+      "ProtocolType": "HTTP",
+      "ApiEndpoint": "https://4mhnxg45fi.execute-api.us-east-1.amazonaws.com",
+      "routes": {
+        "Items": [
+          {
+            "ApiKeyRequired": false,
+            "AuthorizationScopes": [],
+            "AuthorizationType": "NONE",
+            "RequestParameters": {},
+            "RouteId": "s20yl45",
+            "RouteKey": "POST /orders",
+            "Target": "integrations/vqb6ofv"
+          }
+        ]
+      },
+      "integrations": {
+        "Items": [
+          {
+            "ConnectionType": "INTERNET",
+            "IntegrationId": "vqb6ofv",
+            "IntegrationMethod": "POST",
+            "IntegrationType": "AWS_PROXY",
+            "IntegrationUri": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-producer",
+            "PayloadFormatVersion": "2.0",
+            "TimeoutInMillis": 30000
+          }
+        ]
+      },
+      "stages": {
+        "Items": [
+          {
+            "AutoDeploy": true,
+            "CreatedDate": "2026-10-15 11:18:23+00:00",
+            "DefaultRouteSettings": {
+              "DetailedMetricsEnabled": false
+            },
+            "DeploymentId": "bgh03d",
+            "LastDeploymentStatusMessage": "Successfully deployed stage with deployment ID 'bgh03d'",
+            "LastUpdatedDate": "2026-10-15 11:18:25+00:00",
+            "RouteSettings": {},
+            "StageName": "$default",
+            "StageVariables": {},
+            "Tags": {}
+          }
+        ]
+      },
+      "deployments": {
+        "Items": [
+          {
+            "AutoDeployed": true,
+            "CreatedDate": "2026-10-15 11:18:25+00:00",
+            "DeploymentId": "bgh03d",
+            "DeploymentStatus": "DEPLOYED",
+            "Description": "Automatic deployment triggered by changes to the Api configuration"
+          }
+        ]
+      }
+    }
+  ],
+  "monitoring": {
+    "totalMetricAlarmsReturned": 0,
+    "projectAlarms": [],
+    "projectTopics": []
+  },
+  "cloudwatchMetrics": [
+    {
+      "Label": "Invocations",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 13.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Invocations",
+      "dimension": {
+        "FunctionName": "order-producer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Errors",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Errors",
+      "dimension": {
+        "FunctionName": "order-producer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Throttles",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Throttles",
+      "dimension": {
+        "FunctionName": "order-producer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Duration",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 326.55,
+          "Unit": "Milliseconds"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Duration",
+      "dimension": {
+        "FunctionName": "order-producer"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "ConcurrentExecutions",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "ConcurrentExecutions",
+      "dimension": {
+        "FunctionName": "order-producer"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Invocations",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 3.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Invocations",
+      "dimension": {
+        "FunctionName": "order-consumer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Errors",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Errors",
+      "dimension": {
+        "FunctionName": "order-consumer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Throttles",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Throttles",
+      "dimension": {
+        "FunctionName": "order-consumer"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "Duration",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 2574.54,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Maximum": 655.73,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Maximum": 107.7,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Maximum": 126.75,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Maximum": 112.58,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Maximum": 139.12,
+          "Unit": "Milliseconds"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "Duration",
+      "dimension": {
+        "FunctionName": "order-consumer"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "ConcurrentExecutions",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/Lambda",
+      "metricName": "ConcurrentExecutions",
+      "dimension": {
+        "FunctionName": "order-consumer"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "ApproximateNumberOfMessagesVisible",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Maximum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "ApproximateNumberOfMessagesVisible",
+      "dimension": {
+        "QueueName": "orders-queue"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "NumberOfMessagesReceived",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "NumberOfMessagesReceived",
+      "dimension": {
+        "QueueName": "orders-queue"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "NumberOfMessagesDeleted",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "NumberOfMessagesDeleted",
+      "dimension": {
+        "QueueName": "orders-queue"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "ApproximateNumberOfMessagesVisible",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Maximum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Maximum": 3.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Maximum": 3.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "ApproximateNumberOfMessagesVisible",
+      "dimension": {
+        "QueueName": "orders-dlq"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "NumberOfMessagesReceived",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "NumberOfMessagesReceived",
+      "dimension": {
+        "QueueName": "orders-dlq"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "NumberOfMessagesDeleted",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-29 06:54:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:55:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:56:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:57:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:58:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 06:59:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:00:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:01:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:02:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-29 07:03:00+00:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "NumberOfMessagesDeleted",
+      "dimension": {
+        "QueueName": "orders-dlq"
+      },
+      "statistic": "Sum",
+      "windowStartUtc": "2026-10-29T06:54:30+00:00",
+      "windowEndUtc": "2026-10-29T07:04:00+00:00",
+      "periodSeconds": 60
+    },
+    {
+      "Label": "ApproximateNumberOfMessagesVisible",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-30 13:59:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:00:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:01:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:02:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:03:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:04:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:05:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:06:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:07:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:08:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:09:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:10:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:11:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:12:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:13:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "namespace": "AWS/SQS",
+      "metricName": "ApproximateNumberOfMessagesVisible",
+      "dimension": {
+        "QueueName": "orders-dlq"
+      },
+      "statistic": "Maximum",
+      "windowStartUtc": "2026-10-30T13:59:00+00:00",
+      "windowEndUtc": "2026-10-30T14:14:00+00:00",
+      "periodSeconds": 60
+    }
+  ],
+  "cloudwatchLogs": {
+    "groups": {
+      "logGroups": [
+        {
+          "logGroupName": "/aws/lambda/order-consumer",
+          "creationTime": 1792061763045,
+          "metricFilterCount": 0,
+          "arn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-consumer:*",
+          "storedBytes": 20076,
+          "logGroupClass": "STANDARD",
+          "logGroupArn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-consumer",
+          "deletionProtectionEnabled": false,
+          "bearerTokenAuthenticationEnabled": false
+        },
+        {
+          "logGroupName": "/aws/lambda/order-processor",
+          "creationTime": 1791696261380,
+          "metricFilterCount": 0,
+          "arn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-processor:*",
+          "storedBytes": 3939,
+          "logGroupClass": "STANDARD",
+          "logGroupArn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-processor",
+          "deletionProtectionEnabled": false,
+          "bearerTokenAuthenticationEnabled": false
+        },
+        {
+          "logGroupName": "/aws/lambda/order-producer",
+          "creationTime": 1792062664711,
+          "metricFilterCount": 0,
+          "arn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-producer:*",
+          "storedBytes": 11877,
+          "logGroupClass": "STANDARD",
+          "logGroupArn": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/order-producer",
+          "deletionProtectionEnabled": false,
+          "bearerTokenAuthenticationEnabled": false
+        }
+      ]
+    },
+    "retry": {
+      "events": [
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257015770,
+          "message": "[ERROR]\t2026-10-29T06:56:55.770Z\t4f3d3ccb-2a4d-51dc-ac00-5f97da258b9c\t{\"level\": \"ERROR\", \"errorCode\": \"INVALID_JSON\", \"messageId\": \"f0d75c4d-3739-45a3-a1e8-9fbedd75f7df\"}\n",
+          "ingestionTime": 1793257024326,
+          "eventId": "39990967784164181445916759202385939951195694905681969158"
+        },
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257075790,
+          "message": "[ERROR]\t2026-10-29T06:57:55.790Z\te8a0cd4c-d750-51c0-b6f2-ae1027f4251c\t{\"level\": \"ERROR\", \"errorCode\": \"INVALID_JSON\", \"messageId\": \"f0d75c4d-3739-45a3-a1e8-9fbedd75f7df\"}\n",
+          "ingestionTime": 1793257084746,
+          "eventId": "39990969122654908261724760230403468708125667336373993473"
+        },
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257135809,
+          "message": "[ERROR]\t2026-10-29T06:58:55.809Z\tdaf2cd73-6575-51da-9d00-ae2f95913fbc\t{\"level\": \"ERROR\", \"errorCode\": \"INVALID_JSON\", \"messageId\": \"f0d75c4d-3739-45a3-a1e8-9fbedd75f7df\"}\n",
+          "ingestionTime": 1793257144749,
+          "eventId": "39990970461123334332334230634774488287965710960731815937"
+        },
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257195810,
+          "message": "[ERROR]\t2026-10-29T06:59:55.810Z\t4fc9ff3c-fe3b-5251-8162-9c600f1bc5cb\t{\"level\": \"ERROR\", \"errorCode\": \"INVALID_JSON\", \"messageId\": \"f0d75c4d-3739-45a3-a1e8-9fbedd75f7df\"}\n",
+          "ingestionTime": 1793257204768,
+          "eventId": "39990971799190346989370149822618023063132461355315167233"
+        },
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257255830,
+          "message": "[ERROR]\t2026-10-29T07:00:55.830Z\t648ab323-08e3-567a-807d-d07ff9bece9d\t{\"level\": \"ERROR\", \"errorCode\": \"INVALID_JSON\", \"messageId\": \"f0d75c4d-3739-45a3-a1e8-9fbedd75f7df\"}\n",
+          "ingestionTime": 1793257264781,
+          "eventId": "39990973137681073805178150850142977401346986552774361089"
+        }
+      ],
+      "searchedLogStreams": [],
+      "query": {
+        "logGroupName": "/aws/lambda/order-consumer",
+        "filterPattern": "f0d75c4d-3739-45a3-a1e8-9fbedd75f7df",
+        "startUtc": "2026-10-29T06:54:30+00:00",
+        "endUtc": "2026-10-29T07:04:00+00:00"
+      },
+      "pagesRead": 2,
+      "paginationComplete": true
+    },
+    "consumerOrder": {
+      "events": [
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793256905374,
+          "message": "[INFO]\t2026-10-29T06:55:05.374Z\t04fc6886-e738-528e-bcc7-0bda173c620d\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"0ca54fef-1c4c-45db-b608-d8565c7fee27\", \"orderId\": \"e941e651-2be5-4a1e-9575-9bc47657967d\"}\n",
+          "ingestionTime": 1793256911873,
+          "eventId": "39990965322251114508930086733461452258764264347480489985"
+        },
+        {
+          "logStreamName": "2026/10/29/[$LATEST]35d7bf51be1845da8c23f9977b6454f6",
+          "timestamp": 1793257004089,
+          "message": "[INFO]\t2026-10-29T06:56:44.088Z\tc21c9fba-da8e-50af-a129-fce62ae66d2c\t{\"level\": \"INFO\", \"status\": \"PROCESSED\", \"messageId\": \"469067fd-7f7e-47d2-a859-5197ab8dbc60\", \"orderId\": \"e941e651-2be5-4a1e-9575-9bc47657967d\"}\n",
+          "ingestionTime": 1793257012517,
+          "eventId": "39990967523669176781880550271831221054643623044583981057"
+        }
+      ],
+      "searchedLogStreams": [],
+      "query": {
+        "logGroupName": "/aws/lambda/order-consumer",
+        "filterPattern": "e941e651-2be5-4a1e-9575-9bc47657967d",
+        "startUtc": "2026-10-29T06:54:30+00:00",
+        "endUtc": "2026-10-29T07:04:00+00:00"
+      },
+      "pagesRead": 2,
+      "paginationComplete": true
+    },
+    "producerOrder": {
+      "events": [
+        {
+          "logStreamName": "2026/10/29/[$LATEST]11b8ebb88ecf495d94712ad0d5470159",
+          "timestamp": 1793256902331,
+          "message": "{\"orderId\": \"e941e651-2be5-4a1e-9575-9bc47657967d\", \"status\": \"PENDING\"}\n",
+          "ingestionTime": 1793256905797,
+          "eventId": "39990965254389946869801400506423043036950388811106811907"
+        }
+      ],
+      "searchedLogStreams": [],
+      "query": {
+        "logGroupName": "/aws/lambda/order-producer",
+        "filterPattern": "e941e651-2be5-4a1e-9575-9bc47657967d",
+        "startUtc": "2026-10-29T06:54:30+00:00",
+        "endUtc": "2026-10-29T07:04:00+00:00"
+      },
+      "pagesRead": 2,
+      "paginationComplete": true
+    }
+  },
+  "collectionCompletedAtUtc": "2026-10-30T14:14:28.553420+00:00",
+  "limitations": [
+    "No new E2E, replay, conflict, retry, load or benchmark was run.",
+    "DLQ identity was not read: no ReceiveMessage, DeleteMessage, PurgeQueue or visibility changes.",
+    "No resource/configuration/deployment/notification writes were performed.",
+    "Historical retry log and count correlation does not independently prove a particular message is currently in the DLQ."
+  ],
+  "allMappingsForMainQueue": {
+    "EventSourceMappings": [
+      {
+        "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+        "BatchSize": 1,
+        "MaximumBatchingWindowInSeconds": 0,
+        "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+        "MetricsConfig": {
+          "Metrics": []
+        },
+        "ScalingConfig": {
+          "MaximumConcurrency": 5
+        },
+        "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+        "LastModified": "2026-10-29 16:46:47.274000+00:00",
+        "State": "Disabled",
+        "StateTransitionReason": "USER_INITIATED",
+        "FunctionResponseTypes": [],
+        "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:ab1f7f06-157c-429b-bfcf-5cb15689f47f"
+      },
+      {
+        "UUID": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+        "BatchSize": 1,
+        "MaximumBatchingWindowInSeconds": 0,
+        "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+        "MetricsConfig": {
+          "Metrics": []
+        },
+        "ScalingConfig": {
+          "MaximumConcurrency": 2
+        },
+        "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-processor",
+        "LastModified": "2026-10-11 15:18:23.282000+00:00",
+        "State": "Disabled",
+        "StateTransitionReason": "USER_INITIATED",
+        "FunctionResponseTypes": [],
+        "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:7812ff9b-4000-47e1-9e27-6805670c7cc6"
+      }
+    ]
+  },
+  "lambdaAccountLimits": {
+    "TotalCodeSize": 322122547200,
+    "CodeSizeUnzipped": 262144000,
+    "CodeSizeZipped": 52428800,
+    "ConcurrentExecutions": 1000,
+    "UnreservedConcurrentExecutions": 1000
+  },
+  "mappingChangeHistory": {
+    "queryStartUtc": "2026-10-29T00:00:00Z",
+    "events": [],
+    "truncated": false
+  },
+  "supplementCollectedAtUtc": "2026-10-30T14:17:58.286976+00:00"
+}

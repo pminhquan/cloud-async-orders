@@ -71,18 +71,18 @@ Nhật ký thời lượng được quản lý riêng theo [yêu cầu dự án]
 | SNS/Alarm Khôi | Email và manual Alarm State, chưa chứng minh DLQ metric tự kích hoạt | [Phạm vi Khôi](week3-khoi-evidence.md) |
 | PR #11–#15 | Đã merge; main ở 8b14e02 khi đối chiếu 29/10 | [CI đúng main](https://github.com/pminhquan/cloud-async-orders/actions/runs/40163636601) |
 
-## 7. Tuần 4 — nghiệm thu ngày 29/10/2026
+## 7. Tuần 4 — nghiệm thu ngày 29–30/10/2026
 
 | Mã | Kết quả và phạm vi | Minh chứng |
 |---|---|---|
 | W4-01 | Inventory thật Lab Quân; giữ phân biệt hai môi trường | [Inventory](week4-report.md) |
 | W4-02 | Producer đúng main, ESM Enabled, API 202 và đúng orderId PROCESSED | [Deployment/E2E](week4-report.md) |
 | W4-03 | 13/13 HTTP đúng kỳ vọng; replay/conflict giữ item; 5 lần nhận/lỗi và biến đổi queue/DLQ tương ứng | [Ma trận và giới hạn DLQ](week4-report.md) |
-| W4-04 | Log/metrics mới, không throttling trong cửa sổ; không có project alarm/SNS trên Lab Quân | [Monitoring](week4-report.md) |
-| W4-05 | Phân tích B1/B2/B3 bằng dữ liệu có sẵn, không suy năng lực production | [Hiệu năng](final-report.md) |
+| W4-04 | Lab Quân ngày 30/10: metric DLQ → ALARM → SNS → email khớp; subscription confirmed trước khi tạo alarm | [Monitoring](week4-report.md#71-kết-quả-sau-cập-nhật-đã-được-phê-duyệt) |
+| W4-05 | Phân tích B1/B2/B3 bằng dữ liệu có sẵn, không suy năng lực production | [Hiệu năng](week4-report.md#51-hiệu-năng-từ-minh-chứng-hiện-có) |
 | W4-06 | Mô hình chi phí và nguồn chính thức; không bịa hóa đơn | [Chi phí](week4-cost-analysis.md) |
 | W4-07 | KEEP/REVIEW, kiểm tra trạng thái cuối, không purge/delete | [Tài nguyên](week4-report.md) |
 | W4-08 | Hồi quy offline đạt; phân biệt source tham chiếu và head CI của từng PR | [Kiểm thử](evidence/week4/offline-validation.md), [hồ sơ](SUBMISSION.md) |
-| W4-09 | Báo cáo tổng kết, đánh giá kỹ thuật và kịch bản 9:20 | [Báo cáo](final-report.md), [demo](demo-script.md) |
+| W4-09 | Báo cáo từng tuần, đánh giá kỹ thuật và kịch bản 9:20 | [Nghiệm thu Tuần 4](week4-report.md), [demo](demo-script.md) |
 
-Các dòng Tuần 4 dùng bản ghi quan sát có chọn lọc, không phải raw export đính kèm. [Nguồn minh chứng](evidence/week4/README.md) phân biệt giới hạn redrive, monitoring thủ công và môi trường thực nghiệm.
+Kết quả ngày 29/10 được bổ sung JSON AWS và ảnh gốc ngày 30/10. [Nguồn minh chứng](evidence/week4/README.md) phân biệt giới hạn redrive, monitoring thủ công/metric-driven và từng Lab.

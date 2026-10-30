@@ -11,7 +11,7 @@ flowchart LR
     Consumer[Lambda\norder-consumer]
     DB[(DynamoDB\nOrders)]
     DLQ[SQS DLQ\norders-dlq]
-    Alarm[CloudWatch Alarm\ngiai đoạn sau]
+    Alarm[CloudWatch Alarm\nDLQ visible >= 1]
     SNS[SNS\norder-dlq-alert]
 
     Client --> API --> Producer --> Queue --> Consumer --> DB
@@ -98,4 +98,4 @@ Các phần này được triển khai một phần ở Tuần 3 và nghiệm th
 
 ## 6. Trạng thái đến Tuần 4
 
-Pipeline `API Gateway → Producer → SQS → Consumer → DynamoDB` được nghiệm thu trên Lab Quân ngày 29/10/2026. Template monitoring đã lint nhưng chưa triển khai trên Lab Quân; chuỗi Alarm → SNS → email chỉ có minh chứng thủ công trên Lab Khôi ngày 24/10/2026. Chi tiết và giới hạn: [báo cáo Tuần 4](../week4-report.md).
+Pipeline `API Gateway → Producer → SQS → Consumer → DynamoDB` được nghiệm thu trên Lab Quân ngày 29/10/2026. Ngày 30/10, mapping Consumer Enabled và một alarm DLQ từ template đã triển khai; chuỗi DLQ metric → Alarm → SNS → email được xác minh. Minh chứng thủ công của Lab Khôi thuộc ngày 24/10. Chi tiết và giới hạn: [báo cáo Tuần 4](../week4-report.md).

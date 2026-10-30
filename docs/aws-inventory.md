@@ -92,3 +92,4 @@ Cấu hình test Tuần 2 được dùng ở các giai đoạn khác nhau; khi �
 - Kiểm tra cuối: orders-queue 0/0/0; orders-dlq tăng từ 2 lên 3 sau một sentinel thử mới, phù hợp với redrive trong phạm vi bằng chứng tương quan; hai queue benchmark rỗng được giữ để xem xét sau demo.
 - Không có project alarm/topic trên Lab Quân. Log groups được giữ nguyên, chưa đặt retention. Không tạo/xóa IAM, purge hoặc destructive cleanup.
 - Trạng thái nguồn và rollback, ma trận kiểm thử, metrics và KEEP/REVIEW nằm trong [báo cáo Tuần 4](week4-report.md).
+- Bổ sung ngày 30/10: đã đối chiếu lại cấu hình, mapping Consumer Enabled, SNS email confirmed và stack monitoring chứa một alarm DLQ; metric tự kích hoạt ALARM và email đã khớp. [Cấu hình/kết quả sau cập nhật](week4-report.md#71-kết-quả-sau-cập-nhật-đã-được-phê-duyệt).

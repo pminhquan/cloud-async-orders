@@ -7,12 +7,12 @@
 | Thời gian | Người | Hình ảnh/hành động | Nội dung chính |
 |---|---|---|---|
 | 00:00–00:40 | Khôi | Trang đầu báo cáo, tên đề tài/thành viên | Vấn đề và mục tiêu |
-| 00:40–01:40 | Quân | Sơ đồ trong final-report.md | Luồng chính, vai trò queue và ranh giới 202/PROCESSED |
+| 00:40–01:40 | Quân | [Sơ đồ kiến trúc](architecture/README.md) | Luồng chính, vai trò queue và ranh giới 202/PROCESSED |
 | 01:40–02:40 | Khôi | Producer `_validate`, request/response; dùng bản ghi Tuần 4 hoặc đúng một POST hợp lệ khi quay live | Contract và tiếp nhận đơn |
 | 02:40–03:40 | Quân | ESM Enabled; tìm đúng orderId trong Orders và log Consumer | Đối soát xử lý thành công |
 | 03:40–04:45 | Khôi | Bảng 12 ca invalid đã chạy; minh họa 400 có sẵn | Validation và không enqueue |
 | 04:45–06:00 | Quân | Conditional PutItem/strong read; kết quả replay/conflict, năm mốc log retry và số lượng DLQ | Độ tin cậy và bảo vệ dữ liệu |
-| 06:00–07:05 | Khôi | CloudWatch metrics Tuần 4; ảnh SNS/Alarm của Lab Khôi có nhãn 24/10 | Monitoring và giới hạn hai Lab |
+| 06:00–07:05 | Khôi | CloudWatch Alarm History và email thật của Lab Quân ngày 30/10 | Metric DLQ → ALARM → SNS → Email |
 | 07:05–08:10 | Quân | Bảng B1/B2/B3; ảnh CloudWatch B3 | Hiệu năng, batch thật, giới hạn mẫu |
 | 08:10–09:00 | Quân | Bảng yếu tố chi phí và KEEP/REVIEW | Tối ưu có căn cứ, không xóa tài nguyên tùy tiện |
 | 09:00–09:20 | Khôi + Quân | Kết luận, test summary/CI, repository | Kết quả và hướng phát triển |
@@ -45,7 +45,7 @@
 
 ### 06:00–07:05 — Khôi
 
-“Collector có sẵn trong repo thu metrics theo cửa sổ thời gian nghiệm thu. Producer có 13 invocation, không lỗi; Consumer có sáu lỗi dự kiến gồm một conflict và năm lần invalid JSON, không có throttling trong cửa sổ đo. Khi xem metric phải tách lỗi chủ động tạo khỏi sự cố ngoài dự kiến. Lab Quân hiện chưa có alarm và SNS của dự án. Các ảnh sau thuộc Lab Khôi ngày 24/10, thể hiện subscription confirmed, publish email và manual Alarm State dẫn tới email. Nhóm ghi rõ đó là phép thử đường phân phối cảnh báo, chưa phải bằng chứng DLQ metric tự kích hoạt email mới trong Tuần 4.”
+“Metrics nghiệm thu ghi Producer có 13 invocation, không lỗi; Consumer có sáu lỗi dự kiến gồm một conflict và năm lần invalid JSON, không throttling trong cửa sổ đo. Ngày 30/10, nhóm xác nhận SNS subscription rồi triển khai một alarm DLQ trên Lab Quân. Datapoint 1.0 lúc 14:33 UTC làm alarm tự chuyển ALARM lúc 14:35:15 UTC; Alarm History ghi SNS action thành công và email khớp thời điểm, tên alarm, Region và metric. Đây là chuỗi metric-driven từ message DLQ đã có, khác minh chứng thủ công của Lab Khôi ngày 24/10.”
 
 ### 07:05–08:10 — Quân
 
@@ -61,7 +61,8 @@
 
 ## 3. Tài sản màn hình đã có
 
-- [Báo cáo và sơ đồ](final-report.md), [ma trận và inventory Tuần 4](week4-report.md), [gate offline/CI](evidence/week4/offline-validation.md).
+- [Sơ đồ kiến trúc](architecture/README.md), [ma trận và inventory Tuần 4](week4-report.md), [gate offline/CI](evidence/week4/offline-validation.md).
+- Monitoring Lab Quân **30/10**: [Alarm History](evidence/week4/quan/W4-Metric-Alarm.jpg), [email](evidence/week4/quan/W4-SNS-Email.png), [JSON cấu hình/metric/history](evidence/week4/quan/monitoring-2026-10-30.json).
 - Ảnh Console **lịch sử 24/10**: [B3 hai record](evidence/week3/quan/b3-2026-10-24/screenshots/W3-B3-CloudWatch-Two-Record-Batch.jpg), [Alarm History Khôi](evidence/week3/khoi/W3-CW-DLQ-Alarm-History.png), [SNS subscription](evidence/week3/khoi/W3-SNS-Topic-Subscription-Confirmed.png), [email cảnh báo](evidence/week3/khoi/W3-SNS-Alarm-Email-Received.png).
 - Dữ liệu benchmark/load gốc và chỉ mục: [evidence Tuần 3](evidence/week3/README.md), [provenance Tuần 4](evidence/week4/README.md).
 

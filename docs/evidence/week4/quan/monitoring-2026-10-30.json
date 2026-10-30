@@ -1,0 +1,654 @@
+{
+  "startedAtUtc": "2026-10-30T14:30:13.261927+00:00",
+  "region": "us-east-1",
+  "userApproved": true,
+  "scope": [
+    "Enable validated Consumer mapping only",
+    "SNS topic and email subscription",
+    "One DLQ alarm after subscription confirmation"
+  ],
+  "actions": [
+    {
+      "operation": "UpdateEventSourceMapping",
+      "timestampUtc": "2026-10-30T14:30:14.509744+00:00",
+      "mapping": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+      "Enabled": true
+    },
+    {
+      "operation": "CreateTopic",
+      "timestampUtc": "2026-10-30T14:30:32.981247+00:00",
+      "name": "order-dlq-alert"
+    },
+    {
+      "operation": "SetTopicAttributes",
+      "timestampUtc": "2026-10-30T14:30:33.024204+00:00",
+      "scope": "Allow only the named CloudWatch alarm from this account to publish"
+    },
+    {
+      "operation": "Subscribe",
+      "timestampUtc": "2026-10-30T14:30:33.268919+00:00",
+      "protocol": "email",
+      "endpoint": "<STUDENT_EMAIL>"
+    },
+    {
+      "operation": "CreateStack",
+      "timestampUtc": "2026-10-30T14:33:57.756493+00:00",
+      "stackName": "cloud-async-orders-week4-monitoring",
+      "resourcesExpected": {
+        "AWS::CloudWatch::Alarm": 1
+      },
+      "OnFailure": "DO_NOTHING"
+    }
+  ],
+  "mainQueueBefore": {
+    "QueueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "ApproximateNumberOfMessages": "0",
+    "ApproximateNumberOfMessagesNotVisible": "0",
+    "ApproximateNumberOfMessagesDelayed": "0",
+    "CreatedTimestamp": "1791693313",
+    "LastModifiedTimestamp": "1792060948",
+    "VisibilityTimeout": "60",
+    "MaximumMessageSize": "1048576",
+    "MessageRetentionPeriod": "345600",
+    "DelaySeconds": "0",
+    "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<ACCOUNT_ID>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue\"}]}",
+    "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq\",\"maxReceiveCount\":5}",
+    "ReceiveMessageWaitTimeSeconds": "0",
+    "SqsManagedSseEnabled": "true"
+  },
+  "consumerMappingBefore": {
+    "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+    "BatchSize": 1,
+    "MaximumBatchingWindowInSeconds": 0,
+    "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "MetricsConfig": {
+      "Metrics": []
+    },
+    "ScalingConfig": {
+      "MaximumConcurrency": 5
+    },
+    "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+    "LastModified": "2026-10-29 16:46:47.274000+00:00",
+    "State": "Disabled",
+    "StateTransitionReason": "USER_INITIATED",
+    "FunctionResponseTypes": [],
+    "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:ab1f7f06-157c-429b-bfcf-5cb15689f47f"
+  },
+  "consumerMappingAfter": {
+    "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+    "BatchSize": 1,
+    "MaximumBatchingWindowInSeconds": 0,
+    "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "MetricsConfig": {
+      "Metrics": []
+    },
+    "ScalingConfig": {
+      "MaximumConcurrency": 5
+    },
+    "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+    "LastModified": "2026-10-30 14:30:14.494000+00:00",
+    "State": "Enabled",
+    "StateTransitionReason": "USER_INITIATED",
+    "FunctionResponseTypes": [],
+    "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:ab1f7f06-157c-429b-bfcf-5cb15689f47f"
+  },
+  "legacyMappingAfter": {
+    "UUID": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+    "BatchSize": 1,
+    "MaximumBatchingWindowInSeconds": 0,
+    "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "MetricsConfig": {
+      "Metrics": []
+    },
+    "ScalingConfig": {
+      "MaximumConcurrency": 2
+    },
+    "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-processor",
+    "LastModified": "2026-10-11 15:18:23.282000+00:00",
+    "State": "Disabled",
+    "StateTransitionReason": "USER_INITIATED",
+    "FunctionResponseTypes": [],
+    "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:7812ff9b-4000-47e1-9e27-6805670c7cc6"
+  },
+  "topicDisposition": "CREATED",
+  "subscriptionRequest": {
+    "SubscriptionArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert:064587f1-88a9-4d94-a487-0ecc41a2ea8a"
+  },
+  "sns": {
+    "topicArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+    "attributes": {
+      "Policy": "{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\"],\"Resource\":\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"<ACCOUNT_ID>\"}}},{\"Sid\":\"AllowWeek4CloudWatchAlarm\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudwatch.amazonaws.com\"},\"Action\":\"SNS:Publish\",\"Resource\":\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\",\"Condition\":{\"StringEquals\":{\"AWS:SourceAccount\":\"<ACCOUNT_ID>\"},\"ArnEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudwatch:us-east-1:<ACCOUNT_ID>:alarm:AsyncOrderProcessing-orders-dlq-VisibleMessages\"}}}]}",
+      "Owner": "<ACCOUNT_ID>",
+      "SubscriptionsPending": "0",
+      "TopicArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+      "EffectiveDeliveryPolicy": "{\"http\":{\"defaultHealthyRetryPolicy\":{\"minDelayTarget\":20,\"maxDelayTarget\":20,\"numRetries\":3,\"numMaxDelayRetries\":0,\"numNoDelayRetries\":0,\"numMinDelayRetries\":0,\"backoffFunction\":\"linear\"},\"disableSubscriptionOverrides\":false,\"defaultRequestPolicy\":{\"headerContentType\":\"text/plain; charset=UTF-8\"}}}",
+      "SubscriptionsConfirmed": "1",
+      "DisplayName": "",
+      "SubscriptionsDeleted": "0"
+    },
+    "subscriptions": [
+      {
+        "SubscriptionArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert:064587f1-88a9-4d94-a487-0ecc41a2ea8a",
+        "Owner": "<ACCOUNT_ID>",
+        "Protocol": "email",
+        "Endpoint": "<STUDENT_EMAIL>",
+        "TopicArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert"
+      }
+    ],
+    "confirmedSubscriptionAttributes": {
+      "SubscriptionPrincipal": "arn:aws:iam::<ACCOUNT_ID>:role/voclabs",
+      "Owner": "<ACCOUNT_ID>",
+      "RawMessageDelivery": "false",
+      "TopicArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+      "Endpoint": "<STUDENT_EMAIL>",
+      "Protocol": "email",
+      "PendingConfirmation": "false",
+      "ConfirmationWasAuthenticated": "false",
+      "SubscriptionArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert:064587f1-88a9-4d94-a487-0ecc41a2ea8a"
+    }
+  },
+  "phase": "METRIC_ALARM_SNS_EMAIL_VERIFIED",
+  "updatedAtUtc": "2026-10-30T14:34:05.909293+00:00",
+  "subscriptionConfirmedAtUtc": "2026-10-30T14:33:57.359846+00:00",
+  "template": {
+    "path": "iac/week3-monitoring.yaml",
+    "sha256": "211e3ea01972f346a06e2a46f4f1634e1e23827c5d7a2dc20945dca739cd6655",
+    "validation": {
+      "Parameters": [
+        {
+          "ParameterKey": "ConsumerFunctionName",
+          "DefaultValue": "order-consumer",
+          "NoEcho": false,
+          "Description": "Name of the AWS Lambda Consumer function."
+        },
+        {
+          "ParameterKey": "EnableConsumerErrorAlarms",
+          "DefaultValue": "true",
+          "NoEcho": false,
+          "Description": "Whether to create auxiliary CloudWatch alarms for Consumer Lambda Errors and Throttles."
+        },
+        {
+          "ParameterKey": "AlertSnsTopicArn",
+          "NoEcho": false,
+          "Description": "ARN of the existing SNS Topic (e.g. order-dlq-alert) to receive alarm notifications. No account ID or personal ARN is hard-coded in this template.\n"
+        },
+        {
+          "ParameterKey": "DLQName",
+          "DefaultValue": "orders-dlq",
+          "NoEcho": false,
+          "Description": "Name of the Dead Letter Queue (DLQ) monitored for failed order messages."
+        },
+        {
+          "ParameterKey": "ProjectTag",
+          "DefaultValue": "AsyncOrderProcessing",
+          "NoEcho": false,
+          "Description": "Project tag value applied to supported resources."
+        },
+        {
+          "ParameterKey": "AWSRegionName",
+          "DefaultValue": "us-east-1",
+          "NoEcho": false,
+          "Description": "Expected AWS Region for stack deployment (Learner Lab default is us-east-1). Validated against AWS::Region via TemplateRule / Condition so the stack cannot be deployed into a mismatched region.\n"
+        },
+        {
+          "ParameterKey": "AlarmPeriodSeconds",
+          "DefaultValue": "60",
+          "NoEcho": false,
+          "Description": "Metric evaluation period in seconds."
+        },
+        {
+          "ParameterKey": "ConsumerErrorThreshold",
+          "DefaultValue": "1",
+          "NoEcho": false,
+          "Description": "Minimum Lambda Errors within the period to trigger ConsumerErrorsAlarm (>= 1)."
+        },
+        {
+          "ParameterKey": "EnableBacklogAlarm",
+          "DefaultValue": "false",
+          "NoEcho": false,
+          "Description": "Optional backlog alarm on MainQueueName. Disabled by default so no arbitrary operational threshold is assumed before baseline measurement.\n"
+        },
+        {
+          "ParameterKey": "ConsumerThrottleThreshold",
+          "DefaultValue": "1",
+          "NoEcho": false,
+          "Description": "Minimum Lambda Throttles within the period to trigger ConsumerThrottlesAlarm (>= 1)."
+        },
+        {
+          "ParameterKey": "DLQAlarmThreshold",
+          "DefaultValue": "1",
+          "NoEcho": false,
+          "Description": "Minimum visible messages in DLQ required to trigger ALARM state (>= 1 message).\n"
+        },
+        {
+          "ParameterKey": "MainQueueBacklogThreshold",
+          "DefaultValue": "100",
+          "NoEcho": false,
+          "Description": "Explicit threshold for main queue visible messages when EnableBacklogAlarm is true."
+        },
+        {
+          "ParameterKey": "MainQueueName",
+          "DefaultValue": "orders-queue",
+          "NoEcho": false,
+          "Description": "Name of the primary Amazon SQS queue."
+        },
+        {
+          "ParameterKey": "DLQEvaluationPeriods",
+          "DefaultValue": "1",
+          "NoEcho": false,
+          "Description": "Number of evaluation periods for the DLQ visible messages alarm."
+        },
+        {
+          "ParameterKey": "OwnerTag",
+          "DefaultValue": "Khoi-Quan",
+          "NoEcho": false,
+          "Description": "Owner tag value applied to supported resources."
+        }
+      ],
+      "Description": "Week 3 Observability & Alerting for AsyncOrderProcessing (AWS Learner Lab compatible). Defines CloudWatch Alarms for SQS Dead Letter Queue (DLQ) visible messages, optional main queue backlog, and Lambda consumer errors/throttles, wired to an existing Amazon SNS Topic ARN without creating IAM roles or duplicate topics.\n"
+    }
+  },
+  "alarmBefore": [],
+  "stackBefore": [],
+  "stackCreateResult": {
+    "StackId": "arn:aws:cloudformation:us-east-1:<ACCOUNT_ID>:stack/cloud-async-orders-week4-monitoring/f0c1a670-d46e-11f1-8e22-0affc79e4e61",
+    "OperationId": "f0c2b7e0-d46e-11f1-8e22-0affc79e4e61"
+  },
+  "stackParameters": {
+    "AWSRegionName": "us-east-1",
+    "MainQueueName": "orders-queue",
+    "DLQName": "orders-dlq",
+    "ConsumerFunctionName": "order-consumer",
+    "AlertSnsTopicArn": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+    "DLQAlarmThreshold": "1",
+    "DLQEvaluationPeriods": "1",
+    "AlarmPeriodSeconds": "60",
+    "EnableConsumerErrorAlarms": "false",
+    "EnableBacklogAlarm": "false"
+  },
+  "stackAfter": {
+    "StackId": "arn:aws:cloudformation:us-east-1:<ACCOUNT_ID>:stack/cloud-async-orders-week4-monitoring/f0c1a670-d46e-11f1-8e22-0affc79e4e61",
+    "StackName": "cloud-async-orders-week4-monitoring",
+    "Description": "Week 3 Observability & Alerting for AsyncOrderProcessing (AWS Learner Lab compatible). Defines CloudWatch Alarms for SQS Dead Letter Queue (DLQ) visible messages, optional main queue backlog, and Lambda consumer errors/throttles, wired to an existing Amazon SNS Topic ARN without creating IAM roles or duplicate topics.\n",
+    "Parameters": [
+      {
+        "ParameterKey": "ConsumerFunctionName",
+        "ParameterValue": "order-consumer"
+      },
+      {
+        "ParameterKey": "EnableConsumerErrorAlarms",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "AlertSnsTopicArn",
+        "ParameterValue": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert"
+      },
+      {
+        "ParameterKey": "DLQName",
+        "ParameterValue": "orders-dlq"
+      },
+      {
+        "ParameterKey": "ProjectTag",
+        "ParameterValue": "AsyncOrderProcessing"
+      },
+      {
+        "ParameterKey": "AWSRegionName",
+        "ParameterValue": "us-east-1"
+      },
+      {
+        "ParameterKey": "AlarmPeriodSeconds",
+        "ParameterValue": "60"
+      },
+      {
+        "ParameterKey": "ConsumerErrorThreshold",
+        "ParameterValue": "1"
+      },
+      {
+        "ParameterKey": "EnableBacklogAlarm",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "ConsumerThrottleThreshold",
+        "ParameterValue": "1"
+      },
+      {
+        "ParameterKey": "DLQAlarmThreshold",
+        "ParameterValue": "1"
+      },
+      {
+        "ParameterKey": "MainQueueBacklogThreshold",
+        "ParameterValue": "100"
+      },
+      {
+        "ParameterKey": "MainQueueName",
+        "ParameterValue": "orders-queue"
+      },
+      {
+        "ParameterKey": "DLQEvaluationPeriods",
+        "ParameterValue": "1"
+      },
+      {
+        "ParameterKey": "OwnerTag",
+        "ParameterValue": "Khoi-Quan"
+      }
+    ],
+    "CreationTime": "2026-10-30 14:33:57.624000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "TargetSnsTopicArn",
+        "OutputValue": "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+        "Description": "Existing SNS Topic ARN wired to alarm actions"
+      },
+      {
+        "OutputKey": "DLQAlarmName",
+        "OutputValue": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+        "Description": "CloudWatch Alarm name monitoring visible messages in DLQ"
+      },
+      {
+        "OutputKey": "MonitoredDLQName",
+        "OutputValue": "orders-dlq",
+        "Description": "Dead Letter Queue monitored by DLQVisibleMessagesAlarm"
+      },
+      {
+        "OutputKey": "DeploymentRegion",
+        "OutputValue": "us-east-1",
+        "Description": "Actual AWS Region where the monitoring stack is deployed"
+      },
+      {
+        "OutputKey": "MonitoredMainQueueName",
+        "OutputValue": "orders-queue",
+        "Description": "Primary SQS queue name configured for monitoring"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "AsyncOrderProcessing"
+      },
+      {
+        "Key": "Owner",
+        "Value": "Khoi-Quan"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CREATE_STACK",
+        "OperationId": "f0c2b7e0-d46e-11f1-8e22-0affc79e4e61"
+      }
+    ]
+  },
+  "stackResources": [
+    {
+      "StackName": "cloud-async-orders-week4-monitoring",
+      "StackId": "arn:aws:cloudformation:us-east-1:<ACCOUNT_ID>:stack/cloud-async-orders-week4-monitoring/f0c1a670-d46e-11f1-8e22-0affc79e4e61",
+      "LogicalResourceId": "DLQVisibleMessagesAlarm",
+      "PhysicalResourceId": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+      "ResourceType": "AWS::CloudWatch::Alarm",
+      "Timestamp": "2026-10-30 14:34:04.060000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    }
+  ],
+  "alarm": {
+    "AlarmName": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+    "AlarmArn": "arn:aws:cloudwatch:us-east-1:<ACCOUNT_ID>:alarm:AsyncOrderProcessing-orders-dlq-VisibleMessages",
+    "AlarmDescription": "Triggers when orders-dlq in us-east-1 (configured us-east-1) has at least 1 visible message(s). Missing data is treated as notBreaching so idle queues without recent activity or sparse metric reporting remain OK rather than false-alarming.\n",
+    "AlarmConfigurationUpdatedTimestamp": "2026-10-30 14:34:03.383000+00:00",
+    "ActionsEnabled": true,
+    "OKActions": [
+      "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert"
+    ],
+    "AlarmActions": [
+      "arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert"
+    ],
+    "InsufficientDataActions": [],
+    "StateValue": "ALARM",
+    "StateReason": "Threshold Crossed: 1 out of the last 1 datapoints [1.0 (30/10/26 14:33:00)] was greater than or equal to the threshold (1.0) (minimum 1 datapoint for OK -> ALARM transition).",
+    "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-10-30T14:35:15.460+0000\",\"startDate\":\"2026-10-30T14:33:00.000+0000\",\"statistic\":\"Maximum\",\"period\":60,\"recentDatapoints\":[1.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-10-30T14:33:00.000+0000\",\"sampleCount\":1.0,\"value\":1.0}]}",
+    "StateUpdatedTimestamp": "2026-10-30 14:35:15.461000+00:00",
+    "MetricName": "ApproximateNumberOfMessagesVisible",
+    "Namespace": "AWS/SQS",
+    "Statistic": "Maximum",
+    "Dimensions": [
+      {
+        "Name": "QueueName",
+        "Value": "orders-dlq"
+      }
+    ],
+    "Period": 60,
+    "EvaluationPeriods": 1,
+    "DatapointsToAlarm": 1,
+    "Threshold": 1.0,
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "TreatMissingData": "notBreaching",
+    "StateTransitionedTimestamp": "2026-10-30 14:35:15.461000+00:00"
+  },
+  "alarmHistory": [
+    {
+      "AlarmName": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+      "AlarmType": "MetricAlarm",
+      "Timestamp": "2026-10-30 14:35:15.508000+00:00",
+      "HistoryItemType": "Action",
+      "HistorySummary": "Successfully executed action arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert",
+      "HistoryData": "{\"actionState\":\"Succeeded\",\"stateUpdateTimestamp\":1793370915461,\"notificationResource\":\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\",\"publishedMessage\":\"{\\\"default\\\":\\\"{\\\\\\\"AlarmName\\\\\\\":\\\\\\\"AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\\\\",\\\\\\\"AlarmDescription\\\\\\\":\\\\\\\"Triggers when orders-dlq in us-east-1 (configured us-east-1) has at least 1 visible message(s). Missing data is treated as notBreaching so idle queues without recent activity or sparse metric reporting remain OK rather than false-alarming.\\\\\\\\n\\\\\\\",\\\\\\\"AWSAccountId\\\\\\\":\\\\\\\"<ACCOUNT_ID>\\\\\\\",\\\\\\\"AlarmConfigurationUpdatedTimestamp\\\\\\\":\\\\\\\"2026-10-30T14:34:03.383+0000\\\\\\\",\\\\\\\"NewStateValue\\\\\\\":\\\\\\\"ALARM\\\\\\\",\\\\\\\"NewStateReason\\\\\\\":\\\\\\\"Threshold Crossed: 1 out of the last 1 datapoints [1.0 (30/10/26 14:33:00)] was greater than or equal to the threshold (1.0) (minimum 1 datapoint for OK -> ALARM transition).\\\\\\\",\\\\\\\"StateChangeTime\\\\\\\":\\\\\\\"2026-10-30T14:35:15.461+0000\\\\\\\",\\\\\\\"Region\\\\\\\":\\\\\\\"US East (N. Virginia)\\\\\\\",\\\\\\\"AlarmArn\\\\\\\":\\\\\\\"arn:aws:cloudwatch:us-east-1:<ACCOUNT_ID>:alarm:AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\\\\",\\\\\\\"OldStateValue\\\\\\\":\\\\\\\"INSUFFICIENT_DATA\\\\\\\",\\\\\\\"ActionExecutedAfterMuteWindow\\\\\\\":false,\\\\\\\"OKActions\\\\\\\":[\\\\\\\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\\\\\\\"],\\\\\\\"AlarmActions\\\\\\\":[\\\\\\\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\\\\\\\"],\\\\\\\"InsufficientDataActions\\\\\\\":[],\\\\\\\"Trigger\\\\\\\":{\\\\\\\"MetricName\\\\\\\":\\\\\\\"ApproximateNumberOfMessagesVisible\\\\\\\",\\\\\\\"Namespace\\\\\\\":\\\\\\\"AWS/SQS\\\\\\\",\\\\\\\"StatisticType\\\\\\\":\\\\\\\"Statistic\\\\\\\",\\\\\\\"Statistic\\\\\\\":\\\\\\\"MAXIMUM\\\\\\\",\\\\\\\"Unit\\\\\\\":null,\\\\\\\"Dimensions\\\\\\\":[{\\\\\\\"value\\\\\\\":\\\\\\\"orders-dlq\\\\\\\",\\\\\\\"name\\\\\\\":\\\\\\\"QueueName\\\\\\\"}],\\\\\\\"Period\\\\\\\":60,\\\\\\\"EvaluationPeriods\\\\\\\":1,\\\\\\\"DatapointsToAlarm\\\\\\\":1,\\\\\\\"ComparisonOperator\\\\\\\":\\\\\\\"GreaterThanOrEqualToThreshold\\\\\\\",\\\\\\\"Threshold\\\\\\\":1.0,\\\\\\\"TreatMissingData\\\\\\\":\\\\\\\"notBreaching\\\\\\\",\\\\\\\"EvaluateLowSampleCountPercentile\\\\\\\":\\\\\\\"\\\\\\\"}}\\\",\\\"sms\\\":\\\"ALARM: \\\\\\\"AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\\\\" in US East (N. Virginia)\\\",\\\"email\\\":\\\"You are receiving this email because your Amazon CloudWatch Alarm \\\\\\\"AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\\\\" in the US East (N. Virginia) region has entered the ALARM state, because \\\\\\\"Threshold Crossed: 1 out of the last 1 datapoints [1.0 (30/10/26 14:33:00)] was greater than or equal to the threshold (1.0) (minimum 1 datapoint for OK -> ALARM transition).\\\\\\\" at \\\\\\\"Friday 30 October, 2026 14:35:15 UTC\\\\\\\".\\\\n\\\\nView this alarm in the AWS Management Console:\\\\nhttps://us-east-1.console.aws.amazon.com/cloudwatch/deeplink.js?region=us-east-1#alarmsV2:alarm/AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\n\\\\nAlarm Details:\\\\n- Name:                       AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\n- Description:                Triggers when orders-dlq in us-east-1 (configured us-east-1) has at least 1 visible message(s). Missing data is treated as notBreaching so idle queues without recent activity or sparse metric reporting remain OK rather than false-alarming.\\\\n\\\\n- State Change:               INSUFFICIENT_DATA -> ALARM\\\\n- Reason for State Change:    Threshold Crossed: 1 out of the last 1 datapoints [1.0 (30/10/26 14:33:00)] was greater than or equal to the threshold (1.0) (minimum 1 datapoint for OK -> ALARM transition).\\\\n- Timestamp:                  Friday 30 October, 2026 14:35:15 UTC\\\\n- AWS Account:                <ACCOUNT_ID>\\\\n- Alarm Arn:                  arn:aws:cloudwatch:us-east-1:<ACCOUNT_ID>:alarm:AsyncOrderProcessing-orders-dlq-VisibleMessages\\\\n\\\\nThreshold:\\\\n- The alarm is in the ALARM state when the metric is GreaterThanOrEqualToThreshold 1.0 for at least 1 of the last 1 period(s) of 60 seconds. \\\\n\\\\nMonitored Metric:\\\\n- MetricNamespace:                     AWS/SQS\\\\n- MetricName:                          ApproximateNumberOfMessagesVisible\\\\n- Dimensions:                          [QueueName = orders-dlq]\\\\n- Period:                              60 seconds\\\\n- Statistic:                           Maximum\\\\n- Unit:                                not specified\\\\n- TreatMissingData:                    notBreaching\\\\n\\\\n\\\\nState Change Actions:\\\\n- OK: [arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert]\\\\n- ALARM: [arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert]\\\\n- INSUFFICIENT_DATA: \\\\n\\\"}\",\"error\":null,\"muteWindowEndTimestamp\":null}"
+    },
+    {
+      "AlarmName": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+      "AlarmType": "MetricAlarm",
+      "Timestamp": "2026-10-30 14:35:15.461000+00:00",
+      "HistoryItemType": "StateUpdate",
+      "HistorySummary": "Alarm updated from INSUFFICIENT_DATA to ALARM",
+      "HistoryData": "{\"version\":\"1.0\",\"oldState\":{\"stateValue\":\"INSUFFICIENT_DATA\",\"stateReason\":\"Unchecked: Initial alarm creation\"},\"newState\":{\"stateValue\":\"ALARM\",\"stateReason\":\"Threshold Crossed: 1 out of the last 1 datapoints [1.0 (30/10/26 14:33:00)] was greater than or equal to the threshold (1.0) (minimum 1 datapoint for OK -> ALARM transition).\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-10-30T14:35:15.460+0000\",\"startDate\":\"2026-10-30T14:33:00.000+0000\",\"statistic\":\"Maximum\",\"period\":60,\"recentDatapoints\":[1.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-10-30T14:33:00.000+0000\",\"sampleCount\":1.0,\"value\":1.0}]}}}"
+    },
+    {
+      "AlarmName": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+      "AlarmType": "MetricAlarm",
+      "Timestamp": "2026-10-30 14:34:03.385000+00:00",
+      "HistoryItemType": "ConfigurationUpdate",
+      "HistorySummary": "Alarm \"AsyncOrderProcessing-orders-dlq-VisibleMessages\" created",
+      "HistoryData": "{\"version\":\"1.0\",\"type\":\"Create\",\"createdAlarm\":{\"alarmName\":\"AsyncOrderProcessing-orders-dlq-VisibleMessages\",\"alarmDescription\":\"Triggers when orders-dlq in us-east-1 (configured us-east-1) has at least 1 visible message(s). Missing data is treated as notBreaching so idle queues without recent activity or sparse metric reporting remain OK rather than false-alarming.\\n\",\"alarmArn\":\"arn:aws:cloudwatch:us-east-1:<ACCOUNT_ID>:alarm:AsyncOrderProcessing-orders-dlq-VisibleMessages\",\"alarmConfigurationUpdatedTimestamp\":\"2026-10-30T14:34:03.383+0000\",\"namespace\":\"AWS/SQS\",\"metricName\":\"ApproximateNumberOfMessagesVisible\",\"extendedStatistic\":\"MAXIMUM\",\"period\":60,\"dimensions\":[{\"value\":\"orders-dlq\",\"name\":\"QueueName\"}],\"threshold\":1.0,\"comparisonOperator\":\"GreaterThanOrEqualToThreshold\",\"evaluationPeriods\":1,\"datapointsToAlarm\":1,\"treatMissingData\":\"notBreaching\",\"stateValue\":\"INSUFFICIENT_DATA\",\"stateUpdatedTimestamp\":\"2026-10-30T14:34:03.383+0000\",\"actionsEnabled\":true,\"alarmActions\":[\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\"],\"insufficientDataActions\":[],\"okactions\":[\"arn:aws:sns:us-east-1:<ACCOUNT_ID>:order-dlq-alert\"]}}"
+    }
+  ],
+  "dlqMetric": {
+    "namespace": "AWS/SQS",
+    "metricName": "ApproximateNumberOfMessagesVisible",
+    "queueName": "orders-dlq",
+    "statistic": "Maximum",
+    "periodSeconds": 60,
+    "windowStartUtc": "2026-10-30T14:20:47.187405+00:00",
+    "windowEndUtc": "2026-10-30T14:35:47.187405+00:00",
+    "response": {
+      "Label": "ApproximateNumberOfMessagesVisible",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-30 14:20:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:21:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:22:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:23:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:24:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:25:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:26:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:27:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:28:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:29:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:30:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:31:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:32:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:33:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-30 14:34:00+00:00",
+          "Maximum": 1.0,
+          "Unit": "Count"
+        }
+      ]
+    }
+  },
+  "metricDrivenAlarmVerified": true,
+  "snsActionSucceeded": true,
+  "consumerMappingFinal": {
+    "UUID": "ab1f7f06-157c-429b-bfcf-5cb15689f47f",
+    "BatchSize": 1,
+    "MaximumBatchingWindowInSeconds": 0,
+    "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "MetricsConfig": {
+      "Metrics": []
+    },
+    "ScalingConfig": {
+      "MaximumConcurrency": 5
+    },
+    "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-consumer",
+    "LastModified": "2026-10-30 14:30:14.494000+00:00",
+    "State": "Enabled",
+    "StateTransitionReason": "USER_INITIATED",
+    "FunctionResponseTypes": [],
+    "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:ab1f7f06-157c-429b-bfcf-5cb15689f47f"
+  },
+  "legacyMappingFinal": {
+    "UUID": "7812ff9b-4000-47e1-9e27-6805670c7cc6",
+    "BatchSize": 1,
+    "MaximumBatchingWindowInSeconds": 0,
+    "EventSourceArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+    "MetricsConfig": {
+      "Metrics": []
+    },
+    "ScalingConfig": {
+      "MaximumConcurrency": 2
+    },
+    "FunctionArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:function:order-processor",
+    "LastModified": "2026-10-11 15:18:23.282000+00:00",
+    "State": "Disabled",
+    "StateTransitionReason": "USER_INITIATED",
+    "FunctionResponseTypes": [],
+    "EventSourceMappingArn": "arn:aws:lambda:us-east-1:<ACCOUNT_ID>:event-source-mapping:7812ff9b-4000-47e1-9e27-6805670c7cc6"
+  },
+  "queuesFinal": {
+    "orders-queue": {
+      "QueueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue",
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0",
+      "CreatedTimestamp": "1791693313",
+      "LastModifiedTimestamp": "1792060948",
+      "VisibilityTimeout": "60",
+      "MaximumMessageSize": "1048576",
+      "MessageRetentionPeriod": "345600",
+      "DelaySeconds": "0",
+      "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<ACCOUNT_ID>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-queue\"}]}",
+      "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq\",\"maxReceiveCount\":5}",
+      "ReceiveMessageWaitTimeSeconds": "0",
+      "SqsManagedSseEnabled": "true"
+    },
+    "orders-dlq": {
+      "QueueArn": "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq",
+      "ApproximateNumberOfMessages": "1",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0",
+      "CreatedTimestamp": "1791692962",
+      "LastModifiedTimestamp": "1791692962",
+      "VisibilityTimeout": "30",
+      "MaximumMessageSize": "1048576",
+      "MessageRetentionPeriod": "1209600",
+      "DelaySeconds": "0",
+      "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<ACCOUNT_ID>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:us-east-1:<ACCOUNT_ID>:orders-dlq\"}]}",
+      "ReceiveMessageWaitTimeSeconds": "0",
+      "SqsManagedSseEnabled": "true"
+    }
+  },
+  "lambdaConfigurationUnchanged": {
+    "order-producer": true,
+    "order-consumer": true
+  },
+  "observedAtUtc": "2026-10-30T14:35:47.187405+00:00",
+  "emailEvidence": {
+    "sourceType": "USER_SUPPLIED_ORIGINAL_SCREENSHOT",
+    "file": "W4-SNS-Email.png",
+    "sha256": "002dd98e7be0eb15beff18e3af7112bf22f167ac4e1055b1f1bb7d00723bc317",
+    "originalBytesPreserved": true,
+    "alarmName": "AsyncOrderProcessing-orders-dlq-VisibleMessages",
+    "region": "us-east-1",
+    "alarmTimestampUtc": "2026-10-30T14:35:15Z",
+    "stateChange": "INSUFFICIENT_DATA -> ALARM",
+    "metricNamespace": "AWS/SQS",
+    "metricName": "ApproximateNumberOfMessagesVisible",
+    "queueName": "orders-dlq",
+    "statistic": "Maximum",
+    "periodSeconds": 60,
+    "evaluatedDatapoint": {
+      "timestampUtc": "2026-10-30T14:33:00Z",
+      "value": 1.0
+    },
+    "threshold": 1.0,
+    "matchesAwsAlarmHistory": true,
+    "matchesQueriedAwsAccount": true,
+    "recipientVisibility": "Screenshot shows to me; the full recipient address is not expanded. The confirmed SNS subscription was verified separately before alarm creation."
+  }
+}
